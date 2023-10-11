@@ -1,0 +1,80 @@
+/* Custom Scrollbar */
+*{
+    scrollbar-width: thin;
+}
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+} 
+*::-webkit-scrollbar-track {
+    background: #DCDCDC;
+} 
+*::-webkit-scrollbar-thumb {
+    background-color:  #aaa;
+    border-radius: 8px;
+} 
+*::-webkit-scrollbar-thumb:hover {
+    background-color: #505050;
+    border-radius: 8px;
+} 
+.map-container {
+    position: fixed;
+    height: calc(100% - 125px); 
+    /* width: 100%; */
+    width: calc(100% - 60px);
+    margin-left: 60px;
+}
+.loader-overlay {
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background-color: rgba(0, 0, 0, 0.5);  
+    z-index: 9999;  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@media only screen and (max-width: 600px) {
+    .map-container {
+        position: fixed;
+        height: calc(100% - 125px); 
+        width: 100%;
+        /* width: calc(100% - 60px); */
+        margin-left: 0px;
+    }
+}
+.basemap-card {
+    border: 1px solid lightgray;
+  }
+  
+.basemap-card-active {
+    border: 1px solid blue;
+}
+.hover{
+    border: 1px solid blue;
+}
+.filter{
+    display: none;
+}
+.filter2{
+    display: block;
+}
+.layer{
+    display: none;
+}
+.layer2{
+    display: block;
+}
+.sidebar-menu{
+  margin-left: 10px;
+}
+
+.active {
+    background-color: #f0f0f0;
+  }
+  
+  li:hover {
+    background-color: #f0f0f0;
+  }

@@ -3,17 +3,16 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import SERVIR_SEA_Logo from '../public/assets/images/logos/servir-sea.png';
 
 export default function Footer() {
     return (
         <div style={{position:'relative', left: 0, bottom: 0, right: 0}}>
             <div style={{marginTop: '0px', marginBottom: '0px', background: "#e1f5fe"}}>
-                <Container>
+                <Container maxWidth="xxl">
                     <Grid container spacing={0}>
                         <Grid md={6} style={{marginTop: '50px', marginBottom: '50px'}}>
                             <Link href="https://servir.adpc.net/" target="_blank" rel="noreferrer">
-                                <Image src={SERVIR_SEA_Logo} width={200} alt="SERVIR-SEA" />
+                                <img src='/assets/images/logos/servir-sea.png' width={200} height={30} alt="SERVIR-SEA" />
                             </Link>
                             <Typography pt={1} variant="body1" style={{fontWeight: 'bold'}}>
                                 ASIAN DISASTER PREPAREDNESS CENTER (ADPC)

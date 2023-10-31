@@ -77,6 +77,6 @@ export const rubberChartAtom = atom([]);
 export const rubberChartDataLoadingAtom = atom(true);
 
 // Basemap state
-export const basemapAtom = atom('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1Ijoia2FtYWxoMjciLCJhIjoiY2t3b2Roc2M3MDF2bDJ2cDY0ZmppdXl0MCJ9.Gn5rUJgaap_KDcnhyROMzQ');
+export const basemapAtom = atom('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}');
 
 export const selectedFeatureAtom = atom(null);

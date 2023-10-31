@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAtom } from 'jotai';
 import { GeoJSON} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import { 
-    selectedFeatureAtom, 
     provinceDataAtom, 
     provinceVisibilityAtom,
     tempAreaTypeAtom,
@@ -12,82 +11,106 @@ import {
     tempAreaNameAtom,
 } from '@/state/atoms';
 
-import { provinceDataFetcher } from '@/fetchers/provinceDataFetcher';
+import { GeoserverFetcher } from '@/fetchers/GeoserverFetcher';
 
 function ProvinceLayer(){
     const [showProvinceLayer] = useAtom(provinceVisibilityAtom);
     const [provinceData, setProvinceData] = useAtom(provinceDataAtom);
-    const [activeLayer, setActiveLayer] = useState(null);
-    const [, setSelectedFeature] = useAtom(selectedFeatureAtom);
+    const activeLayer = useRef(null); 
     const [, setTempAreaType] = useAtom(tempAreaTypeAtom);
     const [, setTempAreaId] = useAtom(tempAreaIdAtom);
     const [, setTempAreaName] = useAtom(tempAreaNameAtom);
 
-    const defaultStyle = {
-        fillColor: 'red',
-        fillOpacity: 0.0,
-        color: '#000',
-        weight: 1
-    };
-
-    const highlightStyle = {
-        color: '#FF0000',  // Highlight stroke color
-        fillColor: '#FF0000',  // Highlight fill color
-        fillOpacity: 0.1,
-        weight: 5
+    const params = {
+        service: 'WFS',
+        version: '1.3.0',
+        request: 'GetFeature',
+        typeName: 'khm:Cambodia_province', 
+        outputFormat: 'application/json',  
     };
 
     useEffect(() => {
         const fetchProvinceData = async () => {
-            const fetchedData = await provinceDataFetcher();
+            const fetchedData = await GeoserverFetcher(params);
             setProvinceData(fetchedData);
-            // console.log(fetchedData)
         };
-        fetchProvinceData();
-    }, []);
+        fetchProvinceData();   
+    }, []); 
+
+    const defaultStyle = () => {
+        return {
+            color: '#1f2021',
+            weight: 1,
+            fillOpacity: 0.0,
+            fillColor: '#ffcc33',
+        };
+    };
+    
+    const highlightStyle = () => {
+        return {
+            color: '#FF0000',  
+            fillColor: '#ffcc33',  
+            fillOpacity: 0.1,
+            weight: 5
+        };
+    };
 
     const handleProvinceFeatureClick = (e) => {
-        const selected_feature = e.target.feature;
-        const area_id = selected_feature.properties.gid;
+        const layer = e.target;
+        layer.bringToFront();
+        const featureProperties = layer.feature.properties;
+
+        // Reset style of the previous active layer if it exists
+        if (activeLayer.current) {
+            activeLayer.current.setStyle(defaultStyle());
+        }
+
+        // Set this layer as the active one
+        activeLayer.current = layer;
+
+        // Apply the highlight style
+        layer.setStyle(highlightStyle());
+        
+        
+        const area_id = featureProperties.gid;
         const area_type = "province";
-        const area_name = selected_feature.properties.name;
+        const area_name = featureProperties.name;
 
-        const clickedLayer = e.target;
-
-        // if (activeLayer) {
-        //     // Reset style of the previously active feature
-        //     activeLayer.setStyle(defaultStyle);
-        // }
-
-        // Set style of the currently clicked feature
-        clickedLayer.setStyle(highlightStyle);
-
-        // Update activeLayer
-        setActiveLayer(selected_feature);
-        setTempAreaType(area_type);
         setTempAreaId(area_id);
+        setTempAreaType(area_type);
         setTempAreaName(area_name);
     }
 
     const handleMouseover = (e) => {
-        e.target.setStyle(highlightStyle);
+        const layer = e.target;
+        layer.setStyle(highlightStyle());
     }
 
     const handleMouseout = (e) => {
-        e.target.setStyle(defaultStyle);
+        const layer = e.target;
+        // Only reset style if this isn't the active layer
+        if (layer !== activeLayer.current) {
+            layer.setStyle(defaultStyle());
+        }
     }
 
     const onEachFeatureProvince = (feature, layer) => {
         layer.on({
-            click: handleProvinceFeatureClick, // Feature click e to handle selection
-            // mouseover: handleMouseover,
-            // mouseout: handleMouseout,
+            click: handleProvinceFeatureClick,
+            mouseover: handleMouseover,
+            mouseout: handleMouseout,
         });
     }
 
     return (
         <>
-            { showProvinceLayer && provinceData && <GeoJSON style={defaultStyle} data={provinceData} onEachFeature={onEachFeatureProvince} />}
+            { showProvinceLayer 
+                && provinceData 
+                && <GeoJSON 
+                    style={defaultStyle} 
+                    data={provinceData} 
+                    onEachFeature={onEachFeatureProvince} 
+                />}
         </>
     )
 }

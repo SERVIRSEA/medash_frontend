@@ -6,7 +6,7 @@ import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
 Exporting(Highcharts);
 ExportData(Highcharts);
-import { eviLineChartFetcher } from '@/fetchers/eviLineChartFetcher';
+import { Fetcher } from '@/fetchers/Fetcher';
 import { 
     baselineMinYearAtom,
     baselineMaxYearAtom,
@@ -43,14 +43,13 @@ const EVILineChart = () => {
                     'studyHigh': studyHigh
                 }
                 const key = JSON.stringify(params);
+                const action = 'get-evi-line';
 
-                const data = await eviLineChartFetcher(params);
+                const data = await Fetcher(action, params);
                 setEviLineChartData(data);
-                setLoading(false);
             } catch (error) {
                 setError(error.message);
                 console.error('Error fetching data:', error);
-                setLoading(false);
                 throw error; 
             } finally {
                 setLoading(false);

@@ -6,7 +6,7 @@ import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
 Exporting(Highcharts);
 ExportData(Highcharts);
-import { eviPieChartFetcher } from '@/fetchers/eviPieChartFetcher';
+import { Fetcher } from '@/fetchers/Fetcher';
 import { 
     baselineMinYearAtom,
     baselineMaxYearAtom,
@@ -43,9 +43,9 @@ const EVIPieChart = () => {
                     'studyHigh': studyHigh
                 }
                 const key = JSON.stringify(params);
-
-                const data = await eviPieChartFetcher(params);
-                // console.log(data)
+                const action = 'get-evi-pie';
+                const data = await Fetcher(action, params);
+                
                 const graphDataEVI = [];
                 let className = ['Large improvement', 'improvement', 'No Change', 'Under Stress', 'Severe stress'];
                 let classColor = ['#264653','#2A9D8F','#E9C46A','#F4A261','#E76F51'];
@@ -55,11 +55,9 @@ const EVIPieChart = () => {
                     total_area_evi = total_area_evi + data[i];
                 }
                 setEviPieChartData(graphDataEVI);
-                setLoading(false);
             } catch (error) {
                 setError(error.message);
                 console.error('Error fetching data:', error);
-                setLoading(false);
                 throw error; 
             } finally {
                 setLoading(false);

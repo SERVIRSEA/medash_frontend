@@ -13,7 +13,7 @@ import {
     riceApiAtom,
     isLoadingAtom,
 } from '@/state/atoms';
-import { fetchData } from "@/fetchers/fetchData";
+import { Fetcher } from "@/fetchers/Fetcher";
 
 
 function RiceMap(){
@@ -39,15 +39,16 @@ function RiceMap(){
 
         if (riceMapStore[key]) {
             setRiceData(riceMapStore[key]);
-            // console.log(mapDataStore);
         } else {
             try {
-                const data = await fetchData(action, params);
+                const data = await Fetcher(action, params);
                 setRiceData(data);
                 setRiceMapStore(prev => ({ ...prev, [key]: data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error; 
+            } finally {
+                setIsLoading(false)
             }
         }
     }
@@ -59,12 +60,11 @@ function RiceMap(){
             'area_id': '6',
             'year': 2010
         }
-        const data = await fetchData(action, params);
+        const data = await Fetcher(action, params);
         const dnlurl = data.downloadURL;
-        // console.log(data)
         if(data.success === 'success'){
             // Fetch the file as Blob
-            const fileResponse = await fetch(dnlurl);
+            const fileResponse = await Fetcher(dnlurl);
             const fileBlob = await fileResponse.blob();
 
             // Create a blob URL
@@ -98,7 +98,6 @@ function RiceMap(){
                             sx={{ mr: 0.1 }} 
                             checked={year === selectedYear}
                             onClick={()=>showOnOffRiceMap(year)}
-                            // onChange={()=>showOnOffLandCoverMap(year)}
                         />
                         <Typography variant="body2">{year}</Typography>
                     </ListItem>

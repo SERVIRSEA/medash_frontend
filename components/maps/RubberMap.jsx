@@ -2,7 +2,7 @@ import React from "react";
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-import { fetchDownloadLCMap } from '@/fetchers/downloadLandCoverMapFetcher';
+
 import { 
     areaTypeAtom, 
     areaIdAtom, 
@@ -13,7 +13,7 @@ import {
     rubberApiAtom,
     isLoadingAtom,
 } from '@/state/atoms';
-import { fetchData } from "@/fetchers/fetchData";
+import { Fetcher } from "@/fetchers/Fetcher";
 
 
 function RubberMap(){
@@ -39,15 +39,16 @@ function RubberMap(){
 
         if (rubberMapStore[key]) {
             setRubberData(rubberMapStore[key]);
-            // console.log(mapDataStore);
         } else {
             try {
-                const data = await fetchData(action, params);
+                const data = await Fetcher(action, params);
                 setRubberData(data);
                 setRubberMapStore(prev => ({ ...prev, [key]: data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error; 
+            } finally {
+                setIsLoading(false);
             }
         }
     }
@@ -59,9 +60,8 @@ function RubberMap(){
             'area_id': '6',
             'year': 2010
         }
-        const data = await fetchData(action, params);
+        const data = await Fetcher(action, params);
         const dnlurl = data.downloadURL;
-        // console.log(data)
         if(data.success === 'success'){
             // Fetch the file as Blob
             const fileResponse = await fetch(dnlurl);

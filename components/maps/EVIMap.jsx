@@ -7,6 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 import DownloadIcon from '@mui/icons-material/Download';
 import { fetchEVIMap } from '@/fetchers/eviMapFetcher';
 import { fetchDownloadEVIMap } from '@/fetchers/downloadEVIMapFetcher';
+import { Fetcher } from '@/fetchers/Fetcher';
 
 import { 
     baselineMinYearAtom,
@@ -44,20 +45,20 @@ function EVIMap(){
             'studyHigh': studyHigh
         }
         const key = JSON.stringify(params);
+        const action = 'get-evi-map';
 
         if (eviMapDataStore[key]) {
             setEviData(eviMapDataStore[key]);
-            // console.log(mapDataStore);
         } else {
             try {
                 setIsLoading(true);
-                const data = await fetchEVIMap(params);
+                const data = await Fetcher(action, params);
                 setEviData(data);
                 setEVIMapDataStore(prev => ({ ...prev, [key]: data }));
-                setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error; 
+            } finally {
                 setIsLoading(false);
             }
         }
@@ -72,7 +73,8 @@ function EVIMap(){
             'studyLow': studyLow,
             'studyHigh': studyHigh
         }
-        const data = await fetchDownloadEVIMap(params);
+        const action = 'download-evi-map';
+        const data = await Fetcher(action, params);
         const dnlurl = data.downloadURL;
         if (data.success === 'success'){
             // Fetch the file as Blob

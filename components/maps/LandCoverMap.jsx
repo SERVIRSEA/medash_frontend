@@ -13,7 +13,7 @@ import {
     landCoverApiAtom,
     isLoadingAtom,
 } from '@/state/atoms';
-import { fetchLandCoverMap } from '@/fetchers/landCoverMapFetcher';
+import { Fetcher } from '@/fetchers/Fetcher';
 
 function LandCoverMap(){
     const [area_type] = useAtom(areaTypeAtom);
@@ -38,14 +38,15 @@ function LandCoverMap(){
                     'year': year
                 };
                 const key = JSON.stringify(params);
-                const data = await fetchLandCoverMap(params);
+                const action = 'get-landcover-map'
+                const data = await Fetcher(action, params);
                 setLandCoverData(data);
                 setSelectedYear(year);
                 setMapDataStore(prev => ({ ...prev, [key]: data }));
-                setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error; 
+            } finally {
                 setIsLoading(false);
             }
         }
@@ -60,18 +61,20 @@ function LandCoverMap(){
             'year': year
         };
         const key = JSON.stringify(params);
-
+        const action = 'get-landcover-map'
         if (mapDataStore[key]) {
             setLandCoverData(mapDataStore[key]);
-            // console.log(mapDataStore);
         } else {
             try {
-                const data = await fetchLandCoverMap(params);
+                setIsLoading(true);
+                const data = await Fetcher(action, params);
                 setLandCoverData(data);
                 setMapDataStore(prev => ({ ...prev, [key]: data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error; 
+            } finally {
+                setIsLoading(false);
             }
         }
     }

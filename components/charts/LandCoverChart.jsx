@@ -6,7 +6,7 @@ import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
 Exporting(Highcharts);
 ExportData(Highcharts);
-import { landCoverStatsFetcher } from '@/fetchers/landCoverStatsFetcher';
+import { Fetcher } from '@/fetchers/Fetcher';
 import { 
     measureMinYearAtom,
     measureMaxYearAtom,
@@ -37,15 +37,12 @@ const LandCoverChart = () => {
                     'studyHigh': studyHigh
                 }
                 const key = JSON.stringify(params);
-
-                const data = await landCoverStatsFetcher(params);
-                // console.log(data)
+                const action = 'get-landcover-chart';
+                const data = await Fetcher(action, params);
                 setLCChartData(data);
-                setLoading(false);
             } catch (error) {
                 setError(error.message);
                 console.error('Error fetching data:', error);
-                setLoading(false);
                 throw error; 
             } finally {
                 setLoading(false);

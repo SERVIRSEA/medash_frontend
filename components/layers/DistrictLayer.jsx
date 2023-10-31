@@ -1,85 +1,101 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAtom } from 'jotai';
 import { GeoJSON} from 'react-leaflet';
 
 import { 
-    selectedFeatureAtom, 
     districtDataAtom,
     districtVisibilityAtom,
     tempAreaTypeAtom,
     tempAreaIdAtom,
     tempAreaNameAtom,
 } from '@/state/atoms';
-
-import { districtDataFetcher } from '@/fetchers/districtDataFetcher';
+import { GeoserverFetcher } from '@/fetchers/GeoserverFetcher';
 
 function DistrictLayer(){
     const [showDistrictLayer] = useAtom(districtVisibilityAtom);
     const [districtData, setDistrictData] = useAtom(districtDataAtom);
-    const [activeLayer, setActiveLayer] = useState(null);
-    const [, setSelectedFeature] = useAtom(selectedFeatureAtom);
+    const activeLayer = useRef(null); 
     const [, setTempAreaType] = useAtom(tempAreaTypeAtom);
     const [, setTempAreaId] = useAtom(tempAreaIdAtom);
     const [, setTempAreaName] = useAtom(tempAreaNameAtom);
 
-    const defaultStyle = {
-        fillColor: 'red',
-        fillOpacity: 0.0,
-        color: '#000',
-        weight: 1
-    };
-
-    const highlightStyle = {
-        color: '#FF0000',  // Highlight stroke color
-        fillColor: '#FF0000',  // Highlight fill color
-        fillOpacity: 0.1,
-        weight: 5
+    const params = {
+        service: 'WFS',
+        version: '1.3.0',
+        request: 'GetFeature',
+        typeName: 'khm:Cambodia_district', 
+        outputFormat: 'application/json',  
     };
 
     useEffect(() => {
         const fetchDistrictData = async () => {
-            const fetchedData = await districtDataFetcher();
+            const fetchedData = await GeoserverFetcher(params);
             setDistrictData(fetchedData);
-            // console.log(fetchedData)
         };
         fetchDistrictData();
     }, []);
 
+    const defaultStyle = () => {
+        return {
+            color: '#1f2021',
+            weight: 1,
+            fillOpacity: 0.0,
+            fillColor: '#ffcc33',
+        };
+    };
+    
+    const highlightStyle = () => {
+        return {
+            color: '#FF0000',  
+            fillColor: '#ffcc33',  
+            fillOpacity: 0.1,
+            weight: 5
+        };
+    };
+
     const handleDistrictFeatureClick = (e) => {
-        const selected_feature = e.target.feature;
-        const area_id = selected_feature.properties.DIST_CODE;
+        const layer = e.target;
+        layer.bringToFront();
+        const featureProperties = layer.feature.properties;
+
+        // Reset style of the previous active layer if it exists
+        if (activeLayer.current) {
+            activeLayer.current.setStyle(defaultStyle());
+        }
+
+        // Set this layer as the active one
+        activeLayer.current = layer;
+
+        // Apply the highlight style
+        layer.setStyle(highlightStyle());
+
+        const area_id = featureProperties.DIST_CODE;
         const area_type = "district";
-        const area_name = selected_feature.properties.DIST_NAME;
+        const area_name = featureProperties.DIST_NAME;
+
         setTempAreaType(area_type);
         setTempAreaId(area_id);
         setTempAreaName(area_name);
-        // console.log(selected_feature);
-        const clickedLayer = e.target;
-
-        // if (activeLayer) {
-        //     // Reset style of the previously active feature
-        //     activeLayer.setStyle(defaultStyle);
-        // }
-        // Set style of the currently clicked feature
-        clickedLayer.setStyle(highlightStyle);
-
-        // Update activeLayer
-        setActiveLayer(selected_feature);
     };
 
-    // const handleMouseover = (e) => {
-    //     e.target.setStyle(highlightStyle);
-    // }
+    const handleMouseover = (e) => {
+        const layer = e.target;
+        layer.setStyle(highlightStyle());
+    }
 
-    // const handleMouseout = (e) => {
-    //     e.target.setStyle(defaultStyle);
-    // }
+    const handleMouseout = (e) => {
+        const layer = e.target;
+        // Only reset style if this isn't the active layer
+        if (layer !== activeLayer.current) {
+            layer.setStyle(defaultStyle());
+        }
+    }
 
     const onEachFeatureDistrict = (feature, layer) => {
         layer.on({
-            // mouseover: handleMouseover,
-            // mouseout: handleMouseout,
-            click: handleDistrictFeatureClick, // Feature click e to handle selection
+            mouseover: handleMouseover,
+            mouseout: handleMouseout,
+            click: handleDistrictFeatureClick, 
         });
     }
 

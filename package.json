@@ -1,5 +1,5 @@
 {
-  "name": "next-app",
+  "name": "medash",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,21 +11,21 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.14.1",
-    "@mui/material": "^5.14.1",
-    "@mui/styled-engine-sc": "^5.12.0",
-    "@mui/styles": "^5.14.1",
-    "axios": "^1.4.0",
-    "eslint": "8.45.0",
-    "eslint-config-next": "13.4.10",
+    "@mui/icons-material": "^5.14.13",
+    "@mui/material": "^5.14.13",
+    "axios": "^1.5.1",
     "highcharts": "^11.1.0",
-    "highcharts-react-official": "^3.2.0",
-    "jotai": "^2.2.2",
+    "highcharts-react-official": "^3.2.1",
+    "jotai": "^2.4.3",
+    "jsonp": "^0.2.1",
     "leaflet": "^1.9.4",
-    "next": "13.4.10",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-leaflet": "^4.2.1",
-    "styled-components": "^5.3.11"
+    "next": "13.5.4",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-leaflet": "^4.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "13.5.4"
   }
 }

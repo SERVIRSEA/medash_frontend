@@ -1,86 +1,100 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAtom } from 'jotai';
 import { GeoJSON} from 'react-leaflet';
 
 import { 
-    selectedFeatureAtom, 
     protectedAreaDataAtom, 
     protectedAreaVisibilityAtom,
     tempAreaTypeAtom,
     tempAreaIdAtom,
     tempAreaNameAtom,
 } from '@/state/atoms';
-
-import { protectedAreaFetcher } from '@/fetchers/protectedAreaFetcher';
+import { GeoserverFetcher } from '@/fetchers/GeoserverFetcher';
 
 function ProtectedAreaLayer(){
     const [showPALayer] = useAtom(protectedAreaVisibilityAtom);
     const [protectedAreaData, setProtectedAreaData] = useAtom(protectedAreaDataAtom);
-    const [activeLayer, setActiveLayer] = useState(null);
-    const [, setSelectedFeature] = useAtom(selectedFeatureAtom);
+    const activeLayer = useRef(null); 
     const [, setTempAreaType] = useAtom(tempAreaTypeAtom);
     const [, setTempAreaId] = useAtom(tempAreaIdAtom);
     const [, setTempAreaName] = useAtom(tempAreaNameAtom);
 
-    const defaultStyle = {
-        fillColor: 'red',
-        fillOpacity: 0.0,
-        color: '#000',
-        weight: 1
-    };
-
-    const highlightStyle = {
-        color: '#FF0000',  // Highlight stroke color
-        fillColor: '#FF0000',  // Highlight fill color
-        fillOpacity: 0.1,
-        weight: 5
+    const params = {
+        service: 'WFS',
+        version: '1.3.0',
+        request: 'GetFeature',
+        typeName: 'khm:protected_area ', 
+        outputFormat: 'application/json',  
     };
 
     useEffect(() => {
         const fetchProtectedAreaData = async () => {
-            const fetchedPAData = await protectedAreaFetcher();
+            const fetchedPAData = await GeoserverFetcher(params);
             setProtectedAreaData(fetchedPAData);
-            // console.log(fetchedData)
         };
         fetchProtectedAreaData();
     }, []);
 
+    const defaultStyle = () => {
+        return {
+            color: '#1f2021',
+            weight: 1,
+            fillOpacity: 0.0,
+            fillColor: '#ffcc33',
+        };
+    };
+    
+    const highlightStyle = () => {
+        return {
+            color: '#FF0000',  
+            fillColor: '#ffcc33',  
+            fillOpacity: 0.1,
+            weight: 5
+        };
+    };
+
     const handlePAFeatureClick = (e) => {
-        const selected_feature = e.target.feature;
-        const area_id = selected_feature.properties.map_id;
+        const layer = e.target;
+        layer.bringToFront();
+        const featureProperties = layer.feature.properties;
+
+        // Reset style of the previous active layer if it exists
+        if (activeLayer.current) {
+            activeLayer.current.setStyle(defaultStyle());
+        }
+
+        // Set this layer as the active one
+        activeLayer.current = layer;
+
+        // Apply the highlight style
+        layer.setStyle(highlightStyle());
+
+        const area_id = featureProperties.map_id;
         const area_type = "protected_area";
-        const area_name = selected_feature.properties.name;
+        const area_name = featureProperties.name;
+
         setTempAreaType(area_type);
         setTempAreaId(area_id);
         setTempAreaName(area_name);
-
-        const clickedLayer = e.target;
-
-        // if (activeLayer) {
-        //     // Reset style of the previously active feature
-        //     activeLayer.setStyle(defaultStyle);
-        // }
-
-        // Set style of the currently clicked feature
-        clickedLayer.setStyle(highlightStyle);
-
-        // Update activeLayer
-        setActiveLayer(selected_feature);
     }
 
-    // const handleMouseover = (e) => {
-    //     e.target.setStyle(highlightStyle);
-    // }
+    const handleMouseover = (e) => {
+        const layer = e.target;
+        layer.setStyle(highlightStyle());
+    }
 
-    // const handleMouseout = (e) => {
-    //     e.target.setStyle(defaultStyle);
-    // }
-
+    const handleMouseout = (e) => {
+        const layer = e.target;
+        // Only reset style if this isn't the active layer
+        if (layer !== activeLayer.current) {
+            layer.setStyle(defaultStyle());
+        }
+    }
     const onEachFeatureProtectedArea = (feature, layer) => {
         layer.on({
-            // mouseover: handleMouseover,
-            // mouseout: handleMouseout,
-            click: handlePAFeatureClick, // Feature click e to handle selection
+            mouseover: handleMouseover,
+            mouseout: handleMouseout,
+            click: handlePAFeatureClick, 
         });
     }
 

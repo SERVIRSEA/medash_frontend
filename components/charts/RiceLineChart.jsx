@@ -15,7 +15,7 @@ import {
     riceChartDataLoadingAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
-import { fetchData } from '@/fetchers/fetchData';
+import { Fetcher } from '@/fetchers/Fetcher';
 
 const RiceLineChart = () => {
     const [chartData, setChartData] = useAtom(riceChartAtom);
@@ -38,15 +38,11 @@ const RiceLineChart = () => {
                     'studyHigh': studyHigh
                 }
                 const key = JSON.stringify(params);
-
-                const data = await fetchData(action, params);
-                // console.log(data)
+                const data = await Fetcher(action, params);
                 setChartData(data);
-                setLoading(false);
             } catch (error) {
                 setError(error.message);
                 console.error('Error fetching data:', error);
-                setLoading(false);
                 throw error; 
             } finally {
                 setLoading(false);

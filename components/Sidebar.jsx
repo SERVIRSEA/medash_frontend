@@ -12,7 +12,18 @@ import ForestAlertPanel from './panels/ForestAlertPanel';
 import FireHotspotPanel from './panels/FireHotspotPanel';
 import MapLayersPanel from './panels/MapLayersPanel';
 import ReportingPanel from './panels/ReportingPanel';
-import { lcVisibilityAtom, riceVisibilityAtom, rubberVisibilityAtom } from '@/state/atoms';
+import { 
+    lcVisibilityAtom, 
+    forestGainVisibilityAtom,
+    forestLossVisibilityAtom,
+    forestExtentVisibilityAtom,
+    riceVisibilityAtom, 
+    rubberVisibilityAtom,
+    fireVisibilityAtom,
+    gladAlertVisibilityAtom,
+    sarAlertVisibilityAtom
+} from '@/state/atoms';
+
 
 const menuTitleAtom = atom("Biophysical Monitoring");
 const activeTabAtom = atom("block");
@@ -27,6 +38,10 @@ function Sidebar(){
     const [, setRiceMapVisibility] = useAtom(riceVisibilityAtom);
     const [, setLCMapVisibility] = useAtom(lcVisibilityAtom);
     const [, setRubberMapVisibility] = useAtom(rubberVisibilityAtom);
+    const [, setFireMapVisibility] = useAtom(fireVisibilityAtom);
+    const [, setGLADAlertMapVisibility] = useAtom(gladAlertVisibilityAtom);
+    const [, setSARAlertMapVisibility] = useAtom(sarAlertVisibilityAtom);
+    const [, setForestExtentMapVisibility] = useAtom(forestExtentVisibilityAtom);
     
     const sidebarStyle = {
         background: "#eee",
@@ -131,10 +146,10 @@ function Sidebar(){
 
     const mapVisibilityMappings = {
         0: { riceMap: false, rubberMap: false, lcMap: true },
-        1: { riceMap: false, rubberMap: false, lcMap: false },
+        1: { riceMap: false, rubberMap: false, lcMap: false, forestExtentMap: true },
         2: { riceMap: true, rubberMap: true, lcMap: false },
-        3: { riceMap: false, rubberMap: false, lcMap: false },
-        4: { riceMap: false, rubberMap: false, lcMap: false },
+        3: { riceMap: false, rubberMap: false, lcMap: false, gladMap: true, sarMap: true },
+        4: { riceMap: false, rubberMap: false, lcMap: false,  fireMap: true},
     };
       
     const handleListItemClick = (event, index) => {
@@ -148,6 +163,10 @@ function Sidebar(){
         setRiceMapVisibility(mapVisibility.riceMap || false);
         setRubberMapVisibility(mapVisibility.rubberMap || false);
         setLCMapVisibility(mapVisibility.lcMap || false);
+        setFireMapVisibility(mapVisibility.fireMap || false);
+        setGLADAlertMapVisibility(mapVisibility.gladMap || false);
+        setSARAlertMapVisibility(mapVisibility.sarMap || false);
+        setForestExtentMapVisibility(mapVisibility.forestExtentMap || false)
     };
 
     const handleCloseClick = () => {

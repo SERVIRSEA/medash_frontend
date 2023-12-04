@@ -1,60 +1,95 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-
+import { fetchDownloadLCMap } from '@/fetchers/downloadLandCoverMapFetcher';
 import { 
     areaTypeAtom, 
     areaIdAtom, 
     measureMinYearAtom, 
     measureMaxYearAtom, 
-    rubberYearlyMapDataStoreAtom, 
-    selectedYearRubberAtom, 
-    rubberApiAtom,
+    forestExtentMapDataStoreAtom, 
+    selectedYearForestExtentAtom, 
+    forestExtentApiAtom,
     isLoadingAtom,
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 
 
-function RubberMap(){
+function ForestExtentMap(){
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
     const [min] = useAtom(measureMinYearAtom);
     const [max] = useAtom(measureMaxYearAtom);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
-    const [selectedYear, setSelectedYear] = useAtom(selectedYearRubberAtom);
-    const [, setRubberData] = useAtom(rubberApiAtom);
-    const [rubberMapStore, setRubberMapStore] = useAtom(rubberYearlyMapDataStoreAtom);
+    const [selectedYear, setSelectedYear] = useAtom(selectedYearForestExtentAtom);
+    const [, setForestExtentData] = useAtom(forestExtentApiAtom);
+    const [forestExtentMapStore, setForestExtentMapStore] = useAtom(forestExtentMapDataStoreAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
 
-    const showOnOffRubberMap = async (year) =>{
+    // useEffect(() => { 
+    //     const fetchForestExtentMap = async () => {
+    //         try {
+    //             setIsLoading(true);
+    //             const params = {
+    //                 'area_type': area_type,
+    //                 'area_id': area_id,
+    //                 'studyLow': min,
+    //                 'studyHigh': max
+    //             };
+    //             const key = JSON.stringify(params);
+    //             const action = 'get-forest-extent-map';
+    //             const data = await Fetcher(action, params);
+    //             // console.log(data)
+    //             // setForestExtentData(data);
+    //             setForestExtentMapStore(prev => ({ ...prev, [key]: data }));
+    //         } catch (error) {
+    //             console.error('Error fetching data:', error);
+    //             throw error; 
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     }
+    //     fetchForestExtentMap();
+    // }, []);
+
+    const showOnOffForestExtentMap = async (year) =>{
         setSelectedYear((prevYear) => (prevYear === year ? null : year));
-        const action = 'get-landcover-rubber-map';
+        const action = 'get-forest-extent-map';
         const params = {
             'area_type': area_type,
             'area_id': area_id,
-            'year': year
+            'studyLow': min,
+            'studyHigh': max
         };
         const key = JSON.stringify(params);
 
-        if (rubberMapStore[key]) {
-            setRubberData(rubberMapStore[key]);
+        if (forestExtentMapStore[key]) {
+            setIsLoading(true);
+            const data = forestExtentMapStore[key]
+            // console.log(data)
+            const filteredData = data[year];
+            // console.log(filteredData);
+            setForestExtentData(filteredData);
+            setIsLoading(false);
         } else {
             try {
+                setIsLoading(true);
                 const data = await Fetcher(action, params);
-                setRubberData(data);
-                setRubberMapStore(prev => ({ ...prev, [key]: data }));
+                const filteredData = data[year];
+                setForestExtentData(filteredData);
+                setForestExtentMapStore(prev => ({ ...prev, [key]: data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error; 
             } finally {
-                setIsLoading(false);
+                setIsLoading(false)
             }
         }
     }
 
-    const downloadRubberMap = async (year) =>{
-        const action = 'download-landcover-rubber-map';
+    const downloadForestExtentMap = async (year) =>{
+        const action = 'download-landcover-forestextent-map';
         const params = {
             'area_type': 'province',
             'area_id': '6',
@@ -64,7 +99,7 @@ function RubberMap(){
         const dnlurl = data.downloadURL;
         if(data.success === 'success'){
             // Fetch the file as Blob
-            const fileResponse = await fetch(dnlurl);
+            const fileResponse = await Fetcher(dnlurl);
             const fileBlob = await fileResponse.blob();
 
             // Create a blob URL
@@ -73,7 +108,7 @@ function RubberMap(){
             // Create a hidden <a> element to trigger the download
             const a = document.createElement('a');
             a.href = blobURL;
-            a.download = 'RUBBER_MAP_'+year+'.tif';  // Set the filename here
+            a.download = 'FORESTEXTENT_MAP_'+year+'.tif';  // Set the filename here
             document.body.appendChild(a);
             a.click();
 
@@ -91,14 +126,13 @@ function RubberMap(){
                 <Grid key={year} item xs={6} sx={{py: 0}}>
                     <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
                         <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }}>
-                            <DownloadIcon fontSize="small" onClick={()=>downloadRubberMap(year)}/>
+                            <DownloadIcon fontSize="small" onClick={()=>downloadForestExtentMap(year)}/>
                         </IconButton>
                         <Switch 
                             size="small" 
                             sx={{ mr: 0.1 }} 
                             checked={year === selectedYear}
-                            onClick={()=>showOnOffRubberMap(year)}
-                            // onChange={()=>showOnOffLandCoverMap(year)}
+                            onClick={()=>showOnOffForestExtentMap(year)}
                         />
                         <Typography variant="body2">{year}</Typography>
                     </ListItem>
@@ -107,4 +141,4 @@ function RubberMap(){
         </Grid>
     );
 }
-export default RubberMap;
+export default ForestExtentMap;

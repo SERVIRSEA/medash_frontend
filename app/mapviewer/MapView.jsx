@@ -10,6 +10,12 @@ import ProtectedAreaLayer from '@/components/layers/ProtectedAreaLayer';
 import EVILayer from '@/components/layers/EVILayer';
 import RiceLayer from '@/components/layers/RiceLayer';
 import RubberLayer from '@/components/layers/RubberLayer';
+import FireLayer from '@/components/layers/FireLayer';
+import GLADAlertLayer from '@/components/layers/GLADAlertLayer';
+import SARAlertLayer from '@/components/layers/SARAlertLayer';
+import ForestGainLayer from '@/components/layers/ForestGainLayer';
+import ForestLossLayer from '@/components/layers/ForestLossLayer';
+import ForestExtentLayer from '@/components/layers/ForestExtentLayer';
 
 export default function MapView() {
     return (
@@ -23,6 +29,12 @@ export default function MapView() {
             <LandCoverLayer />
             <RiceLayer />
             <RubberLayer />
+            <GLADAlertLayer />
+            <SARAlertLayer />
+            <FireLayer />
+            <ForestGainLayer />
+            <ForestLossLayer />
+            <ForestExtentLayer />
         </MapContainer>
     )
 }

@@ -12,14 +12,16 @@ import {
     selectedYearAtom, 
     landCoverApiAtom,
     isLoadingAtom,
+    minYearLandCover,
+    maxYearLandCover
 } from '@/state/atoms';
 import { Fetcher } from '@/fetchers/Fetcher';
 
 function LandCoverMap(){
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
-    const [min] = useAtom(measureMinYearAtom);
-    const [max] = useAtom(measureMaxYearAtom);
+    const [min] = useAtom(minYearLandCover);
+    const [max] = useAtom(maxYearLandCover);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
     const [selectedYear, setSelectedYear] = useAtom(selectedYearAtom);
     const [, setLandCoverData] = useAtom(landCoverApiAtom);

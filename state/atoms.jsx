@@ -51,6 +51,8 @@ export const tempAreaIdAtom = atom('Cambodia');
 export const tempAreaNameAtom = atom('Cambodia');
 
 // State for land cover map
+export const minYearLandCover = atom(2000);
+export const maxYearLandCover = atom(2022);
 export const selectedYearAtom = atom(null); // For year switches 
 export const landCoverApiAtom = atom(''); // Store land cover gee data url for map visualization
 export const lcVisibilityAtom = atom(true);
@@ -80,14 +82,14 @@ export const rubberChartDataLoadingAtom = atom(true);
 export const minYearForestGain = atom(2000);
 export const maxYearForestGain = atom(2022);
 export const forestGainApiAtom = atom('');
-export const forestGainVisibilityAtom = atom(true);
+export const forestGainVisibilityAtom = atom(false);
 export const forestGainMapDataStoreAtom = atom({});
 
 // State for Forest Loss map
 export const minYearForestLoss = atom(2000);
 export const maxYearForestLoss = atom(2022);
 export const forestLossApiAtom = atom('');
-export const forestLossVisibilityAtom = atom(true);
+export const forestLossVisibilityAtom = atom(false);
 export const forestLossMapDataStoreAtom = atom({});
 
 // State for Forest Extent map
@@ -95,6 +97,15 @@ export const selectedYearForestExtentAtom = atom(null);
 export const forestExtentApiAtom = atom('');
 export const forestExtentVisibilityAtom = atom(false);
 export const forestExtentMapDataStoreAtom = atom({});
+
+// State for Forest Extent map
+export const forestNonForestChartDataAtom = atom({});
+export const forestNonForestChartLoadingAtom = atom(true);
+
+// State for Forest change 
+export const forestGainLossAreaAtom = atom({});
+export const forestChangeGainLossAreaAtom = atom({});
+export const forestChangeLoadingAtom = atom(true);
 
 // State for GLAD Alert map
 export const minYearGLADAlert = atom(2018);

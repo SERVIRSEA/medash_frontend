@@ -10,42 +10,39 @@ if (typeof Highcharts === 'object') {
     Exporting(Highcharts);
     ExportData(Highcharts);
 }
-import { Fetcher } from '@/fetchers/Fetcher';
 import { 
-    measureMinYearAtom,
-    measureMaxYearAtom,
+    minYearForestGain,
+    maxYearForestGain,
     areaTypeAtom,
     areaIdAtom,
-    landCoverChartAtom,
-    lcChartDataLoadingAtom,
-    minYearLandCover,
-    maxYearLandCover
+    forestNonForestChartDataAtom,
+    forestNonForestChartLoadingAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
+import { Fetcher } from '@/fetchers/Fetcher';
 
-const LandCoverChart = () => {
-    const [lcChartData, setLCChartData] = useAtom(landCoverChartAtom);
-    const [loading, setLoading] = useAtom(lcChartDataLoadingAtom);
+const ForestNonForestChart = () => {
+    const [chartData, setChartData] = useAtom(forestNonForestChartDataAtom);
+    const [loading, setLoading] = useAtom(forestNonForestChartLoadingAtom);
     const [error, setError] = useState(null);
 
-    const [studyLow] = useAtom(minYearLandCover);
-    const [studyHigh] = useAtom(maxYearLandCover);
+    const [studyLow] = useAtom(minYearForestGain);
+    const [studyHigh] = useAtom(maxYearForestGain);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
 
     useEffect(() => { 
-        const fetchLCChartData = async () => {
+        const fetchChartData = async () => {
             try {
+                const action = 'get-forest-nonforest-chart-data';
                 const params = {
                     'area_type': area_type,
                     'area_id': area_id,
                     'studyLow': studyLow,
                     'studyHigh': studyHigh
                 }
-                const key = JSON.stringify(params);
-                const action = 'get-landcover-chart';
                 const data = await Fetcher(action, params);
-                setLCChartData(data);
+                setChartData(data);
             } catch (error) {
                 setError(error.message);
                 console.error('Error fetching data:', error);
@@ -54,91 +51,67 @@ const LandCoverChart = () => {
                 setLoading(false);
             }
         }
-        fetchLCChartData();
+        fetchChartData();
     }, []);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;
 
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
+    const processedData = Object.entries(chartData).map(([year, data]) => ({
+        year,
+        forest: data.forest,
+        nonForest: data.noneForest
+    }));
 
-    const chartTitle = "LAND COVER IN";
+    const years = processedData.map(item => item.year);
+    const forestData = processedData.map(item => item.forest);
+    const nonForestData = processedData.map(item => item.nonForest);
 
-    const colors = {
-        'evergreen': '#267300',
-        'semi-evergreen': '#38A800',
-        'deciduous': '#70A800',
-        'mangrove': '#00A884',
-        'flooded forest': '#B4D79E',
-        'rubber': '#AAFF00',
-        'other plantations': '#F5F57A',
-        'rice': '#FFFFBE',
-        'cropland': '#FFD37F',
-        'surface water': '#004DA8',
-        'grassland': '#D7C29E',
-        'woodshrub': '#89CD66',
-        'built-up area': '#E600A9',
-        'village': '#A900E6',
-        'other': '#6f6f6f'
-    };
-
-    // Get an array of the land types
-    const data = lcChartData;
-    const categories = Object.keys(data[studyLow]);
-
-    // Build the series data
-    const series = categories.map(category => {
-        return {
-            name: category,
-            data: Object.keys(data).map(year => data[year][category]),
-            color: colors[category]
-        };
-    });
+    const chartTitle = "AREA OF FOREST AND NON-FOREST";
 
     // Configuring the Highcharts
     const options = {
         chart: {
-            type: 'column',
-            marginRight: 40  
+            type: 'bar',
+            height: 300,
         },
         title: false,
-		subtitle: false,
         xAxis: {
-            categories: Object.keys(data),
-            crosshair: true
+            categories: years,
+            title: false,
         },
         yAxis: {
-            // min: 0,
-            title: {
-                text: null
-            },
-            labels: {
-                formatter: function () {
-                    return (this.value / 1000000) + 'Mha';
+            min: 0,
+            title: false,
+            // title: {
+            //     text: 'Area (Hectares)'
+            // },
+        },
+        tooltip: {
+            headerFormat: '<b>{point.x}</b><br/>',
+            pointFormat: '{series.name}: {point.y} Ha'
+        },
+        plotOptions: {
+            bar: {
+                pointPadding: 0.0, 
+                groupPadding: 0.0, 
+                stacking: 'normal',
+                dataLabels: {
+                    enabled: false
                 }
             }
         },
-        tooltip: {
-            formatter: function () {
-                return this.series.name + " (" + this.point.y + " hectare)";
-            }
-        },
-        plotOptions: {
-            column: {
-                stacking: 'normal',
-                pointPadding: 0.2,
-                pointWidth: 6,
-                borderWidth: 0
-            }
-        },
-        series: series,
+        series: [{
+            name: 'Forest',
+            data: forestData,
+            color: '#138D75'
+        }, {
+            name: 'Non-Forest',
+            data: nonForestData,
+            color: '#919F94'
+        }],
         legend: {
-            labelFormatter: function() {
-                // Split the string into words, capitalize the first letter of each word, then join them back together.
-                return this.name.split(' ').map(capitalizeFirstLetter).join(' ');
-            }
+            enabled: true
         },
         exporting: {
             buttons: {
@@ -180,4 +153,4 @@ const LandCoverChart = () => {
     return <HighchartsReact highcharts={Highcharts} options={options} />;
 }
 
-export default LandCoverChart;
+export default ForestNonForestChart;

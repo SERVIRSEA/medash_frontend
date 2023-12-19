@@ -12,6 +12,7 @@ import ForestAlertPanel from './panels/ForestAlertPanel';
 import FireHotspotPanel from './panels/FireHotspotPanel';
 import MapLayersPanel from './panels/MapLayersPanel';
 import ReportingPanel from './panels/ReportingPanel';
+import DroughtMonitoringPanel from './panels/DroughtMonitoringPanel';
 import { 
     lcVisibilityAtom, 
     forestGainVisibilityAtom,
@@ -48,7 +49,8 @@ function Sidebar(){
         color: "#000",
         width: '80px',
         height: "calc(100% - 125px)",
-        position: 'fixed'
+        position: 'fixed',
+        overflowY: 'scroll'
     }
 
     const menuItemStyle = {
@@ -122,6 +124,12 @@ function Sidebar(){
           panel: <FireHotspotPanel />,
         },
         {
+            name: 'Drought Monitoring',
+            icon: '/assets/icons/menu/fire-burned-green.png', //FireHotspotIcon,
+            text: 'Drought Monitoring',
+            panel: <DroughtMonitoringPanel />,
+        },
+        {
           name: 'Map Layers',
           icon: '/assets/icons/menu/map-layers-green.png', //BasemapLayerIcon,
           text: 'Map Layers',
@@ -176,17 +184,17 @@ function Sidebar(){
     return(
         <div>
             <div style={sidebarStyle}>
-                <List component="nav" aria-label="items">
+                <List component="nav" aria-label="items" sx={{padding: 0, margin:0}}>
                     {menuItems.map((item, index) => (
                         <ListItemButton
                             key={item.name}
-                            sx={{ justifyContent: "center", paddingBottom: '0px' }}
+                            sx={{ justifyContent: "center", paddingBottom: 0, paddingTop: 0, paddingLeft:1, paddingRight: 1 }}
                             selected={selectedIndex === index}
                             onClick={(event) => handleListItemClick(event, index)}
                         >
                         <div style={menuItemStyle}>
                             <img src={item.icon} width={30} height={30} alt={item.text} />
-                            <p style={{ textAlign: 'center', fontSize: '10px', padding: '0px' }}>
+                            <p style={{ textAlign: 'center', fontSize: '10px', padding: 0 }}>
                                 {item.text.split('\n').map((t, i) => <React.Fragment key={i}>{t}<br /></React.Fragment>)}
                             </p>
                         </div>

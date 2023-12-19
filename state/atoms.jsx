@@ -141,6 +141,14 @@ export const fireYearlyMapDataStoreAtom = atom({});
 export const fireChartAtom = atom([]);
 export const fireChartDataLoadingAtom = atom(true);
 
+// Drought monitoring state
+export const accuRFVisAtom = atom(false);
+export const avgTempVisAtom = atom(false);
+export const accuRFForecastVisAtom = atom(false);
+export const avgTempForecastVisAtom = atom(false);
+export const seasonalRFVisAtom = atom(false);
+export const seasonalTempVisAtom = atom(false);
+export const droughtVisAtom = atom(false);
 // Basemap state
 export const basemapAtom = atom('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}');
 

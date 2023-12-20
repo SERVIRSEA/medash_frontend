@@ -149,6 +149,9 @@ export const avgTempForecastVisAtom = atom(false);
 export const seasonalRFVisAtom = atom(false);
 export const seasonalTempVisAtom = atom(false);
 export const droughtVisAtom = atom(false);
+export const droughtMapDataAtom = atom('');
+export const droughtMapDataStoreAtom = atom({});
+
 // Basemap state
 export const basemapAtom = atom('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}');
 

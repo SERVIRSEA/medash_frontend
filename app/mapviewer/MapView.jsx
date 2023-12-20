@@ -16,6 +16,7 @@ import SARAlertLayer from '@/components/layers/SARAlertLayer';
 import ForestGainLayer from '@/components/layers/ForestGainLayer';
 import ForestLossLayer from '@/components/layers/ForestLossLayer';
 import ForestExtentLayer from '@/components/layers/ForestExtentLayer';
+import DroughtLayer from '@/components/layers/DroughtLayer';
 
 export default function MapView() {
     return (
@@ -35,6 +36,7 @@ export default function MapView() {
             <ForestGainLayer />
             <ForestLossLayer />
             <ForestExtentLayer />
+            <DroughtLayer />
         </MapContainer>
     )
 }

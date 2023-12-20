@@ -69,7 +69,7 @@ const EVIPieChart = () => {
             }
         }
         fetchEVIPieChartData();
-    }, []);
+    }, [area_id, area_type, refHigh, refLow, setEviPieChartData, setLoading, studyHigh, studyLow]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

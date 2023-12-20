@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -6,11 +6,56 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import { ListItem, IconButton, Switch, Box } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-import { droughtVisAtom } from '@/state/atoms';
+import { areaTypeAtom, areaIdAtom, droughtVisAtom, isLoadingAtom, droughtMapDataAtom, droughtMapDataStoreAtom } from '@/state/atoms';
+import { Fetcher } from '@/fetchers/Fetcher';
 
 export default function DroughtMap() {
-    const [index, setIndex] = useState('cdi'); 
+    const [area_type] = useAtom(areaTypeAtom);
+    const [area_id] = useAtom(areaIdAtom);
+    const [index, setIndex] = useState('ndvi'); 
     const [isVisible, setIsVisible] = useAtom(droughtVisAtom);
+    const [, setIsLoading] = useAtom(isLoadingAtom);
+    const [, setData] = useAtom(droughtMapDataAtom);
+    const [, setDataStore] = useAtom(droughtMapDataStoreAtom);
+
+    const fetchLatestDroughtMap = async (selectedIndex) => {
+        try {
+            let date;
+            if (selectedIndex === 'ndvi') {
+                date = '2023-11-25';
+            } else if (selectedIndex === 'cwsi') {
+                date = '2023-11-25';
+            } else if (selectedIndex == 'vhi'){
+                date = '2023-11-25';
+            } else if (selectedIndex == 'cdi'){
+                date = '2023-03-22';
+            } else {
+                date = '2023-12-27';
+            }
+            setIsLoading(true);
+            const params = {
+                'area_type': area_type,
+                'area_id': area_id,
+                'index': selectedIndex,
+                'date': date,
+            };
+            const key = JSON.stringify(params);
+            const action = 'get-drought-index-map';
+            const data = await Fetcher(action, params);
+            setData(data);
+            setDataStore((prev) => ({ ...prev, [key]: data }));
+            setIsVisible(true);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchLatestDroughtMap(index);
+    }, [index]);
 
     const handleChange = (event) => {
         setIndex(event.target.value);
@@ -28,15 +73,15 @@ export default function DroughtMap() {
                 onChange={handleChange}
                 style={{ fontSize: '12px' }}
                 >
-                <MenuItem value="cdi" style={{ fontSize: '12px' }}>Combined Drought Index (CDI)*</MenuItem>
-                <MenuItem value="spi" style={{ fontSize: '12px' }}>Standardized Precipitation Index (SPI) – 3months*</MenuItem>
-                <MenuItem value="ndvi" style={{ fontSize: '12px' }}>Normalized Difference Vegetation Index (NDVI)</MenuItem>
-                <MenuItem value="vhi" style={{ fontSize: '12px' }}>Vegetation Health Index (VHI)</MenuItem>
-                <MenuItem value="cwsi" style={{ fontSize: '12px' }}>Crop Water Stress Index (CWSI)</MenuItem>
-                <MenuItem value="sm" style={{ fontSize: '12px' }}>Soil Moisture*</MenuItem>
-                <MenuItem value="rf" style={{ fontSize: '12px' }}>Rainfall (mm)*</MenuItem>
-                <MenuItem value="st" style={{ fontSize: '12px' }}>Surface Temperature (C)*</MenuItem>
-                <MenuItem value="rh" style={{ fontSize: '12px' }}>Relative Humidity (%)*</MenuItem>
+                    <MenuItem value="cdi" style={{ fontSize: '12px' }}>Combined Drought Index (CDI)*</MenuItem>
+                    <MenuItem value="spi3" style={{ fontSize: '12px' }}>Standardized Precipitation Index (SPI) – 3months*</MenuItem>
+                    <MenuItem value="ndvi" style={{ fontSize: '12px' }}>Normalized Difference Vegetation Index (NDVI)</MenuItem>
+                    <MenuItem value="vhi" style={{ fontSize: '12px' }}>Vegetation Health Index (VHI)</MenuItem>
+                    <MenuItem value="cwsi" style={{ fontSize: '12px' }}>Crop Water Stress Index (CWSI)</MenuItem>
+                    <MenuItem value="soil_moist" style={{ fontSize: '12px' }}>Soil Moisture*</MenuItem>
+                    <MenuItem value="rainfall" style={{ fontSize: '12px' }}>Rainfall (mm)*</MenuItem>
+                    <MenuItem value="surf_temp" style={{ fontSize: '12px' }}>Surface Temperature (C)*</MenuItem>
+                    <MenuItem value="rel_humid" style={{ fontSize: '12px' }}>Relative Humidity (%)*</MenuItem>
                 </Select>
             </FormControl>
             <ListItem disableGutters sx={{ py: 1, display: 'flex', alignItems: 'center' }}>

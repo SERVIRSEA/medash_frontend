@@ -61,7 +61,7 @@ const EVILineChart = () => {
             }
         }
         fetchEVILineChartData();
-    }, []);
+    }, [area_id, area_type, refHigh, refLow, setEviLineChartData, setLoading, studyHigh, studyLow]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

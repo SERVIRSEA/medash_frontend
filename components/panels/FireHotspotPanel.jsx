@@ -16,8 +16,8 @@ export default function FireHotspotPanel(){
     const [selectedArea] = useAtom(areaNameAtom);
 
     return(
-        <Box sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}}>
-            <Typography variant="h6">
+        <Box sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}} pt={1} pl={1}>
+            <Typography variant="body2" sx={{fontWeight: 'bold'}}>
                 MAP LAYERS 
             </Typography>
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>

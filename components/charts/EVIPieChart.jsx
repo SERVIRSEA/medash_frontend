@@ -20,7 +20,8 @@ import {
     areaTypeAtom,
     areaIdAtom,
     eviPieChartDataLoadingAtom,
-    eviPieChartAtom
+    eviPieChartAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 
@@ -35,10 +36,12 @@ const EVIPieChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [, setUpdateTrigger] = useAtom(updateTriggerAtom);
 
     useEffect(() => { 
         const fetchEVIPieChartData = async () => {
             try {
+                setLoading(true);
                 const params = {
                     'area_type': area_type,
                     'area_id': area_id,
@@ -69,7 +72,7 @@ const EVIPieChart = () => {
             }
         }
         fetchEVIPieChartData();
-    }, [area_id, area_type, refHigh, refLow, setEviPieChartData, setLoading, studyHigh, studyLow]);
+    }, [area_id, area_type, refHigh, refLow, studyHigh, studyLow, setEviPieChartData, setLoading, setUpdateTrigger]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;
@@ -132,7 +135,7 @@ const EVIPieChart = () => {
                     'downloadJPEG',
                     'downloadPDF',
                     'downloadSVG',
-                    'separator',  // A separator line between images and data export
+                    'separator',  
                     'downloadCSV',
                     'downloadXLS'
                 ]

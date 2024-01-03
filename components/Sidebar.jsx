@@ -43,7 +43,9 @@ function Sidebar(){
     const [, setGLADAlertMapVisibility] = useAtom(gladAlertVisibilityAtom);
     const [, setSARAlertMapVisibility] = useAtom(sarAlertVisibilityAtom);
     const [, setForestExtentMapVisibility] = useAtom(forestExtentVisibilityAtom);
-    
+    const [, setForestGainMapVisibility] = useAtom(forestGainVisibilityAtom);
+    const [, setForestLossMapVisibility] = useAtom(forestLossVisibilityAtom);
+
     const sidebarStyle = {
         background: "#eee",
         color: "#000",
@@ -154,10 +156,11 @@ function Sidebar(){
 
     const mapVisibilityMappings = {
         0: { riceMap: false, rubberMap: false, lcMap: true },
-        1: { riceMap: false, rubberMap: false, lcMap: false, forestExtentMap: true },
+        1: { riceMap: false, rubberMap: false, lcMap: false, forestExtentMap: true, forestGainMap: true, forestLossMap: true },
         2: { riceMap: true, rubberMap: true, lcMap: false },
         3: { riceMap: false, rubberMap: false, lcMap: false, gladMap: true, sarMap: true },
         4: { riceMap: false, rubberMap: false, lcMap: false,  fireMap: true},
+        5:{}
     };
       
     const handleListItemClick = (event, index) => {
@@ -175,6 +178,8 @@ function Sidebar(){
         setGLADAlertMapVisibility(mapVisibility.gladMap || false);
         setSARAlertMapVisibility(mapVisibility.sarMap || false);
         setForestExtentMapVisibility(mapVisibility.forestExtentMap || false)
+        setForestGainMapVisibility(mapVisibility.forestGainMap || false);
+        setForestLossMapVisibility(mapVisibility.forestLossMap || false);
     };
 
     const handleCloseClick = () => {

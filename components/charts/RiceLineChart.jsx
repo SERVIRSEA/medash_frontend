@@ -16,7 +16,8 @@ import {
     areaTypeAtom,
     areaIdAtom,
     riceChartAtom,
-    riceChartDataLoadingAtom
+    riceChartDataLoadingAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -30,10 +31,12 @@ const RiceLineChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
 
     useEffect(() => { 
         const fetchRiceChartData = async () => {
             try {
+                setLoading(true);
                 const action = 'get-landcover-rice-line-data';
                 const params = {
                     'area_type': area_type,
@@ -53,7 +56,7 @@ const RiceLineChart = () => {
             }
         }
         fetchRiceChartData();
-    }, []);
+    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

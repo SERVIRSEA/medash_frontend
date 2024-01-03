@@ -19,7 +19,8 @@ import {
     landCoverChartAtom,
     lcChartDataLoadingAtom,
     minYearLandCover,
-    maxYearLandCover
+    maxYearLandCover,
+    updateTriggerAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 
@@ -32,10 +33,12 @@ const LandCoverChart = () => {
     const [studyHigh] = useAtom(maxYearLandCover);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
 
     useEffect(() => { 
         const fetchLCChartData = async () => {
             try {
+                setLoading(true);
                 const params = {
                     'area_type': area_type,
                     'area_id': area_id,
@@ -55,7 +58,7 @@ const LandCoverChart = () => {
             }
         }
         fetchLCChartData();
-    }, []);
+    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

@@ -39,7 +39,7 @@ const GLADAlertChart = () => {
                     'area_type': area_type,
                     'area_id': area_id,
                     'studyLow': studyLow,
-                    'studyHigh': 2022
+                    'studyHigh': studyHigh
                 }
                 const data = await Fetcher(action, params);
                 setChartData(data);

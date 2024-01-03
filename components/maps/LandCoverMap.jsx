@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -13,7 +13,8 @@ import {
     landCoverApiAtom,
     isLoadingAtom,
     minYearLandCover,
-    maxYearLandCover
+    maxYearLandCover,
+    updateTriggerAtom
 } from '@/state/atoms';
 import { Fetcher } from '@/fetchers/Fetcher';
 
@@ -27,13 +28,20 @@ function LandCoverMap(){
     const [, setLandCoverData] = useAtom(landCoverApiAtom);
     const [mapDataStore, setMapDataStore] = useAtom(lcYearlyGEEDataAtom);
     const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
+    const [isFetching, setIsFetching] = useState(false);
 
     // setSelectedYear(max);
     useEffect(() => { 
-        const fetchLatestLandCoverMap = async () => {
+        const fetchLatestLandCoverMap = async (year) => {
             try {
+                // Check if a request is already in progress
+                if (isFetching) {
+                    return;
+                }
+
+                setIsFetching(true); 
                 setIsLoading(true);
-                const year = max; 
                 const params = {
                     'area_type': area_type,
                     'area_id': area_id,
@@ -50,10 +58,15 @@ function LandCoverMap(){
                 throw error; 
             } finally {
                 setIsLoading(false);
+                setIsFetching(false); 
             }
         }
-        fetchLatestLandCoverMap();
-    }, []);
+        fetchLatestLandCoverMap(max);
+        
+        if (updateTrigger > 0) {
+            fetchLatestLandCoverMap(selectedYear);
+        }
+    }, [area_type, area_id, max, updateTrigger]);
 
     const showOnOffLandCoverMap = async (year) =>{
         setSelectedYear((prevYear) => (prevYear === year ? null : year));
@@ -119,8 +132,8 @@ function LandCoverMap(){
             {years.map((year) => (
                 <Grid key={year} item xs={6} sx={{py: 0}}>
                     <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }}>
-                            <DownloadIcon fontSize="small" onClick={()=>downloadLandCoverMap(year)}/>
+                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadLandCoverMap(year)}>
+                            <DownloadIcon fontSize="small" />
                         </IconButton>
                         <Switch 
                             size="small" 

@@ -20,7 +20,8 @@ import {
     areaTypeAtom,
     areaIdAtom,
     eviLineChartAtom,
-    eviLineChartDataLoadingAtom
+    eviLineChartDataLoadingAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 
@@ -35,10 +36,12 @@ const EVILineChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [, setUpdateTrigger] = useAtom(updateTriggerAtom);
 
     useEffect(() => { 
         const fetchEVILineChartData = async () => {
             try {
+                setLoading(true);
                 const params = {
                     'area_type': area_type,
                     'area_id': area_id,
@@ -52,6 +55,7 @@ const EVILineChart = () => {
 
                 const data = await Fetcher(action, params);
                 setEviLineChartData(data);
+                // console.log(data)
             } catch (error) {
                 setError(error.message);
                 console.error('Error fetching data:', error);
@@ -61,7 +65,7 @@ const EVILineChart = () => {
             }
         }
         fetchEVILineChartData();
-    }, [area_id, area_type, refHigh, refLow, setEviLineChartData, setLoading, studyHigh, studyLow]);
+    }, [area_id, area_type, refHigh, refLow, studyHigh, studyLow, setEviLineChartData, setLoading, setUpdateTrigger]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

@@ -59,10 +59,10 @@ function Navbar(props) {
                             color="inherit"
                             aria-label="open drawer"
                             edge="start"
-                            // onClick={handleDrawerToggle}
                             sx={{ mr: 2, ml: 1, display: { sm: 'none' } }}
+                            onClick={handleDrawerToggle}
                         >
-                            <MenuIcon onClick={handleDrawerToggle} />
+                            <MenuIcon />
                         </IconButton>
                         <Typography
                             variant="h6"

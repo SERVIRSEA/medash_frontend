@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -12,9 +12,9 @@ import {
     selectedYearRiceAtom, 
     riceApiAtom,
     isLoadingAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
-
 
 function RiceMap(){
     const [area_type] = useAtom(areaTypeAtom);
@@ -23,35 +23,79 @@ function RiceMap(){
     const [max] = useAtom(measureMaxYearAtom);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
     const [selectedYear, setSelectedYear] = useAtom(selectedYearRiceAtom);
-    const [, setRiceData] = useAtom(riceApiAtom);
     const [riceMapStore, setRiceMapStore] = useAtom(riceYearlyMapDataStoreAtom);
-    const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
+    const [, setRiceData] = useAtom(riceApiAtom);
+    const [, setIsLoading] = useAtom(isLoadingAtom);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
+    const [isFetching, setIsFetching] = useState(false);
+    const [isInitialRender, setIsInitialRender] = useState(true);
 
-    const showOnOffRiceMap = async (year) =>{
-        setSelectedYear((prevYear) => (prevYear === year ? null : year));
+    const fetchRiceMapData = async (year) => {
+        if (isFetching) {
+            return;
+        }
+
+        setIsFetching(true);
+        setIsLoading(true);
+
         const action = 'get-landcover-rice-map';
         const params = {
             'area_type': area_type,
             'area_id': area_id,
-            'year': year
+            'year': year,
         };
         const key = JSON.stringify(params);
 
         if (riceMapStore[key]) {
             setRiceData(riceMapStore[key]);
+            setIsFetching(false);
+            setIsLoading(false);
         } else {
             try {
+                
                 const data = await Fetcher(action, params);
                 setRiceData(data);
-                setRiceMapStore(prev => ({ ...prev, [key]: data }));
+                setRiceMapStore((prev) => ({ ...prev, [key]: data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
-                throw error; 
+                throw error;
             } finally {
-                setIsLoading(false)
+                setIsLoading(false);
+                setIsFetching(false);
             }
         }
-    }
+    };
+
+    useEffect(() => {
+        // On the initial render, set max as the selected year and fetch data
+        if (isInitialRender) {
+            setSelectedYear(max);
+            fetchRiceMapData(max);
+            setIsInitialRender(false);
+        }
+
+        // When selectedYear changes and it's not the initial render, fetch data
+        if (!isInitialRender && selectedYear !== null) {
+            fetchRiceMapData(selectedYear);
+        }
+
+        // When updateTrigger is triggered, fetch data using the selected year
+        if (!isInitialRender && updateTrigger > 0) {
+            fetchRiceMapData(selectedYear);
+        }
+    }, [area_type, area_id, max, updateTrigger, selectedYear, isInitialRender]);
+
+    const showOnOffRiceMap = async (year) => {
+        setSelectedYear((prevYear) => {
+            const newYear = prevYear === year ? null : year;
+
+            if (newYear !== null || updateTrigger > 0) {
+                fetchRiceMapData(newYear);
+            }
+
+            return newYear;
+        });
+    };
 
     const downloadRiceMap = async (year) =>{
         const action = 'download-landcover-rice-map';
@@ -90,8 +134,8 @@ function RiceMap(){
             {years.map((year) => (
                 <Grid key={year} item xs={6} sx={{py: 0}}>
                     <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }}>
-                            <DownloadIcon fontSize="small" onClick={()=>downloadRiceMap(year)}/>
+                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadRiceMap(year)}>
+                            <DownloadIcon fontSize="small" />
                         </IconButton>
                         <Switch 
                             size="small" 

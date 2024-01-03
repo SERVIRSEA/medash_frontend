@@ -89,8 +89,8 @@ const SARAlertMap = () => {
             {years.map((year) => (
                 <Grid key={year} item xs={6} sx={{py: 0}}>
                     <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }}>
-                            <DownloadIcon fontSize="small" onClick={()=>downloadSARAlertMap(year)}/>
+                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadSARAlertMap(year)}>
+                            <DownloadIcon fontSize="small"/>
                         </IconButton>
                         <Switch 
                             size="small" 

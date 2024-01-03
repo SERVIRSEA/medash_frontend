@@ -29,7 +29,7 @@ const GLADAlertMap = () => {
         const fetchLatestGLADAlertMap = async () => {
             try {
                 setIsLoading(true);
-                const year = 2018; 
+                const year = max; 
                 const params = {
                     'area_type': area_type,
                     'area_id': area_id,
@@ -115,8 +115,8 @@ const GLADAlertMap = () => {
             {years.map((year) => (
                 <Grid key={year} item xs={6} sx={{py: 0}}>
                     <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }}>
-                            <DownloadIcon fontSize="small" onClick={()=>downloadGLADAlertMap(year)}/>
+                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadGLADAlertMap(year)}>
+                            <DownloadIcon fontSize="small" />
                         </IconButton>
                         <Switch 
                             size="small" 

@@ -132,7 +132,7 @@ export const sarAlertChartAtom = atom([]);
 export const sarAlertChartDataLoadingAtom = atom(true);
 
 // State for fire map
-export const selectedYearFireAtom = atom(2020); 
+export const selectedYearFireAtom = atom(null); 
 export const fireApiAtom = atom('');
 export const fireVisibilityAtom = atom(false);
 export const fireYearlyMapDataStoreAtom = atom({});
@@ -156,3 +156,6 @@ export const droughtMapDataStoreAtom = atom({});
 export const basemapAtom = atom('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}');
 
 export const selectedFeatureAtom = atom(null);
+
+// update 
+export const updateTriggerAtom = atom(0);

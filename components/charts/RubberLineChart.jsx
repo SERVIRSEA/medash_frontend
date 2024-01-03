@@ -16,7 +16,8 @@ import {
     areaTypeAtom,
     areaIdAtom,
     rubberChartAtom,
-    rubberChartDataLoadingAtom
+    rubberChartDataLoadingAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -30,10 +31,12 @@ const RubberLineChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
 
     useEffect(() => { 
         const fetchRubberChartData = async () => {
             try {
+                setLoading(true);
                 const action = 'get-landcover-rubber-line-data';
                 const params = {
                     'area_type': area_type,
@@ -54,7 +57,7 @@ const RubberLineChart = () => {
             }
         }
         fetchRubberChartData();
-    }, []);
+    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

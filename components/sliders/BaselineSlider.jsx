@@ -20,7 +20,7 @@ export default function BaselineSlider() {
                 value={[minYear, maxYear]}
                 onChange={handleSliderChange}
                 valueLabelDisplay="on"
-                valueLabelStyle={{ fontSize: 10 }}
+                valueLabelFormat={(value) => <span style={{ fontSize: 10 }}>{value}</span>}
                 min={2000}
                 max={2030}
                 step={1}

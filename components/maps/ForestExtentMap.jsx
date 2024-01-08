@@ -1,8 +1,7 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-import { fetchDownloadLCMap } from '@/fetchers/downloadLandCoverMapFetcher';
 import { 
     areaTypeAtom, 
     areaIdAtom, 
@@ -12,6 +11,8 @@ import {
     selectedYearForestExtentAtom, 
     forestExtentApiAtom,
     isLoadingAtom,
+    updateTriggerAtom,
+    forestExtentVisibilityAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 
@@ -26,35 +27,18 @@ function ForestExtentMap(){
     const [, setForestExtentData] = useAtom(forestExtentApiAtom);
     const [forestExtentMapStore, setForestExtentMapStore] = useAtom(forestExtentMapDataStoreAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
+    const [isFetching, setIsFetching] = useState(false);
+    const [, setIsVisible] = useAtom(forestExtentVisibilityAtom);
 
-    // useEffect(() => { 
-    //     const fetchForestExtentMap = async () => {
-    //         try {
-    //             setIsLoading(true);
-    //             const params = {
-    //                 'area_type': area_type,
-    //                 'area_id': area_id,
-    //                 'studyLow': min,
-    //                 'studyHigh': max
-    //             };
-    //             const key = JSON.stringify(params);
-    //             const action = 'get-forest-extent-map';
-    //             const data = await Fetcher(action, params);
-    //             // console.log(data)
-    //             // setForestExtentData(data);
-    //             setForestExtentMapStore(prev => ({ ...prev, [key]: data }));
-    //         } catch (error) {
-    //             console.error('Error fetching data:', error);
-    //             throw error; 
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     }
-    //     fetchForestExtentMap();
-    // }, []);
+    const fetchForestExtentMap = async (year) => {
+        if (isFetching) {
+            return;
+        }
 
-    const showOnOffForestExtentMap = async (year) =>{
-        setSelectedYear((prevYear) => (prevYear === year ? null : year));
+        setIsFetching(true);
+        setIsLoading(true);
+
         const action = 'get-forest-extent-map';
         const params = {
             'area_type': area_type,
@@ -65,27 +49,45 @@ function ForestExtentMap(){
         const key = JSON.stringify(params);
 
         if (forestExtentMapStore[key]) {
-            setIsLoading(true);
-            const data = forestExtentMapStore[key]
-            // console.log(data)
+            const data = forestExtentMapStore[key];
             const filteredData = data[year];
-            // console.log(filteredData);
             setForestExtentData(filteredData);
+            setIsFetching(false);
             setIsLoading(false);
         } else {
             try {
-                setIsLoading(true);
                 const data = await Fetcher(action, params);
+                setForestExtentMapStore(prev => ({ ...prev, [key]: data }));
                 const filteredData = data[year];
                 setForestExtentData(filteredData);
-                setForestExtentMapStore(prev => ({ ...prev, [key]: data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error; 
             } finally {
-                setIsLoading(false)
+                setIsFetching(false);
+                setIsLoading(false);
             }
         }
+    }
+    useEffect(() => { 
+        // When selectedYear changes and it's not the initial render, fetch data
+        if (selectedYear !== null) {
+            fetchForestExtentMap(selectedYear);
+        }
+        // When updateTrigger is triggered or area-related dependencies change, fetch data using the selected year
+        if (updateTrigger > 0) {
+            fetchForestExtentMap(selectedYear);
+        }
+    }, [area_type, area_id, min, max, updateTrigger, selectedYear, setIsVisible]);
+
+    const showOnOffForestExtentMap = async (year) =>{
+        setSelectedYear((prevYear) => {
+            const newYear = prevYear === year ? null : year;
+            if (newYear !== null || updateTrigger > 0) {
+                fetchForestExtentMap(newYear);
+            }
+            return newYear;
+        });
     }
 
     const downloadForestExtentMap = async (year) =>{

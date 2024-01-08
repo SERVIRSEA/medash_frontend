@@ -82,7 +82,7 @@ export const rubberChartDataLoadingAtom = atom(true);
 export const minYearForestGain = atom(2000);
 export const maxYearForestGain = atom(2022);
 export const forestGainApiAtom = atom('');
-export const forestGainVisibilityAtom = atom(false);
+export const forestGainVisibilityAtom = atom(true);
 export const forestGainMapDataStoreAtom = atom({});
 
 // State for Forest Loss map

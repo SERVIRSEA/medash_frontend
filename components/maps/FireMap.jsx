@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -12,6 +12,7 @@ import {
     selectedYearFireAtom, 
     fireApiAtom,
     isLoadingAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 
@@ -26,35 +27,18 @@ function FireMap(){
     const [, setFireData] = useAtom(fireApiAtom);
     const [fireMapStore, setFireMapStore] = useAtom(fireYearlyMapDataStoreAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
+    const [isFetching, setIsFetching] = useState(false);
+    const [isInitialRender, setIsInitialRender] = useState(true);
 
-    useEffect(() => { 
-        const fetchLatestFireMap = async () => {
-            try {
-                setIsLoading(true);
-                const year = max; 
-                const params = {
-                    'area_type': area_type,
-                    'area_id': area_id,
-                    'year': year
-                };
-                const key = JSON.stringify(params);
-                const action = 'get-burned-area';
-                const data = await Fetcher(action, params);
-                setSelectedYear(year);
-                setFireData(data);
-                setFireMapStore(prev => ({ ...prev, [key]: data }));
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                throw error; 
-            } finally {
-                setIsLoading(false);
-            }
+    const fetchFireMap = async (year) => {
+        if (isFetching) {
+            return;
         }
-        fetchLatestFireMap();
-    }, []);
 
-    const showOnOffFireMap = async (year) =>{
-        setSelectedYear((prevYear) => (prevYear === year ? null : year));
+        setIsFetching(true);
+        setIsLoading(true);
+
         const action = 'get-burned-area';
         const params = {
             'area_type': area_type,
@@ -65,9 +49,10 @@ function FireMap(){
 
         if (fireMapStore[key]) {
             setFireData(fireMapStore[key]);
+            setIsFetching(false);
+            setIsLoading(false);
         } else {
             try {
-                setIsLoading(true);
                 const data = await Fetcher(action, params);
                 setFireData(data);
                 setFireMapStore(prev => ({ ...prev, [key]: data }));
@@ -75,10 +60,42 @@ function FireMap(){
                 console.error('Error fetching data:', error);
                 throw error; 
             } finally {
-                setIsLoading(false)
+                setIsLoading(false);
+                setIsFetching(false);
             }
         }
     }
+
+    useEffect(() => {
+        // On the initial render, set max as the selected year and fetch data
+        if (isInitialRender) {
+            setSelectedYear(max);
+            fetchFireMap(max);
+            setIsInitialRender(false);
+        }
+
+        // When selectedYear changes and it's not the initial render, fetch data
+        if (!isInitialRender && selectedYear !== null) {
+            fetchFireMap(selectedYear);
+        }
+
+        // When updateTrigger is triggered, fetch data using the selected year
+        if (!isInitialRender && updateTrigger > 0) {
+            fetchFireMap(selectedYear);
+        }
+    }, [area_type, area_id, max, updateTrigger, selectedYear, isInitialRender]);
+
+    const showOnOffFireMap = async (year) => {
+        setSelectedYear((prevYear) => {
+            const newYear = prevYear === year ? null : year;
+
+            if (newYear !== null || updateTrigger > 0) {
+                fetchFireMap(newYear);
+            }
+
+            return newYear;
+        });
+    };
 
     const downloadFireMap = async (year) =>{
         const action = 'download-landcover-fire-map';

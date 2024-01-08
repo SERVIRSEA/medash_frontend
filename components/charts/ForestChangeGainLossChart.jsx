@@ -18,7 +18,8 @@ import {
     areaTypeAtom,
     areaIdAtom,
     forestChangeGainLossAreaAtom,
-    forestChangeLoadingAtom
+    forestChangeLoadingAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 
 import LoadingCard from '../LoadingCard';
@@ -34,6 +35,7 @@ const ForestChangeGainLossChart = () => {
     const [changeData, setChangeData] = useAtom(forestChangeGainLossAreaAtom);
     const [loading, setLoading] = useAtom(forestChangeLoadingAtom);
     const [error, setError] = useState(null);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
     
     useEffect(() => { 
         const fetchChartData = async () => {
@@ -60,7 +62,7 @@ const ForestChangeGainLossChart = () => {
             }
         }
         fetchChartData();
-    }, []);
+    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
 
     const data = {
         statsRefLoss: 759096.21,
@@ -68,6 +70,8 @@ const ForestChangeGainLossChart = () => {
         statsRefGain: 545164.51,
         statsStudyGain: 738093.78
     };
+
+    if (loading) return <><LoadingCard /></>;
 
     // Format data for Highcharts
     const lossData = [data.statsRefLoss, data.statsStudyLoss];

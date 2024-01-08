@@ -10,6 +10,7 @@ import {
     areaTypeAtom,
     areaIdAtom,
     forestGainLossAreaAtom,
+    updateTriggerAtom,
 } from '@/state/atoms';
 import { Fetcher } from '@/fetchers/Fetcher';
 import Typography from '@mui/material/Typography';
@@ -22,7 +23,8 @@ const ForestGainLoss = () => {
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
     const [gainLossData, setGainLossData] = useAtom(forestGainLossAreaAtom);
-    
+    const [updateTrigger] = useAtom(updateTriggerAtom);
+
     useEffect(() => { 
         const fetchData = async () => {
             try {
@@ -41,7 +43,7 @@ const ForestGainLoss = () => {
             }
         }
         fetchData();
-    }, []);
+    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
 
     return (
         <>

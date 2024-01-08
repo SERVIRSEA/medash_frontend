@@ -52,7 +52,6 @@ function RiceMap(){
             setIsLoading(false);
         } else {
             try {
-                
                 const data = await Fetcher(action, params);
                 setRiceData(data);
                 setRiceMapStore((prev) => ({ ...prev, [key]: data }));

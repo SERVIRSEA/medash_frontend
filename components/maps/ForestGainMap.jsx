@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect,useState} from "react";
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -11,7 +11,8 @@ import {
     forestGainMapDataStoreAtom, 
     forestGainApiAtom,
     isLoadingAtom,
-    forestGainVisibilityAtom
+    forestGainVisibilityAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 
@@ -24,60 +25,47 @@ function ForestGainMap(){
     const [forestGainMapStore, setForestGainMapStore] = useAtom(forestGainMapDataStoreAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
     const [isForestGainMapVisible, setIsForestGainMapVisible] = useAtom(forestGainVisibilityAtom);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
+    const [isFetching, setIsFetching] = useState(false);
 
     useEffect(() => { 
         const fetchForestGainMap = async () => {
-            try {
-                setIsLoading(true); 
-                const params = {
-                    'area_type': area_type,
-                    'area_id': area_id,
-                    'studyLow': 2000,
-                    'studyHigh': 2020,
-                };
-                const key = JSON.stringify(params);
-                const action = 'get-forest-gain-map';
-                const data = await Fetcher(action, params);
-                // console.log(data)
-                setForestGainData(data);
-                setForestGainMapStore(prev => ({ ...prev, [key]: data }));
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                throw error; 
-            } finally {
+            if (isFetching) {
+                return;
+            }
+
+            setIsFetching(true);
+            setIsLoading(true);
+
+            const action = 'get-forest-gain-map';
+            const params = {
+                'area_type': area_type,
+                'area_id': area_id,
+                'studyLow': 2000,
+                'studyHigh': 2020,
+            };
+            const key = JSON.stringify(params);
+
+            if (forestGainMapStore[key]) {
+                setForestGainData(forestGainMapStore[key]);
+                setIsFetching(false);
                 setIsLoading(false);
+            } else {
+                try {
+                    const data = await Fetcher(action, params);
+                    setForestGainData(data);
+                    setForestGainMapStore(prev => ({ ...prev, [key]: data }));
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    throw error; 
+                } finally {
+                    setIsFetching(false);
+                    setIsLoading(false);
+                }
             }
         }
         fetchForestGainMap();
-    }, []);
-
-    const showOnOffForestGainMap = async () =>{
-        const action = 'get-forest-gain-map';
-        const params = {
-            'area_type': area_type,
-            'area_id': area_id,
-            'start_year': min,
-            'end_year': max,
-        };
-        const key = JSON.stringify(params);
-
-        if (forestGainMapStore[key]) {
-            setForestGainData(forestGainMapStore[key]);
-        } else {
-            try {
-                setIsLoading(true);
-                const data = await Fetcher(action, params);
-                console.log(data)
-                // setForestGainData(data);
-                // setForestGainMapStore(prev => ({ ...prev, [key]: data }));
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                throw error; 
-            } finally {
-                setIsLoading(false)
-            }
-        }
-    }
+    }, [area_type, area_id, updateTrigger]);
 
     const toggleForestGainMapVisibility = () => {
         setIsForestGainMapVisible(!isForestGainMapVisible);

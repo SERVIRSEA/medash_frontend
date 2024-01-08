@@ -34,6 +34,7 @@ const ForestCoverChart = () => {
     useEffect(() => { 
         const fetchChartData = async () => {
             try {
+                setLoading(true);
                 const action = 'get-forest-nonforest-chart-data';
                 const params = {
                     'area_type': area_type,

@@ -16,7 +16,8 @@ import {
     areaTypeAtom,
     areaIdAtom,
     fireChartAtom,
-    fireChartDataLoadingAtom
+    fireChartDataLoadingAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -30,10 +31,12 @@ const FireHotspotChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
 
     useEffect(() => { 
         const fetchFireChartData = async () => {
             try {
+                setLoading(true);
                 const action = 'get-burned-area-chart-data';
                 const params = {
                     'area_type': area_type,
@@ -42,6 +45,7 @@ const FireHotspotChart = () => {
                     'studyHigh': studyHigh
                 }
                 const data = await Fetcher(action, params);
+
                 setChartData(data);
             } catch (error) {
                 setError(error.message);
@@ -52,7 +56,7 @@ const FireHotspotChart = () => {
             }
         }
         fetchFireChartData();
-    }, []);
+    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;
@@ -86,7 +90,7 @@ const FireHotspotChart = () => {
         },
         yAxis: {
             title: false, 
-            tickPositions: [0, 250, 500, 750]
+            // tickPositions: [0, 250, 500, 750]
         },
         series: [{
             data: numberFireData

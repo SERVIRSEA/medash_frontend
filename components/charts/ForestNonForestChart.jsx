@@ -16,7 +16,8 @@ import {
     areaTypeAtom,
     areaIdAtom,
     forestNonForestChartDataAtom,
-    forestNonForestChartLoadingAtom
+    forestNonForestChartLoadingAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -25,7 +26,7 @@ const ForestNonForestChart = () => {
     const [chartData, setChartData] = useAtom(forestNonForestChartDataAtom);
     const [loading, setLoading] = useAtom(forestNonForestChartLoadingAtom);
     const [error, setError] = useState(null);
-
+    const [updateTrigger] = useAtom(updateTriggerAtom);
     const [studyLow] = useAtom(minYearForestGain);
     const [studyHigh] = useAtom(maxYearForestGain);
     const [area_type] = useAtom(areaTypeAtom);
@@ -34,6 +35,7 @@ const ForestNonForestChart = () => {
     useEffect(() => { 
         const fetchChartData = async () => {
             try {
+                setLoading(true);
                 const action = 'get-forest-nonforest-chart-data';
                 const params = {
                     'area_type': area_type,
@@ -52,7 +54,7 @@ const ForestNonForestChart = () => {
             }
         }
         fetchChartData();
-    }, []);
+    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

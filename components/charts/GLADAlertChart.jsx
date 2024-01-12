@@ -16,7 +16,8 @@ import {
     areaTypeAtom,
     areaIdAtom,
     gladAlertChartAtom,
-    gladAlertChartDataLoadingAtom
+    gladAlertChartDataLoadingAtom,
+    updateTriggerAtom,
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -25,7 +26,7 @@ const GLADAlertChart = () => {
     const [chartData, setChartData] = useAtom(gladAlertChartAtom);
     const [loading, setLoading] = useAtom(gladAlertChartDataLoadingAtom);
     const [error, setError] = useState(null);
-
+    const [updateTrigger] = useAtom(updateTriggerAtom);
     const [studyLow] = useAtom(minYearGLADAlert);
     const [studyHigh] = useAtom(maxYearGLADAlert);
     const [area_type] = useAtom(areaTypeAtom);
@@ -34,6 +35,8 @@ const GLADAlertChart = () => {
     useEffect(() => { 
         const fetchGLADChartData = async () => {
             try {
+                setError(null);
+                setLoading(true);
                 const action = 'get-glad-alert-chart-data';
                 const params = {
                     'area_type': area_type,
@@ -52,7 +55,7 @@ const GLADAlertChart = () => {
             }
         }
         fetchGLADChartData();
-    }, []);
+    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

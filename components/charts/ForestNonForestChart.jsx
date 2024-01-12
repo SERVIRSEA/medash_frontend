@@ -35,6 +35,7 @@ const ForestNonForestChart = () => {
     useEffect(() => { 
         const fetchChartData = async () => {
             try {
+                setError(null);
                 setLoading(true);
                 const action = 'get-forest-nonforest-chart-data';
                 const params = {

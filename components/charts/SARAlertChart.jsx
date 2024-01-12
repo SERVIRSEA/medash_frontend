@@ -16,7 +16,8 @@ import {
     areaTypeAtom,
     areaIdAtom,
     sarAlertChartAtom,
-    sarAlertChartDataLoadingAtom
+    sarAlertChartDataLoadingAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -24,8 +25,8 @@ import { Fetcher } from '@/fetchers/Fetcher';
 const SARAlertChart = () => {
     const [chartData, setChartData] = useAtom(sarAlertChartAtom);
     const [loading, setLoading] = useAtom(sarAlertChartDataLoadingAtom);
-    const [error, setError] = useState(null);
-
+    // const [error, setError] = useState(null);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
     const [studyLow] = useAtom(minYearSARAlert);
     const [studyHigh] = useAtom(maxYearSARAlert);
     const [area_type] = useAtom(areaTypeAtom);
@@ -34,6 +35,8 @@ const SARAlertChart = () => {
     useEffect(() => { 
         const fetchSARChartData = async () => {
             try {
+                setError(null);
+                setLoading(true);
                 const action = 'get-sar-alert-chart-data';
                 const params = {
                     'area_type': area_type,
@@ -52,7 +55,7 @@ const SARAlertChart = () => {
             }
         }
         fetchSARChartData();
-    }, []);
+    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

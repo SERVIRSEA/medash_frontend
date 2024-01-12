@@ -40,6 +40,7 @@ const ForestChangeGainLossChart = () => {
     useEffect(() => { 
         const fetchChartData = async () => {
             try {
+                setError(null);
                 setLoading(true);
                 const action = 'get-forest-change-gainloss-chart-data';
                 const params = {
@@ -51,7 +52,7 @@ const ForestChangeGainLossChart = () => {
                     'studyHigh': studyHigh
                 }
                 const data = await Fetcher(action, params);
-                console.log('change data:', data);
+                // console.log('change data:', data);
                 setChangeData(data);
             } catch (error) {
                 setError(error.message);
@@ -65,13 +66,15 @@ const ForestChangeGainLossChart = () => {
     }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
 
     const data = {
-        statsRefLoss: 759096.21,
-        statsStudyLoss: 1436738,
-        statsRefGain: 545164.51,
-        statsStudyGain: 738093.78
+        statsRefLoss: changeData.statsRefLoss || 0,
+        statsStudyLoss: changeData.statsStudyLoss || 0,
+        statsRefGain: changeData.statsRefGain || 0,
+        statsStudyGain: changeData.statsStudyGain || 0
     };
+    
 
     if (loading) return <><LoadingCard /></>;
+    if (error) return <div>Error: {error}</div>;
 
     // Format data for Highcharts
     const lossData = [data.statsRefLoss, data.statsStudyLoss];

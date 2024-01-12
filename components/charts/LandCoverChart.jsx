@@ -38,6 +38,7 @@ const LandCoverChart = () => {
     useEffect(() => { 
         const fetchLCChartData = async () => {
             try {
+                setError(null);
                 setLoading(true);
                 const params = {
                     'area_type': area_type,

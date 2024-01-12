@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+axios.defaults.timeout = 50000;
+
 export const Fetcher = async (action, params) => {
     // Ensure action is a string to prevent errors with 'substring' method.
     if (typeof action !== 'string') {

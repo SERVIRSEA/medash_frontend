@@ -41,6 +41,7 @@ const EVIPieChart = () => {
     useEffect(() => { 
         const fetchEVIPieChartData = async () => {
             try {
+                setError(null);
                 setLoading(true);
                 const params = {
                     'area_type': area_type,

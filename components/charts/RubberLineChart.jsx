@@ -36,6 +36,7 @@ const RubberLineChart = () => {
     useEffect(() => { 
         const fetchRubberChartData = async () => {
             try {
+                setError(null);
                 setLoading(true);
                 const action = 'get-landcover-rubber-line-data';
                 const params = {

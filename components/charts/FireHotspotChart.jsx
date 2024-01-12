@@ -36,6 +36,7 @@ const FireHotspotChart = () => {
     useEffect(() => { 
         const fetchFireChartData = async () => {
             try {
+                setError(null);
                 setLoading(true);
                 const action = 'get-burned-area-chart-data';
                 const params = {

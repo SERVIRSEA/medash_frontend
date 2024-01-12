@@ -36,6 +36,7 @@ const RiceLineChart = () => {
     useEffect(() => { 
         const fetchRiceChartData = async () => {
             try {
+                setError(null);
                 setLoading(true);
                 const action = 'get-landcover-rice-line-data';
                 const params = {

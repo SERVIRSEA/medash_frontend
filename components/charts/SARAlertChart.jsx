@@ -25,7 +25,7 @@ import { Fetcher } from '@/fetchers/Fetcher';
 const SARAlertChart = () => {
     const [chartData, setChartData] = useAtom(sarAlertChartAtom);
     const [loading, setLoading] = useAtom(sarAlertChartDataLoadingAtom);
-    // const [error, setError] = useState(null);
+    const [error, setError] = useState(null);
     const [updateTrigger] = useAtom(updateTriggerAtom);
     const [studyLow] = useAtom(minYearSARAlert);
     const [studyHigh] = useAtom(maxYearSARAlert);

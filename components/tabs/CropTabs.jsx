@@ -15,6 +15,8 @@ import {
     measureMaxYearAtom,
     areaNameAtom
 } from '@/state/atoms';
+import RiceAreaBMChart from '../charts/RiceAreaBMChart';
+import RubberAreaBMChart from '../charts/RubberAreaBMChart';
 
 export default function CropTabs() {
     const [value, setValue] = React.useState(0);
@@ -49,11 +51,13 @@ export default function CropTabs() {
                 <RiceMap />
                 <br />
                 <RiceLineChart />
+                <RiceAreaBMChart />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <RubberMap />
                 <br />
                 <RubberLineChart />
+                <RubberAreaBMChart />
             </CustomTabPanel>
         </Box>
     );

@@ -67,6 +67,8 @@ export const riceYearlyMapDataStoreAtom = atom({});
 // Land cover rice chart data state
 export const riceChartAtom = atom([]);
 export const riceChartDataLoadingAtom = atom(true);
+export const riceBMDataAtom = atom([]);
+export const riceBMDataLoadingAtom = atom(true);
 
 // State for land cover rubber map
 export const selectedYearRubberAtom = atom(null); 
@@ -77,6 +79,8 @@ export const rubberYearlyMapDataStoreAtom = atom({});
 // Land cover rubber chart data state
 export const rubberChartAtom = atom([]);
 export const rubberChartDataLoadingAtom = atom(true);
+export const rubberBMDataAtom = atom([]);
+export const rubberBMDataLoadingAtom = atom(true);
 
 // State for Forest Gain map
 export const minYearForestGain = atom(2000);

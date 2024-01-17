@@ -25,6 +25,8 @@ import {
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 
+const RetryMaxAttempts = 5;
+
 const EVILineChart = () => {
     const [eviLineChartData, setEviLineChartData] = useAtom(eviLineChartAtom);
     const [loading, setLoading] = useAtom(eviLineChartDataLoadingAtom);
@@ -37,36 +39,52 @@ const EVILineChart = () => {
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
     const [, setUpdateTrigger] = useAtom(updateTriggerAtom);
+    const [attempts, setAttempts] = useState(0);
 
-    useEffect(() => { 
+    useEffect(() => {
         const fetchEVILineChartData = async () => {
-            try {
-                setError(null);
-                setLoading(true);
-                const params = {
-                    'area_type': area_type,
-                    'area_id': area_id,
-                    'refLow': refLow,
-                    'refHigh': refHigh,
-                    'studyLow': studyLow,
-                    'studyHigh': studyHigh
-                }
-                const key = JSON.stringify(params);
-                const action = 'get-evi-line';
+            while (attempts < RetryMaxAttempts) {
+                try {
+                    setError(null);
+                    setLoading(true);
+                    const params = {
+                        'area_type': area_type,
+                        'area_id': area_id,
+                        'refLow': refLow,
+                        'refHigh': refHigh,
+                        'studyLow': studyLow,
+                        'studyHigh': studyHigh
+                    }
+                    const key = JSON.stringify(params);
+                    const action = 'get-evi-line';
 
-                const data = await Fetcher(action, params);
-                setEviLineChartData(data);
-                // console.log(data)
-            } catch (error) {
-                setError(error.message);
-                console.error('Error fetching data:', error);
-                throw error; 
-            } finally {
-                setLoading(false);
+                    const data = await Fetcher(action, params);
+                    setEviLineChartData(data);
+                    setLoading(false);
+                    setAttempts(0);
+                    return; // Break out of the loop if successful
+                } catch (error) {
+                    // Retry if it's a network error
+                    if (error.isAxiosError && error.code === 'ECONNABORTED') {
+                        // Increment attempts
+                        setAttempts(prevAttempts => prevAttempts + 1);
+                        console.warn(`Retry attempt ${attempts + 1}`);
+                        // Introduce a 10-second delay before the next attempt
+                        await new Promise(resolve => setTimeout(resolve, 10000));
+                    } else {
+                        // Break out of the loop for non-network errors
+                        setLoading(false);
+                        break;
+                    }
+                } finally {
+                    setLoading(false);
+                }
             }
+            // Handle max retry attempts reached
+            setError('Max retry attempts reached. Please click again on update button.');
         }
         fetchEVILineChartData();
-    }, [area_id, area_type, refHigh, refLow, studyHigh, studyLow, setEviLineChartData, setLoading, setUpdateTrigger]);
+    }, [area_id, area_type, refHigh, refLow, studyHigh, studyLow, setEviLineChartData, setLoading, setUpdateTrigger, attempts]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

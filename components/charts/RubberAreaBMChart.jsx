@@ -24,7 +24,7 @@ import {
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
 
-const RetryMaxAttempts = 3;
+const RetryMaxAttempts = 5;
 
 const RubberAreaBMChart = () => {
     const [chartData, setChartData] = useAtom(rubberBMDataAtom);
@@ -36,12 +36,11 @@ const RubberAreaBMChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
-    const [updateTrigger] = useAtom(updateTriggerAtom);
+    const [, setUpdateTrigger] = useAtom(updateTriggerAtom);
+    const [attempts, setAttempts] = useState(0);
 
     useEffect(() => {
-        const fetchData = async () => {
-            let attempts = 0;
-
+        const fetchDataWithRetry = async () => {
             while (attempts < RetryMaxAttempts) {
                 try {
                     setError(null);
@@ -58,18 +57,18 @@ const RubberAreaBMChart = () => {
                     };
                     const key = JSON.stringify(params);
                     const data = await Fetcher(action, params);
-                    
                     setChartData(data);
                     setLoading(false);
+                    setAttempts(0);
                     return; // Break out of the loop if successful
                 } catch (error) {
-                    setError(error.message);
-                    console.error('Error fetching data:', error);
-
                     // Retry if it's a network error
                     if (error.isAxiosError && error.code === 'ECONNABORTED') {
-                        attempts++;
-                        console.warn(`Retry attempt ${attempts}`);
+                        // Increment attempts
+                        setAttempts(prevAttempts => prevAttempts + 1);
+                        console.warn(`Retry attempt ${attempts + 1}`);
+                        // Introduce a 10-second delay before the next attempt
+                        await new Promise(resolve => setTimeout(resolve, 10000));
                     } else {
                         // Break out of the loop for non-network errors
                         setLoading(false);
@@ -81,11 +80,11 @@ const RubberAreaBMChart = () => {
             }
 
             // Handle max retry attempts reached
-            setError('Max retry attempts reached. Unable to fetch data.');
+            setError('Max retry attempts reached. Please click again on the update button.');
         };
+        fetchDataWithRetry();
+    }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, setChartData, setLoading, setUpdateTrigger, attempts]);
 
-        fetchData();
-    }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh]);
     // useEffect(() => { 
     //     const fetchData = async () => {
     //         try {

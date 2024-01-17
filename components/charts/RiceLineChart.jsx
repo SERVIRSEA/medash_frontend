@@ -47,7 +47,12 @@ const RiceLineChart = () => {
                 }
                 const key = JSON.stringify(params);
                 const data = await Fetcher(action, params);
-                setChartData(data);
+                if (['country', 'province'].includes(area_type)) { //  'district', 'protected_area'
+                    const parsedData = JSON.parse(data);
+                    setChartData(parsedData);
+                } else {
+                    setChartData(data);
+                }
             } catch (error) {
                 setError(error.message);
                 console.error('Error fetching data:', error);

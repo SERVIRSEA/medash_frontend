@@ -45,6 +45,7 @@ const ForestCoverChart = () => {
                     'studyHigh': studyHigh
                 }
                 const data = await Fetcher(action, params);
+                console.log(data)
                 setChartData(data);
             } catch (error) {
                 setError(error.message);

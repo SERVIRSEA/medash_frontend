@@ -52,8 +52,9 @@ const RiceAreaBMChart = () => {
                     'type': 'rice'
                 }
                 const key = JSON.stringify(params);
+                console.log('Fetching data with params:', params);
                 const data = await Fetcher(action, params);
-                // console.log(data)
+                console.log('Received data:', data);
                 setChartData(data);
             } catch (error) {
                 setError(error.message);

@@ -49,7 +49,14 @@ const LandCoverChart = () => {
                 const key = JSON.stringify(params);
                 const action = 'get-landcover-chart';
                 const data = await Fetcher(action, params);
-                setLCChartData(data);
+                
+                if (['country', 'province'].includes(area_type)) { //  'district', 'protected_area'
+                    const parsedData = JSON.parse(data);
+                    setLCChartData(parsedData);
+                } else {
+                    setLCChartData(data);
+                }
+                
             } catch (error) {
                 setError(error.message);
                 console.error('Error fetching data:', error);

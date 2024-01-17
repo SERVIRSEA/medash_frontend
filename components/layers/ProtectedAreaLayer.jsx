@@ -23,7 +23,7 @@ function ProtectedAreaLayer(){
         service: 'WFS',
         version: '1.3.0',
         request: 'GetFeature',
-        typeName: 'khm:protected_area ', 
+        typeName: 'khm:cambodia_protected_area', 
         outputFormat: 'application/json',  
     };
 

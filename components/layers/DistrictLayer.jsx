@@ -23,7 +23,7 @@ function DistrictLayer(){
         service: 'WFS',
         version: '1.3.0',
         request: 'GetFeature',
-        typeName: 'khm:Cambodia_district', 
+        typeName: 'khm:cambodia_district', 
         outputFormat: 'application/json',  
     };
 
@@ -69,9 +69,9 @@ function DistrictLayer(){
         // Apply the highlight style
         layer.setStyle(highlightStyle());
 
-        const area_id = featureProperties.DIST_CODE;
+        const area_id = featureProperties.dist_code;
         const area_type = "district";
-        const area_name = featureProperties.DIST_NAME;
+        const area_name = featureProperties.dist_name;
 
         setTempAreaType(area_type);
         setTempAreaId(area_id);

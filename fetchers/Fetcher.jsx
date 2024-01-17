@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.timeout = 50000;
+// axios.defaults.timeout = 50000;
 
 export const Fetcher = async (action, params) => {
     // Ensure action is a string to prevent errors with 'substring' method.
@@ -38,10 +38,13 @@ export const Fetcher = async (action, params) => {
             'Authorization': `${apiKey}` 
         };
 
+        const timeout = 300000;
+
         // Await the axios GET request with the headers included and return the data
         const response = await axios.get(url, { 
             params: fullParams,
-            headers: headers 
+            headers: headers,
+            timeout: timeout,
         });
 
         // Optional: Check for non-200 status responses

@@ -24,6 +24,8 @@ import {
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
 
+const RetryMaxAttempts = 3;
+
 const RubberAreaBMChart = () => {
     const [chartData, setChartData] = useAtom(rubberBMDataAtom);
     const [loading, setLoading] = useAtom(rubberBMDataLoadingAtom);
@@ -36,35 +38,83 @@ const RubberAreaBMChart = () => {
     const [area_id] = useAtom(areaIdAtom);
     const [updateTrigger] = useAtom(updateTriggerAtom);
 
-    useEffect(() => { 
+    useEffect(() => {
         const fetchData = async () => {
-            try {
-                setError(null);
-                setLoading(true);
-                const action = 'get-landcover-baselinemeasure-area';
-                const params = {
-                    'area_type': area_type,
-                    'area_id': area_id,
-                    'refLow': refLow,
-                    'refHigh': refHigh,
-                    'studyLow': studyLow,
-                    'studyHigh': studyHigh,
-                    'type': 'rubber'
+            let attempts = 0;
+
+            while (attempts < RetryMaxAttempts) {
+                try {
+                    setError(null);
+                    setLoading(true);
+                    const action = 'get-landcover-baselinemeasure-area';
+                    const params = {
+                        'area_type': area_type,
+                        'area_id': area_id,
+                        'refLow': refLow,
+                        'refHigh': refHigh,
+                        'studyLow': studyLow,
+                        'studyHigh': studyHigh,
+                        'type': 'rubber'
+                    };
+                    const key = JSON.stringify(params);
+                    const data = await Fetcher(action, params);
+                    
+                    setChartData(data);
+                    setLoading(false);
+                    return; // Break out of the loop if successful
+                } catch (error) {
+                    setError(error.message);
+                    console.error('Error fetching data:', error);
+
+                    // Retry if it's a network error
+                    if (error.isAxiosError && error.code === 'ECONNABORTED') {
+                        attempts++;
+                        console.warn(`Retry attempt ${attempts}`);
+                    } else {
+                        // Break out of the loop for non-network errors
+                        setLoading(false);
+                        break;
+                    }
+                } finally {
+                    setLoading(false);
                 }
-                const key = JSON.stringify(params);
-                const data = await Fetcher(action, params);
-                // console.log(data)
-                setChartData(data);
-            } catch (error) {
-                setError(error.message);
-                console.error('Error fetching data:', error);
-                throw error; 
-            } finally {
-                setLoading(false);
             }
-        }
+
+            // Handle max retry attempts reached
+            setError('Max retry attempts reached. Unable to fetch data.');
+        };
+
         fetchData();
-    }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, updateTrigger]);
+    }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh]);
+    // useEffect(() => { 
+    //     const fetchData = async () => {
+    //         try {
+    //             setError(null);
+    //             setLoading(true);
+    //             const action = 'get-landcover-baselinemeasure-area';
+    //             const params = {
+    //                 'area_type': area_type,
+    //                 'area_id': area_id,
+    //                 'refLow': refLow,
+    //                 'refHigh': refHigh,
+    //                 'studyLow': studyLow,
+    //                 'studyHigh': studyHigh,
+    //                 'type': 'rubber'
+    //             }
+    //             const key = JSON.stringify(params);
+    //             const data = await Fetcher(action, params);
+    //             // console.log(data)
+    //             setChartData(data);
+    //         } catch (error) {
+    //             setError(error.message);
+    //             console.error('Error fetching data:', error);
+    //             throw error; 
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     }
+    //     fetchData();
+    // }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, updateTrigger]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;
@@ -96,7 +146,7 @@ const RubberAreaBMChart = () => {
             }
         },
         series: [{
-            name: 'Rice Area',
+            name: 'Rubber Area',
             data: [
                 chartData.baselineArea || 0,
                 chartData.measureArea || 0

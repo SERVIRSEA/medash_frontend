@@ -25,7 +25,7 @@ function ProvinceLayer(){
         service: 'WFS',
         version: '1.3.0',
         request: 'GetFeature',
-        typeName: 'khm:Cambodia_province', 
+        typeName: 'khm:cambodia_province', 
         outputFormat: 'application/json',  
     };
 

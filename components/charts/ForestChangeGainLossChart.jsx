@@ -4,8 +4,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
-// Exporting(Highcharts);
-// ExportData(Highcharts);
+
 if (typeof Highcharts === 'object') {
     Exporting(Highcharts);
     ExportData(Highcharts);
@@ -19,7 +18,8 @@ import {
     areaIdAtom,
     forestChangeGainLossAreaAtom,
     forestChangeLoadingAtom,
-    updateTriggerAtom
+    updateTriggerAtom,
+    maxRetryAttemptsAtom
 } from '@/state/atoms';
 
 import LoadingCard from '../LoadingCard';
@@ -35,35 +35,66 @@ const ForestChangeGainLossChart = () => {
     const [changeData, setChangeData] = useAtom(forestChangeGainLossAreaAtom);
     const [loading, setLoading] = useAtom(forestChangeLoadingAtom);
     const [error, setError] = useState(null);
-    const [updateTrigger] = useAtom(updateTriggerAtom);
-    
-    useEffect(() => { 
-        const fetchChartData = async () => {
-            try {
-                setError(null);
-                setLoading(true);
-                const action = 'get-forest-change-gainloss-chart-data';
-                const params = {
-                    'area_type': area_type,
-                    'area_id': area_id,
-                    'refLow': refLow,
-                    'refHigh': refHigh,
-                    'studyLow': studyLow,
-                    'studyHigh': studyHigh
+    const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
+    const [attempts, setAttempts] = useState(0);
+    const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
+
+    useEffect(() => {
+        const fetchChartDataWithRetry = async () => {
+            while (attempts < RetryMaxAttempts) {
+                try {
+                    setError(null);
+                    setLoading(true);
+                    const action = 'get-forest-change-gainloss-chart-data';
+                    const params = {
+                        'area_type': area_type,
+                        'area_id': area_id,
+                        'refLow': refLow,
+                        'refHigh': refHigh,
+                        'studyLow': studyLow,
+                        'studyHigh': studyHigh
+                    };
+
+                    const data = await Fetcher(action, params);
+                    setChangeData(data);
+                    setLoading(false);
+                    setAttempts(0);
+                    return; // Break out of the loop if successful
+                } catch (error) {
+                    // Retry if it's a network error
+                    if (error.isAxiosError && error.code === 'ECONNABORTED') {
+                        // Increment attempts
+                        setAttempts(prevAttempts => prevAttempts + 1);
+                        console.warn(`Retry attempt ${attempts + 1}`);
+                        // Introduce a 10-second delay before the next attempt
+                        await new Promise(resolve => setTimeout(resolve, 10000));
+                    } else {
+                        // Break out of the loop for non-network errors
+                        setLoading(false);
+                        break;
+                    }
+                } finally {
+                    setLoading(false);
                 }
-                const data = await Fetcher(action, params);
-                // console.log('change data:', data);
-                setChangeData(data);
-            } catch (error) {
-                setError(error.message);
-                console.error('Error fetching data:', error);
-                throw error; 
-            } finally {
-                setLoading(false);
             }
+
+            // Handle max retry attempts reached
+            setError('Max retry attempts reached. Please click again on the update button.');
+        };
+
+        // Check for updateTrigger to initiate fetch
+        if (updateTrigger > 0) {
+            // If update trigger occurs, reset attempts to 0
+            setAttempts(0);
+            // Reset update trigger
+            setUpdateTrigger(0);
+            // Execute fetchChartDataWithRetry
+            fetchChartDataWithRetry();
+        } else {
+            // Initial fetch
+            fetchChartDataWithRetry();
         }
-        fetchChartData();
-    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
+    }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, setChangeData, setLoading, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
 
     const data = {
         statsRefLoss: changeData.statsRefLoss || 0,

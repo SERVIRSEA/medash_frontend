@@ -19,12 +19,11 @@ import {
     areaIdAtom,
     rubberBMDataAtom,
     rubberBMDataLoadingAtom,
-    updateTriggerAtom
+    updateTriggerAtom,
+    maxRetryAttemptsAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
-
-const RetryMaxAttempts = 5;
 
 const RubberAreaBMChart = () => {
     const [chartData, setChartData] = useAtom(rubberBMDataAtom);
@@ -36,8 +35,9 @@ const RubberAreaBMChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
-    const [, setUpdateTrigger] = useAtom(updateTriggerAtom);
+    const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
     const [attempts, setAttempts] = useState(0);
+    const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
 
     useEffect(() => {
         const fetchDataWithRetry = async () => {
@@ -82,8 +82,20 @@ const RubberAreaBMChart = () => {
             // Handle max retry attempts reached
             setError('Max retry attempts reached. Please click again on the update button.');
         };
-        fetchDataWithRetry();
-    }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, setChartData, setLoading, setUpdateTrigger, attempts]);
+
+        // Check for updateTrigger to initiate fetch
+        if (updateTrigger > 0) {
+            // If update trigger occurs, reset attempts to 0
+            setAttempts(0);
+            // Reset update trigger
+            setUpdateTrigger(0);
+            // Execute fetchDataWithRetry
+            fetchDataWithRetry();
+        } else {
+            // Initial fetch
+            fetchDataWithRetry();
+        }
+    }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, setChartData, setLoading, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
 
     // useEffect(() => { 
     //     const fetchData = async () => {

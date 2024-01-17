@@ -4,8 +4,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
-// Exporting(Highcharts);
-// ExportData(Highcharts);
+
 if (typeof Highcharts === 'object') {
     Exporting(Highcharts);
     ExportData(Highcharts);
@@ -21,24 +20,23 @@ import {
     areaIdAtom,
     eviLineChartAtom,
     eviLineChartDataLoadingAtom,
-    updateTriggerAtom
+    updateTriggerAtom,
+    maxRetryAttemptsAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
-
-const RetryMaxAttempts = 5;
 
 const EVILineChart = () => {
     const [eviLineChartData, setEviLineChartData] = useAtom(eviLineChartAtom);
     const [loading, setLoading] = useAtom(eviLineChartDataLoadingAtom);
     const [error, setError] = useState(null);
-
+    const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
     const [refLow] = useAtom(baselineMinYearAtom);
     const [refHigh] = useAtom(baselineMaxYearAtom);
     const [studyLow] = useAtom(measureMinYearAtom);
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
-    const [, setUpdateTrigger] = useAtom(updateTriggerAtom);
+    const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
     const [attempts, setAttempts] = useState(0);
 
     useEffect(() => {
@@ -80,11 +78,24 @@ const EVILineChart = () => {
                     setLoading(false);
                 }
             }
+
             // Handle max retry attempts reached
-            setError('Max retry attempts reached. Please click again on update button.');
+            setError('Max retry attempts reached. Please click again on the update button.');
         }
-        fetchEVILineChartData();
-    }, [area_id, area_type, refHigh, refLow, studyHigh, studyLow, setEviLineChartData, setLoading, setUpdateTrigger, attempts]);
+
+        // Check for updateTrigger to initiate fetch
+        if (updateTrigger > 0) {
+            // If update trigger occurs, reset attempts to 0
+            setAttempts(0);
+            // Reset update trigger
+            setUpdateTrigger(0);
+            // Execute fetchDataWithRetry
+            fetchEVILineChartData();
+        } else {
+            // Initiall request
+            fetchEVILineChartData();
+        }
+    }, [area_id, area_type, refHigh, refLow, studyHigh, studyLow, setEviLineChartData, setLoading, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

@@ -18,6 +18,7 @@ import {
     gladAlertChartAtom,
     gladAlertChartDataLoadingAtom,
     updateTriggerAtom,
+    maxRetryAttemptsAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -26,36 +27,67 @@ const GLADAlertChart = () => {
     const [chartData, setChartData] = useAtom(gladAlertChartAtom);
     const [loading, setLoading] = useAtom(gladAlertChartDataLoadingAtom);
     const [error, setError] = useState(null);
-    const [updateTrigger] = useAtom(updateTriggerAtom);
     const [studyLow] = useAtom(minYearGLADAlert);
     const [studyHigh] = useAtom(maxYearGLADAlert);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
+    const [attempts, setAttempts] = useState(0);
+    const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
 
-    useEffect(() => { 
-        const fetchGLADChartData = async () => {
-            try {
-                setError(null);
-                setLoading(true);
-                const action = 'get-glad-alert-chart-data';
-                const params = {
-                    'area_type': area_type,
-                    'area_id': area_id,
-                    'studyLow': studyLow,
-                    'studyHigh': studyHigh
+    useEffect(() => {
+        const fetchDataWithRetry = async () => {
+            while (attempts < RetryMaxAttempts) {
+                try {
+                    setError(null);
+                    setLoading(true);
+                    const action = 'get-glad-alert-chart-data';
+                    const params = {
+                        'area_type': area_type,
+                        'area_id': area_id,
+                        'studyLow': studyLow,
+                        'studyHigh': studyHigh
+                    };
+                    const data = await Fetcher(action, params);
+                    setChartData(data);
+                    setLoading(false);
+                    setAttempts(0);
+                    return; // Break out of the loop if successful
+                } catch (error) {
+                    // Retry if it's a network error
+                    if (error.isAxiosError && error.code === 'ECONNABORTED') {
+                        // Increment attempts
+                        setAttempts(prevAttempts => prevAttempts + 1);
+                        console.warn(`Retry attempt ${attempts + 1}`);
+                        // Introduce a 10-second delay before the next attempt
+                        await new Promise(resolve => setTimeout(resolve, 10000));
+                    } else {
+                        // Break out of the loop for non-network errors
+                        setLoading(false);
+                        break;
+                    }
+                } finally {
+                    setLoading(false);
                 }
-                const data = await Fetcher(action, params);
-                setChartData(data);
-            } catch (error) {
-                setError(error.message);
-                console.error('Error fetching data:', error);
-                throw error; 
-            } finally {
-                setLoading(false);
             }
+
+            // Handle max retry attempts reached
+            setError('Max retry attempts reached. Please click again on the update button.');
+        };
+
+        // Check for updateTrigger to initiate fetch
+        if (updateTrigger > 0) {
+            // If update trigger occurs, reset attempts to 0
+            setAttempts(0);
+            // Reset update trigger
+            setUpdateTrigger(0);
+            // Execute fetchDataWithRetry
+            fetchDataWithRetry();
+        } else {
+            // Initial fetch
+            fetchDataWithRetry();
         }
-        fetchGLADChartData();
-    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
+    }, [area_type, area_id, studyLow, studyHigh, setChartData, setLoading, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

@@ -4,8 +4,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
-// Exporting(Highcharts);
-// ExportData(Highcharts);
+
 if (typeof Highcharts === 'object') {
     Exporting(Highcharts);
     ExportData(Highcharts);
@@ -21,7 +20,8 @@ import {
     areaIdAtom,
     eviPieChartDataLoadingAtom,
     eviPieChartAtom,
-    updateTriggerAtom
+    updateTriggerAtom,
+    maxRetryAttemptsAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 
@@ -29,51 +29,81 @@ const EVIPieChart = () => {
     const [eviPieChartData, setEviPieChartData] = useAtom(eviPieChartAtom);
     const [loading, setLoading] = useAtom(eviPieChartDataLoadingAtom);
     const [error, setError] = useState(null);
-
+    const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
     const [refLow] = useAtom(baselineMinYearAtom);
     const [refHigh] = useAtom(baselineMaxYearAtom);
     const [studyLow] = useAtom(measureMinYearAtom);
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
-    const [, setUpdateTrigger] = useAtom(updateTriggerAtom);
+    const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
+    const [attempts, setAttempts] = useState(0);
 
-    useEffect(() => { 
-        const fetchEVIPieChartData = async () => {
-            try {
-                setError(null);
-                setLoading(true);
-                const params = {
-                    'area_type': area_type,
-                    'area_id': area_id,
-                    'refLow': refLow,
-                    'refHigh': refHigh,
-                    'studyLow': studyLow,
-                    'studyHigh': studyHigh
+    useEffect(() => {
+        const fetchEVIPieChartDataWithRetry = async () => {
+            while (attempts < RetryMaxAttempts) {
+                try {
+                    setError(null);
+                    setLoading(true);
+                    const params = {
+                        'area_type': area_type,
+                        'area_id': area_id,
+                        'refLow': refLow,
+                        'refHigh': refHigh,
+                        'studyLow': studyLow,
+                        'studyHigh': studyHigh
+                    };
+                    const key = JSON.stringify(params);
+                    const action = 'get-evi-pie';
+                    const data = await Fetcher(action, params);
+
+                    const graphDataEVI = [];
+                    let className = ['Large improvement', 'improvement', 'No Change', 'Under Stress', 'Severe stress'];
+                    let classColor = ['#264653','#2A9D8F','#E9C46A','#F4A261','#E76F51'];
+                    let total_area_evi = 0;
+                    for (var i=0; i< className.length; i++) {
+                        graphDataEVI.push({ name: className[i], y: data[i], color: classColor[i]});
+                        total_area_evi = total_area_evi + data[i];
+                    }
+                    setEviPieChartData(graphDataEVI);
+                    setLoading(false);
+                    setAttempts(0);
+                    return; // Break out of the loop if successful
+                } catch (error) {
+                    // Retry if it's a network error
+                    if (error.isAxiosError && error.code === 'ECONNABORTED') {
+                        // Increment attempts
+                        setAttempts(prevAttempts => prevAttempts + 1);
+                        console.warn(`Retry attempt ${attempts + 1}`);
+                        // Introduce a 10-second delay before the next attempt
+                        await new Promise(resolve => setTimeout(resolve, 10000));
+                    } else {
+                        // Break out of the loop for non-network errors
+                        setLoading(false);
+                        break;
+                    }
+                } finally {
+                    setLoading(false);
                 }
-                const key = JSON.stringify(params);
-                const action = 'get-evi-pie';
-                const data = await Fetcher(action, params);
-                
-                const graphDataEVI = [];
-                let className = ['Large improvement', 'improvement', 'No Change', 'Under Stress', 'Severe stress'];
-                let classColor = ['#264653','#2A9D8F','#E9C46A','#F4A261','#E76F51'];
-                let total_area_evi = 0;
-                for (var i=0; i< className.length; i++) {
-                    graphDataEVI.push({ name: className[i], y: data[i], color: classColor[i]});
-                    total_area_evi = total_area_evi + data[i];
-                }
-                setEviPieChartData(graphDataEVI);
-            } catch (error) {
-                setError(error.message);
-                console.error('Error fetching data:', error);
-                throw error; 
-            } finally {
-                setLoading(false);
             }
+
+            // Handle max retry attempts reached
+            setError('Max retry attempts reached. Please click again on the update button.');
+        };
+
+        // Check for updateTrigger to initiate fetch
+        if (updateTrigger > 0) {
+            // If update trigger occurs, reset attempts to 0
+            setAttempts(0);
+            // Reset update trigger
+            setUpdateTrigger(0);
+            // Execute fetchEVIPieChartDataWithRetry
+            fetchEVIPieChartDataWithRetry();
+        } else {
+            // Initial fetch
+            fetchEVIPieChartDataWithRetry();
         }
-        fetchEVIPieChartData();
-    }, [area_id, area_type, refHigh, refLow, studyHigh, studyLow, setEviPieChartData, setLoading, setUpdateTrigger]);
+    }, [area_id, area_type, refLow, refHigh, studyLow, studyHigh, setEviPieChartData, setLoading, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

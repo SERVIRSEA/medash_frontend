@@ -20,7 +20,8 @@ import {
     lcChartDataLoadingAtom,
     minYearLandCover,
     maxYearLandCover,
-    updateTriggerAtom
+    updateTriggerAtom,
+    maxRetryAttemptsAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 
@@ -28,45 +29,75 @@ const LandCoverChart = () => {
     const [lcChartData, setLCChartData] = useAtom(landCoverChartAtom);
     const [loading, setLoading] = useAtom(lcChartDataLoadingAtom);
     const [error, setError] = useState(null);
-
     const [studyLow] = useAtom(minYearLandCover);
     const [studyHigh] = useAtom(maxYearLandCover);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
-    const [updateTrigger] = useAtom(updateTriggerAtom);
+    const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
+    const [attempts, setAttempts] = useState(0);
+    const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
 
-    useEffect(() => { 
-        const fetchLCChartData = async () => {
-            try {
-                setError(null);
-                setLoading(true);
-                const params = {
-                    'area_type': area_type,
-                    'area_id': area_id,
-                    'studyLow': studyLow,
-                    'studyHigh': studyHigh
+    useEffect(() => {
+        const fetchDataWithRetry = async () => {
+            while (attempts < RetryMaxAttempts) {
+                try {
+                    setError(null);
+                    setLoading(true);
+                    const params = {
+                        'area_type': area_type,
+                        'area_id': area_id,
+                        'studyLow': studyLow,
+                        'studyHigh': studyHigh
+                    };
+                    const key = JSON.stringify(params);
+                    const action = 'get-landcover-chart';
+                    const data = await Fetcher(action, params);
+
+                    if (['country', 'province'].includes(area_type)) {
+                        const parsedData = JSON.parse(data);
+                        setLCChartData(parsedData);
+                    } else {
+                        setLCChartData(data);
+                    }
+
+                    setLoading(false);
+                    setAttempts(0);
+                    return; // Break out of the loop if successful
+                } catch (error) {
+                    // Retry if it's a network error
+                    if (error.isAxiosError && error.code === 'ECONNABORTED') {
+                        // Increment attempts
+                        setAttempts(prevAttempts => prevAttempts + 1);
+                        console.warn(`Retry attempt ${attempts + 1}`);
+                        // Introduce a 10-second delay before the next attempt
+                        await new Promise(resolve => setTimeout(resolve, 10000));
+                    } else {
+                        // Break out of the loop for non-network errors
+                        setLoading(false);
+                        break;
+                    }
+                } finally {
+                    setLoading(false);
                 }
-                const key = JSON.stringify(params);
-                const action = 'get-landcover-chart';
-                const data = await Fetcher(action, params);
-                
-                if (['country', 'province'].includes(area_type)) { //  'district', 'protected_area'
-                    const parsedData = JSON.parse(data);
-                    setLCChartData(parsedData);
-                } else {
-                    setLCChartData(data);
-                }
-                
-            } catch (error) {
-                setError(error.message);
-                console.error('Error fetching data:', error);
-                throw error; 
-            } finally {
-                setLoading(false);
             }
+
+            // Handle max retry attempts reached
+            setError('Max retry attempts reached. Please click again on the update button.');
+        };
+
+        // Check for updateTrigger to initiate fetch
+        if (updateTrigger > 0) {
+            // If update trigger occurs, reset attempts to 0
+            setAttempts(0);
+            // Reset update trigger
+            setUpdateTrigger(0);
+            // Execute fetchDataWithRetry
+            fetchDataWithRetry();
+        } else {
+            // Initial fetch
+            fetchDataWithRetry();
         }
-        fetchLCChartData();
-    }, [area_type, area_id, studyLow, studyHigh, updateTrigger]);
+    }, [area_type, area_id, studyLow, studyHigh, setLCChartData, setLoading, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

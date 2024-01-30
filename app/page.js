@@ -49,7 +49,7 @@ export default function Home() {
             </Grid>
             <Grid item xs={6}>
               <Box pt={0} pl={8} pr={8}>
-                <img src="/Dashboard.png" alt="Dashboard" height={400} width={400} layout="responsive" />
+                <img src="/Dashboard.png" alt="Dashboard" height={400} width={500} layout="responsive" />
               </Box>
             </Grid>
           </Grid>

@@ -97,8 +97,7 @@ const FireHotspotChart = () => {
     const data = chartData;
 
     const years = Object.keys(data);
-    const numberFireData = years.map(year => data[year].number_fire);
-    const totalAreaData = years.map(year => data[year].total_area);
+    const numberFireData = years.map(year => data[year]);
 
     const chartTitle = "NUMBER OF FIRE HOTSPOT";
 

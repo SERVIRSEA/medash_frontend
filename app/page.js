@@ -49,7 +49,7 @@ export default function Home() {
             </Grid>
             <Grid item xs={6}>
               <Box pt={0} pl={8} pr={8}>
-                <Image src="/Dashboard.png" alt="Dashboard" height={400} width={400} layout="responsive" />
+                <img src="/Dashboard.png" alt="Dashboard" height={400} width={400} layout="responsive" />
               </Box>
             </Grid>
           </Grid>
@@ -75,7 +75,7 @@ export default function Home() {
             </Grid>
             <Grid item xs={6}>
               <Box pt={8} pl={8} pr={8}>
-                <Image src="/forest-photo.jpg" alt="forest" height={400} width={400} layout="responsive" />
+                <img src="/forest-photo.jpg" alt="forest" height={400} width={600} />
                 <Typography variant='caption' sx={{paddingTop: '0px', marginTop: '0px'}}>Image credit: USAID Greening Prey Lang, Cambodia </Typography>
               </Box>
             </Grid>

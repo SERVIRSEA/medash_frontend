@@ -5,8 +5,6 @@ import { ListItem, IconButton } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import DownloadIcon from '@mui/icons-material/Download';
-import { fetchEVIMap } from '@/fetchers/eviMapFetcher';
-import { fetchDownloadEVIMap } from '@/fetchers/downloadEVIMapFetcher';
 import { Fetcher } from '@/fetchers/Fetcher';
 
 import { 
@@ -36,70 +34,54 @@ function EVIMap(){
     const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
     const [updateTrigger] = useAtom(updateTriggerAtom);
 
+    const handleCheckboxChange = async () => {
+        setEVILayerVisibility(!visibleEVILayer);
+
+        // Fetch and update data when the checkbox is checked
+        if (!visibleEVILayer) {
+            await fetchData();
+        }
+    };
+
+    const fetchData = async () => {
+        const params = {
+            'area_type': area_type,
+            'area_id': area_id,
+            'refLow': refLow,
+            'refHigh': refHigh,
+            'studyLow': studyLow,
+            'studyHigh': studyHigh
+        };
+
+        const key = JSON.stringify(params);
+        const action = 'get-evi-map';
+
+        if (eviMapDataStore[key]) {
+            setEviData(eviMapDataStore[key]);
+        } else {
+            try {
+                setIsLoading(true);
+                const data = await Fetcher(action, params);
+                setEviData(data);
+                setEVIMapDataStore((prev) => ({ ...prev, [key]: data }));
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                throw error;
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    };
+
     useEffect(() => {
         const handleEviLayerOnOff = async () => {
-            // Fetch data only when both update button is clicked and visibleEVILayer is checked
             if (updateTrigger > 0 && visibleEVILayer) {
-                const params = {
-                    'area_type': area_type,
-                    'area_id': area_id,
-                    'refLow': refLow,
-                    'refHigh': refHigh,
-                    'studyLow': studyLow,
-                    'studyHigh': studyHigh
-                }
-                const key = JSON.stringify(params);
-                const action = 'get-evi-map';
-
-                if (eviMapDataStore[key]) {
-                    setEviData(eviMapDataStore[key]);
-                } else {
-                    try {
-                        setIsLoading(true);
-                        const data = await Fetcher(action, params);
-                        setEviData(data);
-                        setEVIMapDataStore(prev => ({ ...prev, [key]: data }));
-                    } catch (error) {
-                        console.error('Error fetching data:', error);
-                        throw error;
-                    } finally {
-                        setIsLoading(false);
-                    }
-                }
+                await fetchData();
             }
         };
         handleEviLayerOnOff();
     }, [updateTrigger, visibleEVILayer, area_type, area_id, refLow, refHigh, studyLow, studyHigh]);
 
-    // const handleEviLayerOnOff = async()=> {
-    //     setEVILayerVisibility(!visibleEVILayer);
-    //     const params = {
-    //         'area_type': area_type,
-    //         'area_id': area_id,
-    //         'refLow': refLow,
-    //         'refHigh': refHigh,
-    //         'studyLow': studyLow,
-    //         'studyHigh': studyHigh
-    //     }
-    //     const key = JSON.stringify(params);
-    //     const action = 'get-evi-map';
-
-    //     if (eviMapDataStore[key]) {
-    //         setEviData(eviMapDataStore[key]);
-    //     } else {
-    //         try {
-    //             setIsLoading(true);
-    //             const data = await Fetcher(action, params);
-    //             setEviData(data);
-    //             setEVIMapDataStore(prev => ({ ...prev, [key]: data }));
-    //         } catch (error) {
-    //             console.error('Error fetching data:', error);
-    //             throw error; 
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     }
-    // }
 
     const downloadEVIMap = async ()=> {
         const params = {
@@ -142,8 +124,7 @@ function EVIMap(){
                 <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={downloadEVIMap}>
                     <DownloadIcon />
                 </IconButton>
-                <FormControlLabel control={<Checkbox checked={visibleEVILayer} size="small" sx={{ mr: 0.1 }} />} label="Enhanced vegetation index" onChange={() => setEVILayerVisibility(!visibleEVILayer)} />
-                {/* <FormControlLabel control={<Checkbox checked={visibleEVILayer} size="small" sx={{ mr: 0.1 }}  />} label="Enhanced vegetation index" onChange={handleEviLayerOnOff} /> */}
+                <FormControlLabel control={<Checkbox checked={visibleEVILayer} size="small" sx={{ mr: 0.1 }} />} label="Enhanced vegetation index" onChange={handleCheckboxChange} /> 
             </ListItem>
         </>
     )

@@ -14,6 +14,7 @@ import MapLayersPanel from './panels/MapLayersPanel';
 import ReportingPanel from './panels/ReportingPanel';
 import DroughtMonitoringPanel from './panels/DroughtMonitoringPanel';
 import { 
+    eviVisibilityAtom,
     lcVisibilityAtom, 
     forestGainVisibilityAtom,
     forestLossVisibilityAtom,
@@ -45,6 +46,7 @@ function Sidebar(){
     const [, setForestExtentMapVisibility] = useAtom(forestExtentVisibilityAtom);
     const [, setForestGainMapVisibility] = useAtom(forestGainVisibilityAtom);
     const [, setForestLossMapVisibility] = useAtom(forestLossVisibilityAtom);
+    const [, setEviMapVisibility] = useAtom(eviVisibilityAtom);
 
     const sidebarStyle = {
         background: "#eee",
@@ -155,7 +157,7 @@ function Sidebar(){
     }
 
     const mapVisibilityMappings = {
-        0: { riceMap: false, rubberMap: false, lcMap: true },
+        0: { eviMap: true, lcMap: true, riceMap: false, rubberMap: false },
         1: { riceMap: false, rubberMap: false, lcMap: false, forestExtentMap: true, forestGainMap: true, forestLossMap: true },
         2: { riceMap: true, rubberMap: true, lcMap: false },
         3: { riceMap: false, rubberMap: false, lcMap: false, gladMap: true, sarMap: true },
@@ -171,6 +173,7 @@ function Sidebar(){
 
         const mapVisibility = mapVisibilityMappings[index] || {};
 
+        setEviMapVisibility(mapVisibility.eviMap || false)
         setRiceMapVisibility(mapVisibility.riceMap || false);
         setRubberMapVisibility(mapVisibility.rubberMap || false);
         setLCMapVisibility(mapVisibility.lcMap || false);

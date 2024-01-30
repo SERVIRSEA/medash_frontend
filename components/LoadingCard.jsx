@@ -5,8 +5,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
 function LoadingCard() {
+    const cardStyle = {
+        boxShadow: 'none', 
+        border: 'none', 
+    };
     return (
-        <Card>
+        <Card style={cardStyle}>
             <CardContent>
                 <Box
                     display="flex"

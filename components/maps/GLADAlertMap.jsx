@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -11,6 +11,7 @@ import {
     selectedYearGLADAlertAtom, 
     gladAlertApiAtom,
     isLoadingAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 
@@ -24,35 +25,21 @@ const GLADAlertMap = () => {
     const [, setGLADAlertData] = useAtom(gladAlertApiAtom);
     const [gladAlertMapStore, setGLADAlertMapStore] = useAtom(gladAlertYearlyMapDataStoreAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
+    const [isFetching, setIsFetching] = useState(false);
+    const [isInitialRender, setIsInitialRender] = useState(true);
 
-    useEffect(() => { 
-        const fetchLatestGLADAlertMap = async () => {
-            try {
-                setIsLoading(true);
-                const year = max; 
-                const params = {
-                    'area_type': area_type,
-                    'area_id': area_id,
-                    'year': year
-                };
-                const key = JSON.stringify(params);
-                const action = 'get-glad-alert-map';
-                const data = await Fetcher(action, params);
-                setSelectedYear(year);
-                setGLADAlertData(data);
-                setGLADAlertMapStore(prev => ({ ...prev, [key]: data }));
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                throw error; 
-            } finally {
-                setIsLoading(false);
-            }
+    const fetchGLADAlertMap = async (year) => {
+        if (isFetching) {
+            return;
         }
-        fetchLatestGLADAlertMap();
-    }, []);
+        if (!year){
+            return;
+        }
 
-    const showOnOffGLADAlertMap = async (year) =>{
-        setSelectedYear((prevYear) => (prevYear === year ? null : year));
+        setIsFetching(true);
+        setIsLoading(true);
+
         const action = 'get-glad-alert-map';
         const params = {
             'area_type': area_type,
@@ -60,12 +47,13 @@ const GLADAlertMap = () => {
             'year': year
         };
         const key = JSON.stringify(params);
-
+        
         if (gladAlertMapStore[key]) {
             setGLADAlertData(gladAlertMapStore[key]);
+            setIsFetching(false);
+            setIsLoading(false);
         } else {
             try {
-                setIsLoading(true);
                 const data = await Fetcher(action, params);
                 setGLADAlertData(data);
                 setGLADAlertMapStore(prev => ({ ...prev, [key]: data }));
@@ -73,9 +61,41 @@ const GLADAlertMap = () => {
                 console.error('Error fetching data:', error);
                 throw error; 
             } finally {
-                setIsLoading(false)
+                setIsLoading(false);
+                setIsFetching(false);
             }
         }
+    }
+    
+    useEffect(() => { 
+        // On the initial render, set max as the selected year and fetch data
+        if (isInitialRender) {
+            setSelectedYear(max);
+            fetchGLADAlertMap(max);
+            setIsInitialRender(false);
+        }
+
+        // When selectedYear changes and it's not the initial render, fetch data
+        if (!isInitialRender && selectedYear !== null) {
+            fetchGLADAlertMap(selectedYear);
+        }
+
+        // When updateTrigger is triggered, fetch data using the selected year
+        if (!isInitialRender && updateTrigger > 0) {
+            fetchGLADAlertMap(selectedYear);
+        }
+    }, [area_type, area_id, max, updateTrigger, selectedYear, isInitialRender]);
+
+    const showOnOffGLADAlertMap = async (year) =>{
+        setSelectedYear((prevYear) => {
+            const newYear = prevYear === year ? null : year;
+
+            if (newYear !== null || updateTrigger > 0) {
+                fetchGLADAlertMap(newYear);
+            }
+
+            return newYear;
+        });
     }
 
     const downloadGLADAlertMap = async (year) =>{

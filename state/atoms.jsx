@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 
 // State for sidebar expand/collapse
 export const sidebarAtom = atom(0);
-export const maxRetryAttemptsAtom = atom(5);
+export const maxRetryAttemptsAtom = atom(100);
 
 // State for loading map data
 export const mapInstanceAtom = atom(null);

@@ -60,7 +60,7 @@ const GLADAlertChart = () => {
                         setAttempts(prevAttempts => prevAttempts + 1);
                         console.warn(`Retry attempt ${attempts + 1}`);
                         // Introduce a 10-second delay before the next attempt
-                        await new Promise(resolve => setTimeout(resolve, 10000));
+                        await new Promise(resolve => setTimeout(resolve, 100000));
                     } else {
                         // Break out of the loop for non-network errors
                         setLoading(false);
@@ -93,7 +93,7 @@ const GLADAlertChart = () => {
     if (error) return <div>Error: {error}</div>;
 
     const data = Object.entries(chartData).map(([year, totalArea]) => ({ year, totalArea }));
-
+    
     const years = data.map(item => item.year);
     const totalAreaData = data.map(item => item.totalArea);
 

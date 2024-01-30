@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -11,6 +11,7 @@ import {
     selectedYearSARAlertAtom, 
     sarAlertApiAtom,
     isLoadingAtom,
+    updateTriggerAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 
@@ -24,9 +25,21 @@ const SARAlertMap = () => {
     const [, setSARAlertData] = useAtom(sarAlertApiAtom);
     const [sarAlertMapStore, setSARAlertMapStore] = useAtom(sarAlertYearlyMapDataStoreAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
+    const [updateTrigger] = useAtom(updateTriggerAtom);
+    const [isFetching, setIsFetching] = useState(false);
+    const [isInitialRender, setIsInitialRender] = useState(true);
 
-    const showOnOffSARAlertMap = async (year) =>{
-        setSelectedYear((prevYear) => (prevYear === year ? null : year));
+    const fetchSARAlertMap = async(year) =>{
+        if (isFetching) {
+            return;
+        }
+        if (!year){
+            return;
+        }
+
+        setIsFetching(true);
+        setIsLoading(true);
+
         const action = 'get-burned-area';
         const params = {
             'area_type': area_type,
@@ -37,6 +50,8 @@ const SARAlertMap = () => {
 
         if (sarAlertMapStore[key]) {
             setSARAlertData(sarAlertMapStore[key]);
+            setIsFetching(false);
+            setIsLoading(false);
         } else {
             try {
                 setIsLoading(true);
@@ -47,9 +62,42 @@ const SARAlertMap = () => {
                 console.error('Error fetching data:', error);
                 throw error; 
             } finally {
-                setIsLoading(false)
+                setIsLoading(false);
+                setIsFetching(false);
             }
         }
+    }
+
+    useEffect(() => { 
+        // On the initial render, set max as the selected year and fetch data
+        if (isInitialRender) {
+            // setSelectedYear(max);
+            // fetchSARAlertMap(max);
+            setIsInitialRender(false);
+        }
+
+        // When selectedYear changes and it's not the initial render, fetch data
+        if (!isInitialRender && selectedYear !== null) {
+            fetchSARAlertMap(selectedYear);
+        }
+
+        // When updateTrigger is triggered, fetch data using the selected year
+        if (!isInitialRender && updateTrigger > 0) {
+            fetchSARAlertMap(selectedYear);
+        }
+    }, [area_type, area_id, max, updateTrigger, selectedYear, isInitialRender]);
+
+    
+    const showOnOffSARAlertMap = async (year) =>{
+        setSelectedYear((prevYear) => {
+            const newYear = prevYear === year ? null : year;
+
+            if (newYear !== null || updateTrigger > 0) {
+                fetchSARAlertMap(newYear);
+            }
+
+            return newYear;
+        });
     }
 
     const downloadSARAlertMap = async (year) =>{

@@ -52,8 +52,8 @@ const LandCoverChart = () => {
                     const key = JSON.stringify(params);
                     const action = 'get-landcover-chart';
                     const data = await Fetcher(action, params);
-
-                    if (['country', 'province'].includes(area_type)) {
+                    // console.log(data)
+                    if (['country', 'province', 'district', 'protected_area'].includes(area_type)) {
                         const parsedData = JSON.parse(data);
                         setLCChartData(parsedData);
                     } else {
@@ -131,13 +131,18 @@ const LandCoverChart = () => {
     const categories = Object.keys(data[studyLow]);
 
     // Build the series data
+
     const series = categories.map(category => {
         return {
             name: category,
-            data: Object.keys(data).map(year => data[year][category]),
+            data: Object.keys(data).map(year => {
+                const categoryData = data[year][category];
+                return categoryData !== undefined ? categoryData : 0;
+            }),
             color: colors[category]
         };
     });
+    
 
     // Configuring the Highcharts
     const options = {

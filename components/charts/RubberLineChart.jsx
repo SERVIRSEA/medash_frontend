@@ -50,9 +50,9 @@ const RubberLineChart = () => {
                         'studyHigh': studyHigh
                     };
                     const key = JSON.stringify(params);
-
+                    
                     const data = await Fetcher(action, params);
-                    if (['country', 'province'].includes(area_type)) { // 'district', 'protected_area'
+                    if (['country', 'province', 'district', 'protected_area'].includes(area_type)) { // 'district', 'protected_area'
                         const parsedData = JSON.parse(data);
                         setChartData(parsedData);
                     } else {

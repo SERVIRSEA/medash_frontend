@@ -49,6 +49,7 @@ const SARAlertChart = () => {
                         'studyHigh': studyHigh
                     };
                     const data = await Fetcher(action, params);
+                    // console.log(data)
                     setChartData(data);
                     setLoading(false);
                     setAttempts(0);

@@ -2,7 +2,7 @@ import React, {useEffect,useState} from "react";
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-import { fetchDownloadLCMap } from '@/fetchers/downloadLandCoverMapFetcher';
+
 import { 
     areaTypeAtom, 
     areaIdAtom, 
@@ -41,8 +41,8 @@ function ForestGainMap(){
             const params = {
                 'area_type': area_type,
                 'area_id': area_id,
-                'studyLow': 2000,
-                'studyHigh': 2020,
+                'studyLow': min,
+                'studyHigh': max,
             };
             const key = JSON.stringify(params);
 
@@ -71,36 +71,26 @@ function ForestGainMap(){
         setIsForestGainMapVisible(!isForestGainMapVisible);
     };
 
-    const downloadForestGainMap = async (year) =>{
-        const action = 'download-landcover-forestgain-map';
+    const downloadForestGainMap = async () =>{
+        const action = 'download-forest-gain-map';
         const params = {
             'area_type': area_type,
             'area_id': area_id,
-            'start_year': min,
-            'end_year': max,
+            'studyLow': min,
+            'studyHigh': max,
         }
         const data = await Fetcher(action, params);
-        const dnlurl = data.downloadURL;
-        if(data.success === 'success'){
-            // Fetch the file as Blob
-            const fileResponse = await Fetcher(dnlurl);
-            const fileBlob = await fileResponse.blob();
-
-            // Create a blob URL
-            const blobURL = window.URL.createObjectURL(fileBlob);
-
+        if (data.success === 'success' && data.downloadURL) {
+            const downloadURL = data.downloadURL;
             // Create a hidden <a> element to trigger the download
             const a = document.createElement('a');
-            a.href = blobURL;
-            a.download = 'FORESTGAIN_MAP_'+year+'.tif';  // Set the filename here
+            a.href = downloadURL;
             document.body.appendChild(a);
             a.click();
-
             // Cleanup
             a.remove();
-            window.URL.revokeObjectURL(blobURL);
-        }else{
-            console.log('failed download');
+        } else {
+            console.log('Failed to download land cover map.');
         }
     }
 

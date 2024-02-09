@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-import { fetchDownloadLCMap } from '@/fetchers/downloadLandCoverMapFetcher';
+
 import { 
     areaTypeAtom, 
     areaIdAtom, 
@@ -98,34 +98,25 @@ function FireMap(){
     };
 
     const downloadFireMap = async (year) =>{
-        const action = 'download-landcover-fire-map';
+        const action = 'download-burned-area-map';
         const params = {
-            'area_type': 'province',
-            'area_id': '6',
-            'year': 2010
+            'area_type': area_type,
+            'area_id': area_id,
+            'year': year
         }
         const data = await Fetcher(action, params);
-        const dnlurl = data.downloadURL;
-        if(data.success === 'success'){
-            // Fetch the file as Blob
-            const fileResponse = await Fetcher(dnlurl);
-            const fileBlob = await fileResponse.blob();
-
-            // Create a blob URL
-            const blobURL = window.URL.createObjectURL(fileBlob);
-
+        
+        if (data.success === 'success' && data.downloadURL) {
+            const downloadURL = data.downloadURL;
             // Create a hidden <a> element to trigger the download
             const a = document.createElement('a');
-            a.href = blobURL;
-            a.download = 'FIRE_MAP_'+year+'.tif';  // Set the filename here
+            a.href = downloadURL;
             document.body.appendChild(a);
             a.click();
-
             // Cleanup
             a.remove();
-            window.URL.revokeObjectURL(blobURL);
-        }else{
-            console.log('failed download');
+        } else {
+            console.log('Failed to download.');
         }
     }
 

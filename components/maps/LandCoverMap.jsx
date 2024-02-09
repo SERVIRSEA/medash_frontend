@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-import { fetchDownloadLCMap } from '@/fetchers/downloadLandCoverMapFetcher';
+
 import { 
     areaTypeAtom, 
     areaIdAtom, 
@@ -94,38 +94,28 @@ function LandCoverMap(){
         }
     }
 
-    const downloadLandCoverMap = async (year) =>{
+    const downloadLandCoverMap = async (year) => {
         const params = {
-            'area_type': 'province',
-            'area_id': '6',
-            'year': 2010,
-            download: true
-        }
-        const data = await fetchDownloadLCMap(params);
-        const dnlurl = data.downloadURL;
-        // console.log(data)
-        if(data.success === 'success'){
-            // Fetch the file as Blob
-            const fileResponse = await fetch(dnlurl);
-            const fileBlob = await fileResponse.blob();
-
-            // Create a blob URL
-            const blobURL = window.URL.createObjectURL(fileBlob);
-
+            'area_type': area_type,
+            'area_id': area_id,
+            'year': year,
+        };
+        const action = 'download-landcover-map';
+        const data = await Fetcher(action, params);
+        
+        if (data.success === 'success' && data.downloadURL) {
+            const downloadURL = data.downloadURL;
             // Create a hidden <a> element to trigger the download
             const a = document.createElement('a');
-            a.href = blobURL;
-            a.download = 'LANDCOVER_'+year+'.tif';  // Set the filename here
+            a.href = downloadURL;
             document.body.appendChild(a);
             a.click();
-
             // Cleanup
             a.remove();
-            window.URL.revokeObjectURL(blobURL);
-        }else{
-            console.log('failed download');
+        } else {
+            console.log('Failed to download land cover map.');
         }
-    }
+    };    
 
     return (
         <Grid container spacing={0}>

@@ -94,27 +94,17 @@ function EVIMap(){
         }
         const action = 'download-evi-map';
         const data = await Fetcher(action, params);
-        const dnlurl = data.downloadURL;
-        if (data.success === 'success'){
-            // Fetch the file as Blob
-            const fileResponse = await fetch(dnlurl);
-            const fileBlob = await fileResponse.blob();
-
-            // Create a blob URL
-            const blobURL = window.URL.createObjectURL(fileBlob);
-
+        if (data.success === 'success' && data.downloadURL) {
+            const downloadURL = data.downloadURL;
             // Create a hidden <a> element to trigger the download
             const a = document.createElement('a');
-            a.href = blobURL;
-            a.download = "EVIMAP"+ studyLow + "_" + studyHigh+'.tif';  // Set the filename here
+            a.href = downloadURL;
             document.body.appendChild(a);
             a.click();
-
             // Cleanup
             a.remove();
-            window.URL.revokeObjectURL(blobURL);
         } else {
-            console.log('Download failed');
+            console.log('Failed to download land cover map.');
         }
     }
 

@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import StreetviewIcon from '@mui/icons-material/Streetview';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { Modal } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import { protectedAreaVisibilityAtom, provinceVisibilityAtom, districtVisibilityAtom} from '@/state/atoms';
+import DrawTabs from './tabs/DrawTabs';
 
 export default function LayerSelection(){
     const [visiblePALayer, setVisiblePALayer] = useAtom(protectedAreaVisibilityAtom);
     const [visibleProvinceLayer, setVisibleProvinceLayer] = useAtom(provinceVisibilityAtom);
     const [visibleDistrictLayer, setVisibleDistrictLayer] = useAtom(districtVisibilityAtom);
-    
+    const [openModal, setOpenModal] = useState(false);
+
     const handlePALayerOnOff = ()=> {
         setVisiblePALayer(true);
         setVisibleProvinceLayer(false);
@@ -27,6 +32,17 @@ export default function LayerSelection(){
         setVisibleProvinceLayer(false);
         setVisibleDistrictLayer(true);
     }
+
+    // Function to handle opening modal
+    const handleOpenModal = () => {
+        setOpenModal(true);
+    }
+
+    // Function to handle closing modal
+    const handleCloseModal = () => {
+        setOpenModal(false);
+    }
+
     return(
         <div>
             <Grid container spacing={2} pt={1}>
@@ -54,7 +70,7 @@ export default function LayerSelection(){
                         <Typography variant="caption" lineHeight={1} pt={1}>ADM DISTRICT</Typography>
                     </div>
                 </Grid>
-                <Grid item xs sx={{color: 'text.disabled', cursor: 'not-allowed'}}>
+                <Grid item xs sx={{color: 'text.dark', cursor: 'pointer'}} onClick={handleOpenModal}>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <StreetviewIcon />
                     </div>
@@ -63,6 +79,31 @@ export default function LayerSelection(){
                     </div>
                 </Grid>
             </Grid>
+            <Modal
+                open={openModal}
+                onClose={handleCloseModal}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            >
+                <div style={{
+                    backgroundColor: '#fff',
+                    padding: 20,
+                    outline: 'none', // Remove outline
+                    borderRadius: 8, // Add border radius for a rounded look
+                }}>
+                    <div>
+                        <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'center' }}>Define Area</Typography>
+                        {/* <IconButton onClick={handleCloseModal}>
+                            <CloseIcon />
+                        </IconButton> */}
+                        <DrawTabs />
+                    </div>
+                    
+                </div>
+            </Modal>
         </div>
     )
 }

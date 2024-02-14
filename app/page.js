@@ -1,4 +1,5 @@
 "use client"
+import React, { useState } from "react"
 import Navbar from "@/components/Navbar"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
@@ -7,8 +8,10 @@ import Grid from '@mui/material/Grid';
 import { Typography, Button } from "@mui/material";
 import Image from "next/image";
 import LaunchIcon from '@mui/icons-material/Launch';
+import YouTubeIcon from '@mui/icons-material/YouTube';
 import { useRouter } from "next/navigation";
 import Partners from "@/components/Partners";
+import VideoModal from "@/components/VideoModal";
 
 export default function Home() {
   const router = useRouter();
@@ -17,6 +20,17 @@ export default function Home() {
     // Navigate to "/mapviewer" when the button is clicked
     router.push("/mapviewer");
   };
+    
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleVideoButtonClick = () => {
+    setIsOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+  };
+
     return (
       <div>
         <Header />
@@ -42,10 +56,27 @@ export default function Home() {
                   borderRadius: '20px',
                   paddingLeft: '50px',
                   paddingRight: '50px',
+                  marginRight: '30px'
                 }}
               >
                 LAUNCH TOOL
               </Button>
+              
+              <Button
+                component="a"
+                variant="contained"
+                startIcon={<YouTubeIcon />}
+                onClick={handleVideoButtonClick}
+                sx={{
+                  marginTop: '30px',
+                  borderRadius: '20px',
+                  paddingLeft: '50px',
+                  paddingRight: '50px',
+                }}
+              >
+                WATCH A DEMO VIDEO
+              </Button>
+              <VideoModal isOpen={isOpen} onClose={handleCloseModal} />
             </Grid>
             <Grid item xs={6}>
               <Box pt={0} pl={8} pr={8}>

@@ -114,7 +114,7 @@ function EVIMap(){
                 <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={downloadEVIMap}>
                     <DownloadIcon />
                 </IconButton>
-                <FormControlLabel control={<Checkbox checked={visibleEVILayer} size="small" sx={{ mr: 0.1 }} />} label="Enhanced vegetation index" onChange={handleCheckboxChange} /> 
+                <FormControlLabel control={<Checkbox checked={visibleEVILayer} size="small" sx={{ mr: 0.1 }} />} label="Vegetation health" onChange={handleCheckboxChange} /> 
             </ListItem>
         </>
     )

@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAtom } from 'jotai';
-import Typography from '@mui/material/Typography';
-import { Box } from '@mui/material';
+import { Typography, Box, IconButton, Tooltip } from '@mui/material';
+import LegendToggleIcon from '@mui/icons-material/LegendToggle';
 import EVIMap from '../maps/EVIMap';
 import LandCoverMap from '../maps/LandCoverMap';
 import EVIPieChart from '../charts/EVIPieChart';
 import EVILineChart from '../charts/EVILineChart';
 import LandCoverChart from '../charts/LandCoverChart';
+import LayerNameLegendControl from '../LayerNameLegendControl';
+import EVILegend from '../legend/EVILegend';
+import LandCoverLegend from '../legend/LandCoverLegend';
 
 import { 
     measureMinYearAtom,
@@ -23,6 +26,17 @@ export default function BiophysicalPanel(){
     const [minYLC] = useAtom(minYearLandCover);
     const [maxYLC] = useAtom(maxYearLandCover);
 
+    const [isLandCoverOpen, setIsLandCoverOpen] = useState(false);
+    const [isEviOpen, setIsEviOpen] = useState(false);
+
+    const handleLandCoverClick = () => {
+        setIsLandCoverOpen(!isLandCoverOpen);
+    };
+    
+    const handleEviClick = () => {
+        setIsEviOpen(!isEviOpen);
+    };
+
     return(
         <Box p={1} sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}}>
             <Typography variant="body2" sx={{fontWeight: 'bold'}}>
@@ -31,10 +45,21 @@ export default function BiophysicalPanel(){
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>
                 Selected Area: {selectedArea}
             </Typography>
+            <LayerNameLegendControl
+                title="EVI Map"
+                icon={<LegendToggleIcon />}
+                tooltipTitle="Click to show EVI legend"
+                onClick={handleEviClick}
+            />
             <EVIMap />
-            <Typography variant="body1" sx={{fontSize: '14px', fontWeight: 'bold'}} pt={1}>
-                Land Cover Map
-            </Typography>
+            {isEviOpen  && ( <EVILegend /> )}
+            <LayerNameLegendControl
+                title="Land Cover Map"
+                icon={<LegendToggleIcon />}
+                tooltipTitle="Click to show landcover legend"
+                onClick={handleLandCoverClick}
+            />
+            {isLandCoverOpen  && ( <LandCoverLegend /> )}
             <LandCoverMap />
             <br />
             <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}}>

@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
+import LegendToggleIcon from '@mui/icons-material/LegendToggle';
+import LayerNameLegendControl from '../LayerNameLegendControl';
+import FireLegend from '../legend/FireLegend';
 import { 
     measureMinYearAtom,
     measureMaxYearAtom,
@@ -15,6 +18,12 @@ export default function FireHotspotPanel(){
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [selectedArea] = useAtom(areaNameAtom);
 
+    const [isFireOpen, setIsFireOpen] = useState(false);
+
+    const handleFireClick = () => {
+        setIsFireOpen(!isFireOpen);
+    };
+
     return(
         <Box sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}} pt={1} pl={1}>
             <Typography variant="body2" sx={{fontWeight: 'bold'}}>
@@ -23,6 +32,13 @@ export default function FireHotspotPanel(){
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>
                 Selected Area: {selectedArea}
             </Typography>
+            <LayerNameLegendControl
+                title="Fire Hotspot Map"
+                icon={<LegendToggleIcon />}
+                tooltipTitle="Click to show fire hotspot legend"
+                onClick={handleFireClick}
+            />
+            {isFireOpen  && ( <FireLegend /> )}
             <FireMap />
             <br />
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>

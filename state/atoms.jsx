@@ -164,3 +164,7 @@ export const selectedFeatureAtom = atom(null);
 
 // update 
 export const updateTriggerAtom = atom(0);
+export const drawControlAtom= atom(false);
+
+// Guiding modal
+export const guidingModalAtom = atom(true);

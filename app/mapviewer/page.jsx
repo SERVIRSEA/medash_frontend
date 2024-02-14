@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import { Box } from '@mui/material';
 import Navbar from "@/components/Navbar"
@@ -9,6 +9,8 @@ import DashboardControl from '@/components/DashboardControl';
 import { isLoadingAtom } from '@/state/atoms';
 import LoadingIcon from '@/components/LoadingIcon';
 import dynamic from 'next/dynamic';
+import GuidingPanel from '@/components/GuidingPanel';
+import { guidingModalAtom } from '@/state/atoms';
 
 const DynamicMapView = dynamic(() => import('./MapView'), {
     loading: () => <LoadingIcon />,
@@ -17,11 +19,16 @@ const DynamicMapView = dynamic(() => import('./MapView'), {
 
 export default function Mapviewer() {
     const [isLoading] = useAtom(isLoadingAtom);
+    const [isGuidingPanelOpen, setIsGuidingPanelOpen] = useAtom(guidingModalAtom);
     
+    const handleCloseGuidingPanel = () => {
+        setIsGuidingPanelOpen(false);
+    };
     return (
         <div>
             <Header />
             <Navbar />
+            <GuidingPanel isOpen={isGuidingPanelOpen} onClose={handleCloseGuidingPanel} />
             <>
                 <div id="map">
                     <DynamicMapView />

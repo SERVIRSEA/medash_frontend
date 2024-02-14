@@ -1,14 +1,18 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import LegendToggleIcon from '@mui/icons-material/LegendToggle';
 import RiceMap from '../maps/RiceMap';
 import RubberMap from '../maps/RubberMap';
 import RiceLineChart from '../charts/RiceLineChart';
 import RubberLineChart from '../charts/RubberLineChart';
+import LayerNameLegendControl from '../LayerNameLegendControl';
+import RiceLegend from '../legend/RiceLegend';
+import RubberLegend from '../legend/RubberLegend';
 import { 
     selectedYearRiceAtom,
     selectedYearRubberAtom,
@@ -19,11 +23,22 @@ import RiceAreaBMChart from '../charts/RiceAreaBMChart';
 import RubberAreaBMChart from '../charts/RubberAreaBMChart';
 
 export default function CropTabs() {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
     const [max] = useAtom(measureMaxYearAtom);
     const [, setSelectedYearRice] = useAtom(selectedYearRiceAtom);
     const [, setSelectedYearRubber] = useAtom(selectedYearRubberAtom);
     const [selectedArea] = useAtom(areaNameAtom);
+
+    const [isRiceOpen, setIsRiceOpen] = useState(false);
+    const [isRubberOpen, setIsRubberOpen] = useState(false);
+
+    const handleRiceClick = () => {
+        setIsRiceOpen(!isRiceOpen);
+    };
+    
+    const handleRubberClick = () => {
+        setIsRubberOpen(!isRubberOpen);
+    };
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -47,13 +62,31 @@ export default function CropTabs() {
             <Typography variant="body2" sx={{fontSize: '12px'}} pl={1} pt={2} pb={0} mb={0}>
                 Selected Area: {selectedArea}
             </Typography>
-            <CustomTabPanel value={value} index={0}>
+            <CustomTabPanel value={value} index={0} pt={0}>
+                <Box pl={1} pt={0}>
+                    <LayerNameLegendControl
+                        title="Rice Map"
+                        icon={<LegendToggleIcon />}
+                        tooltipTitle="Click to show Rice Map legend"
+                        onClick={handleRiceClick}
+                    />
+                </Box>
+                {isRiceOpen  && ( <RiceLegend /> )}
                 <RiceMap />
                 <br />
                 <RiceLineChart />
                 <RiceAreaBMChart />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
+                <Box pl={1}>
+                    <LayerNameLegendControl
+                        title="Rubber Map"
+                        icon={<LegendToggleIcon />}
+                        tooltipTitle="Click to show Rubber Map legend"
+                        onClick={handleRubberClick}
+                    />
+                </Box>
+                {isRubberOpen  && ( <RubberLegend /> )}
                 <RubberMap />
                 <br />
                 <RubberLineChart />
@@ -75,7 +108,7 @@ function CustomTabPanel(props) {
             {...other}
         >
         {value === index && (
-            <Box sx={{ pt: 3, pr: 1 }}>
+            <Box sx={{ pt: 0, pr: 1 }}>
                 <Typography>{children}</Typography>
             </Box>
         )}

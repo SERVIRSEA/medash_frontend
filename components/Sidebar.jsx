@@ -136,7 +136,7 @@ function Sidebar(){
         {
           name: 'Map Layers',
           icon: '/assets/icons/menu/map-layers-green.png', //BasemapLayerIcon,
-          text: 'Map Layers',
+          text: 'Basemap',
           panel: <MapLayersPanel />,
         },
         {

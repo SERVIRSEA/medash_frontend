@@ -4,18 +4,28 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
+import { IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import InfoIcon from '@mui/icons-material/Info';
+import { Box } from '@mui/material';
 import BaselineSlider from './sliders/BaselineSlider';
 import MeasureSlider from './sliders/MeasureSlider';
 import LayerSelection from './LayerSelection';
 import UpdateMapButton from './UpdateMap';
 
 import { 
-    tempAreaNameAtom
+    tempAreaNameAtom,
+    guidingModalAtom
 } from '@/state/atoms';
 
 export default function DashboardControl() {
     const [selectedArea] = useAtom(tempAreaNameAtom);
+    const [, setIsGuidingPanelOpen] = useAtom(guidingModalAtom);
+    
+    const handleOpenGuidingPanel = () => {
+        setIsGuidingPanelOpen(true);
+    };
+
     return (
         <div>
             <Accordion defaultExpanded={true}>
@@ -23,9 +33,20 @@ export default function DashboardControl() {
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
-                    sx={{bgcolor: '#eee', color: "#000"}}
+                    sx={{
+                        backgroundColor: '#eee',
+                        color: "#000",
+                        display: 'flex',
+                        alignItems: 'center',
+                        py: '2px', 
+                        px: '16px', 
+                        maxHeight: 50, 
+                    }}
                 >
-                    <Typography>Dashboard Controls</Typography>
+                    <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
+                        <Typography sx={{ display: 'inline', marginRight: '4px' }}>Dashboard Controls</Typography>
+                        <InfoIcon onClick={handleOpenGuidingPanel} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                    </Box>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Typography>

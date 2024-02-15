@@ -43,13 +43,13 @@ const DrawingControl = () => {
 
     return (
         <Typography 
-        variant="caption" 
-        lineHeight={1} 
-        pt={1} 
-        sx={{ cursor: 'pointer' }} 
-        onClick={activateDrawingMode}
+            variant="caption" 
+            lineHeight={1} 
+            pt={1} 
+            sx={{ cursor: 'pointer' }} 
+            onClick={activateDrawingMode}
         >
-        DRAW / UPLOAD
+            DRAW / UPLOAD
         </Typography>
     );
 };

@@ -4,6 +4,8 @@ import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 import LayerNameLegendControl from '../LayerNameLegendControl';
 import LegendToggleIcon from '@mui/icons-material/LegendToggle';
+import InfoIcon from '@mui/icons-material/Info';
+import ForestAlertModal from '../modals/ForestAlertModal';
 import { 
     areaNameAtom
 } from '@/state/atoms';
@@ -16,9 +18,17 @@ import SARAlertLegend from '../legend/SARAlertLegend';
 
 export default function ForestAlertPanel(){
     const [selectedArea] = useAtom(areaNameAtom);
-    
     const [isGLADOpen, setIsGLADOpen] = useState(false);
     const [isSAROpen, setIsSAROpen] = useState(false);
+    const [isForestAlertOpen, setIsForestAlertInfoOpen] = useState(false);
+
+    const handleOpenFALayerInfoModal = () => {
+        setIsForestAlertInfoOpen(true);
+    };
+
+    const handleCloseFAModal = () => {
+        setIsForestAlertInfoOpen(false);
+    }
 
     const handleGLADClick = () => {
         setIsGLADOpen(!isGLADOpen);
@@ -30,9 +40,11 @@ export default function ForestAlertPanel(){
 
     return (
         <Box sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}} pl={1} pt={1}>
-            <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                MAP LAYERS 
-            </Typography>
+            <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>MAP LAYERS</Typography>
+                <InfoIcon onClick={handleOpenFALayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+            </Box>
+            <ForestAlertModal isOpen={isForestAlertOpen} onClose={handleCloseFAModal} />
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>
                 Selected Area: {selectedArea}
             </Typography>

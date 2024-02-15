@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 import LegendToggleIcon from '@mui/icons-material/LegendToggle';
 import ForestGainMap from '../maps/ForestGainMap';
 import ForestLossMap from '../maps/ForestLossMap';
@@ -13,6 +14,7 @@ import ForestGainLoss from '../charts/ForestGainLoss';
 import LayerNameLegendControl from '../LayerNameLegendControl';
 import ForestGainLossLegend from '../legend/ForestGainLossLegend';
 import ForestCoverLegend from '../legend/ForestCoverLegend';
+import ForestMonitoringModal from '../modals/ForestMonitoringModal';
 import { 
     measureMinYearAtom,
     measureMaxYearAtom,
@@ -25,7 +27,8 @@ export default function ForestMonitoringPanel(){
     const [selectedArea] = useAtom(areaNameAtom);
     const [isGainLossOpen, setIsGainLossOpen] = useState(false);
     const [isForestCoverOpen, setIsForestCoverOpen] = useState(false);
-
+    const [isForestMonOpen, setIsForestMonLayerInfoOpen] = useState(false);
+    
     const handleGainLossClick = () => {
         setIsGainLossOpen(!isGainLossOpen);
     };
@@ -33,13 +36,23 @@ export default function ForestMonitoringPanel(){
     const handleForestCoverClick = () => {
         setIsForestCoverOpen(!isForestCoverOpen);
     }
+
+    const handleOpenFMLayerInfoModal = () => {
+        setIsForestMonLayerInfoOpen(true);
+    };
+
+    const handleCloseFMModal = () => {
+        setIsForestMonLayerInfoOpen(false);
+    }
     
     return (
         <>
             <Box p={1} sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}}>
-                <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                    MAP LAYERS 
-                </Typography>
+                <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>MAP LAYERS</Typography>
+                    <InfoIcon onClick={handleOpenFMLayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                </Box>
+                <ForestMonitoringModal isOpen={isForestMonOpen} onClose={handleCloseFMModal} />
                 <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>
                     Selected Area: {selectedArea}
                 </Typography>

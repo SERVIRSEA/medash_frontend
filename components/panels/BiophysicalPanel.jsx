@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import { Typography, Box, IconButton, Tooltip } from '@mui/material';
 import LegendToggleIcon from '@mui/icons-material/LegendToggle';
+import InfoIcon from '@mui/icons-material/Info';
 import EVIMap from '../maps/EVIMap';
 import LandCoverMap from '../maps/LandCoverMap';
 import EVIPieChart from '../charts/EVIPieChart';
@@ -10,13 +11,14 @@ import LandCoverChart from '../charts/LandCoverChart';
 import LayerNameLegendControl from '../LayerNameLegendControl';
 import EVILegend from '../legend/EVILegend';
 import LandCoverLegend from '../legend/LandCoverLegend';
-
+import BioInfoModal from '../modals/BioInfoModal';
+import LandCoverInfoModal from '../modals/LandCoverInfoModal';
 import { 
     measureMinYearAtom,
     measureMaxYearAtom,
     areaNameAtom,
     minYearLandCover,
-    maxYearLandCover
+    maxYearLandCover,
 } from '@/state/atoms';
 
 export default function BiophysicalPanel(){
@@ -25,7 +27,8 @@ export default function BiophysicalPanel(){
     const [selectedArea] = useAtom(areaNameAtom);
     const [minYLC] = useAtom(minYearLandCover);
     const [maxYLC] = useAtom(maxYearLandCover);
-
+    const [isBioModalOpen, setIsBioLayerInfoOpen] = useState(false);
+    const [isLCModalOpen, setIsLCLayerInfoOpen] = useState(false);
     const [isLandCoverOpen, setIsLandCoverOpen] = useState(false);
     const [isEviOpen, setIsEviOpen] = useState(false);
 
@@ -36,6 +39,22 @@ export default function BiophysicalPanel(){
     const handleEviClick = () => {
         setIsEviOpen(!isEviOpen);
     };
+
+    const handleOpenBioLayerInfoModal = () => {
+        setIsBioLayerInfoOpen(true);
+    };
+
+    const handleCloseBioModal = () => {
+        setIsBioLayerInfoOpen(false);
+    }
+
+    const handleOpenLCLayerInfoModal = () => {
+        setIsLCLayerInfoOpen(true);
+    };
+
+    const handleCloseLCModal = () => {
+        setIsLCLayerInfoOpen(false);
+    }
 
     return(
         <Box p={1} sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}}>
@@ -62,18 +81,22 @@ export default function BiophysicalPanel(){
             {isLandCoverOpen  && ( <LandCoverLegend /> )}
             <LandCoverMap />
             <br />
-            <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}}>
-                BIOPHYSICAL HEALTH
-            </Typography>
+            <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>BIOPHYSICAL HEALTH</Typography>
+                <InfoIcon onClick={handleOpenBioLayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+            </Box>
+            <BioInfoModal isOpen={isBioModalOpen} onClose={handleCloseBioModal} />
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>
                 From {studyLow} To {studyHigh}
             </Typography>
             <EVIPieChart />
             <br />
             <EVILineChart />
-            <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}}>
-                LAND COVER 
-            </Typography>
+            <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>LAND COVER</Typography>
+                <InfoIcon onClick={handleOpenLCLayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+            </Box>
+            <LandCoverInfoModal isOpen={isLCModalOpen} onClose={handleCloseLCModal} />
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>
                 From {minYLC} To {maxYLC}
             </Typography>

@@ -3,8 +3,10 @@ import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 import LegendToggleIcon from '@mui/icons-material/LegendToggle';
+import InfoIcon from '@mui/icons-material/Info';
 import LayerNameLegendControl from '../LayerNameLegendControl';
 import FireLegend from '../legend/FireLegend';
+import FireInfoModal from '../modals/FireInfoModal';
 import { 
     measureMinYearAtom,
     measureMaxYearAtom,
@@ -17,8 +19,16 @@ export default function FireHotspotPanel(){
     const [studyLow] = useAtom(measureMinYearAtom);
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [selectedArea] = useAtom(areaNameAtom);
-
     const [isFireOpen, setIsFireOpen] = useState(false);
+    const [isFireHotspotOpen, setIsFireHotspotInfoOpen] = useState(false);
+
+    const handleOpenFireInfoModal = () => {
+        setIsFireHotspotInfoOpen(true);
+    };
+
+    const handleCloseFireModal = () => {
+        setIsFireHotspotInfoOpen(false);
+    }
 
     const handleFireClick = () => {
         setIsFireOpen(!isFireOpen);
@@ -26,9 +36,11 @@ export default function FireHotspotPanel(){
 
     return(
         <Box sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}} pt={1} pl={1}>
-            <Typography variant="body2" sx={{fontWeight: 'bold'}}>
-                MAP LAYERS 
-            </Typography>
+            <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>MAP LAYERS</Typography>
+                <InfoIcon onClick={handleOpenFireInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+            </Box>
+            <FireInfoModal isOpen={isFireHotspotOpen} onClose={handleCloseFireModal} />
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>
                 Selected Area: {selectedArea}
             </Typography>

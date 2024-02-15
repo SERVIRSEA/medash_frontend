@@ -95,7 +95,7 @@ export default function LayerSelection(){
                     borderRadius: 8, // Add border radius for a rounded look
                 }}>
                     <div>
-                        <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'center' }}>Define Area</Typography>
+                        <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'center' }}>Define Area (Under Development)</Typography>
                         {/* <IconButton onClick={handleCloseModal}>
                             <CloseIcon />
                         </IconButton> */}

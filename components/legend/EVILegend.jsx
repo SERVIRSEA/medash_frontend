@@ -1,15 +1,6 @@
 import React from 'react'
 import { Box, Typography } from '@mui/material'
 
-// const EVILegend = () => {
-//     return (
-//         <Box pt={2} pl={2} pb={4}>
-//             <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}}>EVI Legend</Typography>
-//             <img src="evi-legend.png" width="100px" alt="EVI" />
-//         </Box>
-//     )
-// }
-
 const palette = ['#E76F51', '#F4A261', '#E9C46A', '#2A9D8F', '#264653'];
 
 const EVILegend = () => {

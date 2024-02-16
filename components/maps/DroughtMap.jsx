@@ -8,30 +8,32 @@ import { ListItem, IconButton, Switch, Box } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { areaTypeAtom, areaIdAtom, droughtVisAtom, isLoadingAtom, droughtMapDataAtom, droughtMapDataStoreAtom } from '@/state/atoms';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { selectedDroughtIndexAtom, selectedDroughtDateAtom } from '@/state/atoms';
 
 export default function DroughtMap() {
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
-    const [index, setIndex] = useState('ndvi'); 
+    const [index, setIndex] = useAtom(selectedDroughtIndexAtom); 
     const [isVisible, setIsVisible] = useAtom(droughtVisAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
     const [, setData] = useAtom(droughtMapDataAtom);
     const [, setDataStore] = useAtom(droughtMapDataStoreAtom);
+    const [date, setSelectedDate] = useAtom(selectedDroughtDateAtom);
 
-    const fetchLatestDroughtMap = async (selectedIndex) => {
+    const fetchLatestDroughtMap = async (selectedIndex, date) => {
         try {
-            let date;
-            if (selectedIndex === 'ndvi') {
-                date = '2023-11-25';
-            } else if (selectedIndex === 'cwsi') {
-                date = '2023-11-25';
-            } else if (selectedIndex == 'vhi'){
-                date = '2023-11-25';
-            } else if (selectedIndex == 'cdi'){
-                date = '2023-03-22';
-            } else {
-                date = '2023-12-27';
-            }
+            // let date;
+            // if (selectedIndex === 'ndvi') {
+            //     date = '2023-11-25';
+            // } else if (selectedIndex === 'cwsi') {
+            //     date = '2023-11-25';
+            // } else if (selectedIndex == 'vhi'){
+            //     date = '2023-11-25';
+            // } else if (selectedIndex == 'cdi'){
+            //     date = '2023-03-22';
+            // } else {
+            //     date = '2023-12-27';
+            // }
             setIsLoading(true);
             const params = {
                 'area_type': area_type,
@@ -54,15 +56,18 @@ export default function DroughtMap() {
     };
 
     useEffect(() => {
-        fetchLatestDroughtMap(index);
-    }, [index]);
+        if (index && date) {
+            fetchLatestDroughtMap(index, date);
+        }
+    }, [index, date]);
 
     const handleChange = (event) => {
+        setSelectedDate(''); // Reset selected date
         setIndex(event.target.value);
     };
 
     return (
-        <Box p={2}> 
+        <Box p={1}> 
             <Typography variant="body2" pl={1}>
                 Select Index <span style={{ fontSize: '10px' }}>(*Include Forecast)</span>
             </Typography>

@@ -168,3 +168,7 @@ export const drawControlAtom= atom(false);
 
 // Guiding modal
 export const guidingModalAtom = atom(true);
+
+// Drought index selector
+export const selectedDroughtIndexAtom = atom('cdi');
+export const selectedDroughtDateAtom = atom('');

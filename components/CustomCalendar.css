@@ -1,0 +1,71 @@
+#customCalendar input {
+    width: 100%;
+    padding: 10px 14px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s;
+  
+    /* MUI-like focus effect */
+    outline: none;
+  }
+
+#customCalendar #calendarWrapper {
+    margin-left: 0px;
+    margin-top: 50px;
+    width: 280px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+#customCalendar #calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 30px); 
+    grid-template-rows: repeat(6, 30px); 
+    gap: 8px;
+    margin-top: 20px;
+}
+
+#customCalendar .date-item {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.date-item.disabled {
+    cursor: not-allowed;
+    opacity: 0.5; /* Optional: visually indicate disabled state */
+  }
+  
+  .date-item.clickable {
+    cursor: pointer;
+  }
+
+#customCalendar .clickable:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#customCalendar .today {
+    background-color: #4CAF50;
+    color: white;
+}
+.date-item.clickable {
+    background-color: green;
+    color: white;
+  }
+  
+  .date-item.active {
+    background-color: red;
+    color: white;
+  }

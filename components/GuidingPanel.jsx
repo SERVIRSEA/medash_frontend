@@ -94,25 +94,25 @@ const steps = [
   {
     title: 'Step 1',
     description: 'Select Baseline and Evaluation period (Baseline period: period before project intervention / Evaluation period: period of project intervention)',
-    icon: 'https://me-dashboard-servir.adpc.net/static/images/icons/guide/time-period.png',
+    icon: 'time-period.png',
     alt: 'Time Period',
   },
   {
     title: 'Step 2',
     description: 'Define area of interest (administrative boundaries, protected area(s) or customized)',
-    icon: 'https://me-dashboard-servir.adpc.net/static/images/icons/guide/define-area.png',
+    icon: 'define-area.png',
     alt: 'Define Area',
   },
   {
     title: 'Step 3',
     description: 'Update map',
-    icon: 'https://me-dashboard-servir.adpc.net/static/images/icons/guide/img-processing.png',
+    icon: 'img-processing.png',
     alt: 'Update Map',
   },
   {
     title: 'Step 4',
     description: 'Select information of interest',
-    icon: 'https://me-dashboard-servir.adpc.net/static/images/icons/guide/components.png',
+    icon: 'components.png',
     alt: 'Select Information',
   },
 ];

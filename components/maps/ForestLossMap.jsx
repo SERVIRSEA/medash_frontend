@@ -67,7 +67,8 @@ function ForestLossMap(){
             }
         }
         fetchForestLossMap();
-    }, [min, max, area_type, area_id, updateTrigger, forestLossMapStore, isFetching, setForestLossData, setForestLossMapStore, setIsLoading]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [area_type, area_id, updateTrigger]);
 
     const toggleForestLossMapVisibility = () => {
         setIsForestLossMapVisible(!isForestLossMapVisible);

@@ -85,7 +85,7 @@ const GLADAlertMap = () => {
             fetchGLADAlertMap(selectedYear);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [area_type, area_id, max, updateTrigger, selectedYear, isInitialRender, setSelectedYear]);
+    }, [area_type, area_id, max, updateTrigger, selectedYear, isInitialRender]);
 
     const showOnOffGLADAlertMap = async (year) =>{
         setSelectedYear((prevYear) => {

@@ -83,7 +83,7 @@ function RiceMap(){
             fetchRiceMapData(selectedYear);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [area_type, area_id, max, updateTrigger, selectedYear, isInitialRender, setSelectedYear]);
+    }, [area_type, area_id, max, updateTrigger, selectedYear, isInitialRender]);
 
     const showOnOffRiceMap = async (year) => {
         setSelectedYear((prevYear) => {

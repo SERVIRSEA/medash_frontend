@@ -65,7 +65,8 @@ function ForestGainMap(){
             }
         }
         fetchForestGainMap();
-    }, [min, max, area_type, area_id, updateTrigger, forestGainMapStore, isFetching, setForestGainData, setForestGainMapStore, setIsLoading]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [area_type, area_id, updateTrigger]);
 
     const toggleForestGainMapVisibility = () => {
         setIsForestGainMapVisible(!isForestGainMapVisible);

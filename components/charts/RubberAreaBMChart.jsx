@@ -95,7 +95,8 @@ const RubberAreaBMChart = () => {
             // Initial fetch
             fetchDataWithRetry();
         }
-    }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, setChartData, setLoading, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, setChartData, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
 
     // useEffect(() => { 
     //     const fetchData = async () => {

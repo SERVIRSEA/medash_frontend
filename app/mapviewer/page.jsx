@@ -11,6 +11,7 @@ import LoadingIcon from '@/components/LoadingIcon';
 import dynamic from 'next/dynamic';
 import GuidingPanel from '@/components/GuidingPanel';
 import { guidingModalAtom } from '@/state/atoms';
+import CustomAlert from '@/components/CustomAlert';
 
 const DynamicMapView = dynamic(() => import('./MapView'), {
     loading: () => <LoadingIcon />,
@@ -39,6 +40,7 @@ export default function Mapviewer() {
                 </Box>
                 {isLoading && <LoadingIcon />}
             </>
+            <CustomAlert />
         </div>
     )
 }

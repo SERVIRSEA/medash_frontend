@@ -88,7 +88,8 @@ const ForestCoverChart = () => {
             // Initial fetch
             fetchChartDataWithRetry();
         }
-    }, [area_type, area_id, studyLow, studyHigh, setChartData, setLoading, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [area_type, area_id, studyLow, studyHigh, setChartData, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

@@ -7,7 +7,7 @@ import { Box, Typography } from '@mui/material';
 import { selectedDroughtIndexAtom } from '@/state/atoms';
 
 const DroughtCalendar = () => {
-    const [availableDates, setAvailableDates] = useState([]);
+    const [availableDatesByIndex, setAvailableDatesByIndex] = useState({});
     const [index, setIndex] = useAtom(selectedDroughtIndexAtom); 
     const [loading, setLoading] = useState(true);
     
@@ -16,10 +16,12 @@ const DroughtCalendar = () => {
             const params = {
                 'index': selectedIndex,
             };
-            const key = JSON.stringify(params);
             const action = 'get-drought-index-dates';
             const data = await Fetcher(action, params);
-            setAvailableDates(data);
+            setAvailableDatesByIndex(prevState => ({
+                ...prevState,
+                [selectedIndex]: data
+            }));
         } catch (error) {
             console.error('Error fetching data:', error);
             throw error;
@@ -30,8 +32,12 @@ const DroughtCalendar = () => {
 
     useEffect(() => {
         setLoading(true); 
-        fetchDates(index);
-    }, [index]);
+        if (!availableDatesByIndex[index]) {
+            fetchDates(index);
+        } else {
+            setLoading(false); // Data is already available, no need to fetch again
+        }
+    }, [index, availableDatesByIndex]);
 
     // Render CustomDatePicker only when data is loaded
     return (
@@ -42,7 +48,7 @@ const DroughtCalendar = () => {
             {loading ? (
                 <LoadingCard />
             ) : (
-                <CustomDatePicker availableDates={availableDates} />
+                <CustomDatePicker availableDates={availableDatesByIndex[index] || []} />
             )}
         </Box>
     );

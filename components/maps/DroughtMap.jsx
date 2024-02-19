@@ -6,9 +6,19 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import { ListItem, IconButton, Switch, Box } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-import { areaTypeAtom, areaIdAtom, droughtVisAtom, isLoadingAtom, droughtMapDataAtom, droughtMapDataStoreAtom } from '@/state/atoms';
 import { Fetcher } from '@/fetchers/Fetcher';
-import { selectedDroughtIndexAtom, selectedDroughtDateAtom } from '@/state/atoms';
+import { 
+    areaTypeAtom, 
+    areaIdAtom, 
+    droughtVisAtom, 
+    isLoadingAtom, 
+    droughtMapDataAtom, 
+    droughtMapDataStoreAtom,
+    selectedDroughtIndexAtom, 
+    selectedDroughtDateAtom, 
+    alertOpenAtom, 
+    alertMessageAtom 
+} from '@/state/atoms';
 
 export default function DroughtMap() {
     const [area_type] = useAtom(areaTypeAtom);
@@ -19,6 +29,8 @@ export default function DroughtMap() {
     const [, setData] = useAtom(droughtMapDataAtom);
     const [, setDataStore] = useAtom(droughtMapDataStoreAtom);
     const [date, setSelectedDate] = useAtom(selectedDroughtDateAtom);
+    const [, setAlertOpen] = useAtom(alertOpenAtom);
+    const [, setAlertMessage] = useAtom(alertMessageAtom);
 
     const fetchLatestDroughtMap = async (selectedIndex, date) => {
         try {
@@ -55,6 +67,42 @@ export default function DroughtMap() {
         setIndex(event.target.value);
     };
 
+    const downloadDroughtMap = async () => {
+        try {
+            setIsLoading(true);
+
+            const params = {
+                'area_type': area_type,
+                'area_id': area_id,
+                'index': index,
+                'date': date,
+            };
+
+            const action = 'download-drought-index-map';
+            const data = await Fetcher(action, params);
+
+            if (data.success === 'success' && data.downloadURL) {
+                const downloadURL = data.downloadURL;
+
+                // Create a hidden <a> element to trigger the download
+                const a = document.createElement('a');
+                a.href = downloadURL;
+                document.body.appendChild(a);
+                a.click();
+                // Cleanup
+                a.remove();
+            } else {
+                setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
+                setAlertOpen(true);
+                throw new Error('Failed to download drought map.');
+            }
+        } catch (error) {
+            console.error('Error downloading drought map:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     return (
         <Box p={1}> 
             <Typography variant="body2" pl={1}>
@@ -79,7 +127,7 @@ export default function DroughtMap() {
                 </Select>
             </FormControl>
             <ListItem disableGutters sx={{ py: 1, display: 'flex', alignItems: 'center' }}>
-                <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }}>
+                <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={downloadDroughtMap}>
                     <DownloadIcon />
                 </IconButton>
                 <Switch

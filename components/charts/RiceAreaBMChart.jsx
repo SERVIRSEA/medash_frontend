@@ -95,7 +95,8 @@ const RiceAreaBMChart = () => {
             // Initial fetch
             fetchDataWithRetry();
         }
-    }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, setChartData, setLoading, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, setChartData, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

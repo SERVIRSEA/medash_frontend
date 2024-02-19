@@ -14,7 +14,9 @@ import {
     isLoadingAtom,
     minYearLandCover,
     maxYearLandCover,
-    updateTriggerAtom
+    updateTriggerAtom,
+    alertOpenAtom, 
+    alertMessageAtom
 } from '@/state/atoms';
 import { Fetcher } from '@/fetchers/Fetcher';
 
@@ -30,6 +32,8 @@ function LandCoverMap(){
     const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
     const [updateTrigger] = useAtom(updateTriggerAtom);
     const [isFetching, setIsFetching] = useState(false);
+    const [, setAlertOpen] = useAtom(alertOpenAtom);
+    const [, setAlertMessage] = useAtom(alertMessageAtom);
 
     // setSelectedYear(max);
     useEffect(() => { 
@@ -96,25 +100,34 @@ function LandCoverMap(){
     }
 
     const downloadLandCoverMap = async (year) => {
-        const params = {
-            'area_type': area_type,
-            'area_id': area_id,
-            'year': year,
-        };
-        const action = 'download-landcover-map';
-        const data = await Fetcher(action, params);
-        
-        if (data.success === 'success' && data.downloadURL) {
-            const downloadURL = data.downloadURL;
-            // Create a hidden <a> element to trigger the download
-            const a = document.createElement('a');
-            a.href = downloadURL;
-            document.body.appendChild(a);
-            a.click();
-            // Cleanup
-            a.remove();
-        } else {
-            console.log('Failed to download land cover map.');
+        try{
+            setIsLoading(true)
+            const params = {
+                'area_type': area_type,
+                'area_id': area_id,
+                'year': year,
+            };
+            const action = 'download-landcover-map';
+            const data = await Fetcher(action, params);
+            
+            if (data.success === 'success' && data.downloadURL) {
+                const downloadURL = data.downloadURL;
+                // Create a hidden <a> element to trigger the download
+                const a = document.createElement('a');
+                a.href = downloadURL;
+                document.body.appendChild(a);
+                a.click();
+                // Cleanup
+                a.remove();
+            } else {
+                setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
+                setAlertOpen(true);
+                throw new Error('Failed to download map.');
+            }
+        } catch (error) {
+            console.error('Error downloading drought map:', error);
+        } finally {
+            setIsLoading(false);
         }
     };    
 

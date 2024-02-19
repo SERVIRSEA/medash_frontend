@@ -172,3 +172,7 @@ export const guidingModalAtom = atom(true);
 // Drought index selector
 export const selectedDroughtIndexAtom = atom('cdi');
 export const selectedDroughtDateAtom = atom('');
+
+// Alert state
+export const alertOpenAtom = atom(false);
+export const alertMessageAtom = atom('');

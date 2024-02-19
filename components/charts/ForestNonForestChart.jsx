@@ -87,7 +87,8 @@ const ForestNonForestChart = () => {
             // Initial fetch
             fetchDataWithRetry();
         }
-    }, [area_type, area_id, studyLow, studyHigh, setChartData, setUpdateTrigger, setLoading, updateTrigger, attempts, RetryMaxAttempts]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [area_type, area_id, studyLow, studyHigh, setChartData, setUpdateTrigger, updateTrigger, attempts, RetryMaxAttempts]);
 
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;

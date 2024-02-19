@@ -80,7 +80,8 @@ const ForestGainLoss = () => {
             // Initial fetch
             fetchDataWithRetry();
         }
-    }, [area_type, area_id, studyLow, studyHigh, setGainLossData, setUpdateTrigger, setLoading, updateTrigger, attempts, RetryMaxAttempts]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [area_type, area_id, studyLow, studyHigh, setGainLossData, setUpdateTrigger, updateTrigger, attempts, RetryMaxAttempts]);
 
     return (
         <>

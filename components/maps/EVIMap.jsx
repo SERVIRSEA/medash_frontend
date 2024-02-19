@@ -80,6 +80,7 @@ function EVIMap(){
             }
         };
         handleEviLayerOnOff();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [updateTrigger, visibleEVILayer, area_type, area_id, refLow, refHigh, studyLow, studyHigh]);
 
 

@@ -19,21 +19,20 @@ function ProtectedAreaLayer(){
     const [, setTempAreaId] = useAtom(tempAreaIdAtom);
     const [, setTempAreaName] = useAtom(tempAreaNameAtom);
 
-    const params = {
-        service: 'WFS',
-        version: '1.3.0',
-        request: 'GetFeature',
-        typeName: 'khm:cambodia_protected_area', 
-        outputFormat: 'application/json',  
-    };
-
     useEffect(() => {
+        const params = {
+            service: 'WFS',
+            version: '1.3.0',
+            request: 'GetFeature',
+            typeName: 'khm:cambodia_protected_area', 
+            outputFormat: 'application/json',  
+        };
         const fetchProtectedAreaData = async () => {
             const fetchedPAData = await GeoserverFetcher(params);
             setProtectedAreaData(fetchedPAData);
         };
         fetchProtectedAreaData();
-    }, []);
+    }, [setProtectedAreaData]);
 
     const defaultStyle = () => {
         return {

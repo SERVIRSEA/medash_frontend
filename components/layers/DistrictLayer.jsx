@@ -19,21 +19,20 @@ function DistrictLayer(){
     const [, setTempAreaId] = useAtom(tempAreaIdAtom);
     const [, setTempAreaName] = useAtom(tempAreaNameAtom);
 
-    const params = {
-        service: 'WFS',
-        version: '1.3.0',
-        request: 'GetFeature',
-        typeName: 'khm:cambodia_district', 
-        outputFormat: 'application/json',  
-    };
-
     useEffect(() => {
+        const params = {
+            service: 'WFS',
+            version: '1.3.0',
+            request: 'GetFeature',
+            typeName: 'khm:cambodia_district', 
+            outputFormat: 'application/json',  
+        };
         const fetchDistrictData = async () => {
             const fetchedData = await GeoserverFetcher(params);
             setDistrictData(fetchedData);
         };
         fetchDistrictData();
-    }, []);
+    }, [setDistrictData]);
 
     const defaultStyle = () => {
         return {

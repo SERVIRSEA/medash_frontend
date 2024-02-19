@@ -67,7 +67,7 @@ function ForestLossMap(){
             }
         }
         fetchForestLossMap();
-    }, [area_type, area_id, updateTrigger]);
+    }, [min, max, area_type, area_id, updateTrigger, forestLossMapStore, isFetching, setForestLossData, setForestLossMapStore, setIsLoading]);
 
     const toggleForestLossMapVisibility = () => {
         setIsForestLossMapVisible(!isForestLossMapVisible);

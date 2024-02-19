@@ -22,18 +22,6 @@ export default function DroughtMap() {
 
     const fetchLatestDroughtMap = async (selectedIndex, date) => {
         try {
-            // let date;
-            // if (selectedIndex === 'ndvi') {
-            //     date = '2023-11-25';
-            // } else if (selectedIndex === 'cwsi') {
-            //     date = '2023-11-25';
-            // } else if (selectedIndex == 'vhi'){
-            //     date = '2023-11-25';
-            // } else if (selectedIndex == 'cdi'){
-            //     date = '2023-03-22';
-            // } else {
-            //     date = '2023-12-27';
-            // }
             setIsLoading(true);
             const params = {
                 'area_type': area_type,
@@ -59,6 +47,7 @@ export default function DroughtMap() {
         if (index && date) {
             fetchLatestDroughtMap(index, date);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [index, date]);
 
     const handleChange = (event) => {

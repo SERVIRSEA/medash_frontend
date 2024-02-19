@@ -65,7 +65,7 @@ function ForestGainMap(){
             }
         }
         fetchForestGainMap();
-    }, [area_type, area_id, updateTrigger]);
+    }, [min, max, area_type, area_id, updateTrigger, forestGainMapStore, isFetching, setForestGainData, setForestGainMapStore, setIsLoading]);
 
     const toggleForestGainMapVisibility = () => {
         setIsForestGainMapVisible(!isForestGainMapVisible);

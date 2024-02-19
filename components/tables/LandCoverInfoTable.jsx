@@ -8,7 +8,7 @@ const LandCoverInfoTable = () => {
         <TableRow>
           <TableCell>Overview</TableCell>
           <TableCell>
-            The Cambodia national Land Cover time series (2000 - 2020) was developed through a collaborative effort led by SERVIR-Mekong using the Regional Land Cover Monitoring System approach (Saah et al. 2020). The maps were developed under the auspices of the REDD+ task team and the FCPF project in Cambodia to support the FREL. For this purpose, RLCMS was customized to meet Cambodia's land cover typologies. An uncertainty assessment was integrated into the assemblage process. These maps were developed using Landsat annual composites and training data collected by MOE.
+            The Cambodia national Land Cover time series (2000 - 2020) was developed through a collaborative effort led by SERVIR-Mekong using the Regional Land Cover Monitoring System approach (Saah et al. 2020). The maps were developed under the auspices of the REDD+ task team and the FCPF project in Cambodia to support the FREL. For this purpose, RLCMS was customized to meet CambodiaNASA&apos;s land cover typologies. An uncertainty assessment was integrated into the assemblage process. These maps were developed using Landsat annual composites and training data collected by MOE.
           </TableCell>
         </TableRow>
         <TableRow>

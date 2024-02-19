@@ -20,7 +20,7 @@ const CustomDatePicker = ({ availableDates }) => {
         if (availableDates && availableDates.length > 0) {
             setActiveDate(availableDates[availableDates.length - 1]);
         }
-    }, [availableDates]);
+    }, [availableDates, setActiveDate]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {

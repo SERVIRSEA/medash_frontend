@@ -26,7 +26,7 @@ const FireInfoTable = () => {
         <TableRow>
           <TableCell>Frequency updates</TableCell>
           <TableCell>
-            NASA's Fire Information for Resource Management System (FIRMS) distributes Near Real-Time (NRT) active fire data within 3 hours
+            NASA&apos;s Fire Information for Resource Management System (FIRMS) distributes Near Real-Time (NRT) active fire data within 3 hours
           </TableCell>
         </TableRow>
         <TableRow>

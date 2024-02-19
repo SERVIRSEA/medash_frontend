@@ -78,6 +78,7 @@ function ForestExtentMap(){
         if (updateTrigger > 0) {
             fetchForestExtentMap(selectedYear);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [area_type, area_id, min, max, updateTrigger, selectedYear, setIsVisible]);
 
     const showOnOffForestExtentMap = async (year) =>{

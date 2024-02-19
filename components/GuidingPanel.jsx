@@ -55,6 +55,7 @@ const GuidingPanel = ({ isOpen, onClose }) => {
             {steps.map((step, index) => (
               <Grid key={index} item xs={12} sm={6}>
                 <Box sx={{ textAlign: 'center', mb: 2 }}>
+                  {/* eslint-disable-next-line */}
                   <img src={step.icon} alt={step.alt} width="25%" />
                 </Box>
                 <Typography variant="body2" align="center" sx={{ mb: 2 }}>

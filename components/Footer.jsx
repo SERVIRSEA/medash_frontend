@@ -12,6 +12,7 @@ export default function Footer() {
                     <Grid container spacing={0}>
                         <Grid md={6} style={{marginTop: '50px', marginBottom: '50px'}}>
                             <Link href="https://servir.adpc.net/" target="_blank" rel="noreferrer">
+                                {/* eslint-disable-next-line */}
                                 <img src='/assets/images/logos/servir-sea.png' width={200} height={30} alt="SERVIR-SEA" />
                             </Link>
                             <Typography pt={1} variant="body1" style={{fontWeight: 'bold'}}>

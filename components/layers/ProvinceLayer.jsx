@@ -21,21 +21,20 @@ function ProvinceLayer(){
     const [, setTempAreaId] = useAtom(tempAreaIdAtom);
     const [, setTempAreaName] = useAtom(tempAreaNameAtom);
 
-    const params = {
-        service: 'WFS',
-        version: '1.3.0',
-        request: 'GetFeature',
-        typeName: 'khm:cambodia_province', 
-        outputFormat: 'application/json',  
-    };
-
     useEffect(() => {
+        const params = {
+            service: 'WFS',
+            version: '1.3.0',
+            request: 'GetFeature',
+            typeName: 'khm:cambodia_province', 
+            outputFormat: 'application/json',  
+        };
         const fetchProvinceData = async () => {
             const fetchedData = await GeoserverFetcher(params);
             setProvinceData(fetchedData);
         };
         fetchProvinceData();   
-    }, []); 
+    }, [setProvinceData]); 
 
     const defaultStyle = () => {
         return {

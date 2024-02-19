@@ -201,6 +201,7 @@ function Sidebar(){
                             onClick={(event) => handleListItemClick(event, index)}
                         >
                         <div style={menuItemStyle}>
+                            {/* eslint-disable-next-line */}
                             <img src={item.icon} width={30} height={30} alt={item.text} />
                             <p style={{ textAlign: 'center', fontSize: '10px', padding: 0 }}>
                                 {item.text.split('\n').map((t, i) => <React.Fragment key={i}>{t}<br /></React.Fragment>)}

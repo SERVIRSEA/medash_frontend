@@ -66,7 +66,7 @@ function LandCoverMap(){
         if (updateTrigger > 0) {
             fetchLatestLandCoverMap(selectedYear);
         }
-    }, [area_type, area_id, max, updateTrigger]);
+    }, [area_type, area_id, max, updateTrigger, isFetching, selectedYear, setIsLoading, setLandCoverData, setMapDataStore, setSelectedYear]);
 
     const showOnOffLandCoverMap = async (year) =>{
         setSelectedYear((prevYear) => (prevYear === year ? null : year));

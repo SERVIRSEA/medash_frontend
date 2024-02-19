@@ -51,6 +51,7 @@ const Basemaps = () => {
             >
               <ListItemAvatar>
                 <Avatar>
+                  {/* eslint-disable-next-line */}
                   <img src={basemap.thumbnail} alt={basemap.name} />
                 </Avatar>
               </ListItemAvatar>

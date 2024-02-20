@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
 import { ListItem, IconButton, Switch } from '@mui/material';
@@ -8,19 +8,73 @@ import { Fetcher } from '@/fetchers/Fetcher';
 import {
     areaTypeAtom,
     areaIdAtom,
-    seasonalRFVisAtom,
+    seasonalRainfallVisAtom,
+    seasonalRainfallDataAtom,
     seasonalTempVisAtom,
-    avgTempVisAtom,
-    avgTempForecastVisAtom,
-    isLoadingAtom
+    seasonalTemperatureDataAtom,
+    isLoadingAtom,
+    weatherDataStoreAtom
 } from '@/state/atoms';
 
 function SeasonalWeatherMap() {
-    const [area_type] = useAtom(areaTypeAtom);
-    const [area_id] = useAtom(areaIdAtom);
+    const [areaType] = useAtom(areaTypeAtom);
+    const [areaId] = useAtom(areaIdAtom);
     const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
-    const [isVisibleRF, setIsVisibleRF] = useAtom(seasonalRFVisAtom);
-    const [isVisibleTemp, setIsVisibleTemp] = useAtom(seasonalTempVisAtom);
+    const [isVisibleRainfall, setIsVisibleRainfall] = useAtom(seasonalRainfallVisAtom);
+    const [isVisibleTemperature, setIsVisibleTemperature] = useAtom(seasonalTempVisAtom);
+    const [rainfallData, setRainfallData] = useAtom(seasonalRainfallDataAtom);
+    const [temperatureData, setTemperatureData] = useAtom(seasonalTemperatureDataAtom);
+    const [weatherDataStore, setWeatherDataStore] = useAtom(weatherDataStoreAtom);
+
+    const fetchLatestWeatherMap = async (weatherParam, weatherType, areaType, areaId) => {
+        try {
+            setIsLoading(true);
+            const params = {
+                'area_type': areaType,
+                'area_id': areaId,
+                'weather_param': weatherParam,
+                'weather_type': weatherType,
+            };
+            const key = JSON.stringify(params);
+
+            // Check if data for the given parameters is already available in the data store
+            if (!weatherDataStore[key]) {
+                // Data not found, fetch it
+                const action = 'get-weather-map';
+                const data = await Fetcher(action, params);
+
+                // Update the data store
+                setWeatherDataStore((prev) => ({ ...prev, [key]: data }));
+
+                // Set the fetched data
+                if (weatherParam === 'precipitation') {
+                    setRainfallData(data);
+                } else if (weatherParam === 'temperature') {
+                    setTemperatureData(data);
+                }
+            } else {
+                // Data already exists in the data store
+                // Reuse the existing data
+                const data = weatherDataStore[key];
+                if (weatherParam === 'precipitation') {
+                    setRainfallData(data);
+                } else if (weatherParam === 'temperature') {
+                    setTemperatureData(data);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (isVisibleRainfall || isVisibleTemperature) {
+            fetchLatestWeatherMap(isVisibleRainfall ? 'precipitation' : 'temperature', 'seasonal', areaType, areaId);
+        }
+    }, [areaType, areaId, isVisibleRainfall, isVisibleTemperature]);
 
     return (
         <>
@@ -31,8 +85,8 @@ function SeasonalWeatherMap() {
                 <Switch
                     size="small"
                     sx={{ mr: 0.1 }}
-                    checked={isVisibleRF}
-                    onChange={() => setIsVisibleRF(!isVisibleRF)} 
+                    checked={isVisibleRainfall}
+                    onChange={() => setIsVisibleRainfall(!isVisibleRainfall)} 
                 />
                 <Typography variant="body2">Rainfall Anomaly (next 3 months): Forecasted (mm)</Typography>
             </ListItem>
@@ -43,8 +97,8 @@ function SeasonalWeatherMap() {
                 <Switch
                     size="small"
                     sx={{ mr: 0.1 }}
-                    checked={isVisibleTemp}
-                    onChange={() => setIsVisibleTemp(!isVisibleTemp)} 
+                    checked={isVisibleTemperature}
+                    onChange={() => setIsVisibleTemperature(!isVisibleTemperature)} 
                 />
                 <Typography variant="body2">Temperature Anomaly (next 3 months): Forecasted (C)</Typography>
             </ListItem>

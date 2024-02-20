@@ -164,7 +164,7 @@ function Sidebar(){
         2: { riceMap: true, rubberMap: true, lcMap: false },
         3: { riceMap: false, rubberMap: false, lcMap: false, gladMap: true, sarMap: true },
         4: { riceMap: false, rubberMap: false, lcMap: false,  fireMap: true},
-        5:{droughtMap: true}
+        5: {droughtMap: true}
     };
       
     const handleListItemClick = (event, index) => {

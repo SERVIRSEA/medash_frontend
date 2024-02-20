@@ -10,60 +10,6 @@ const DroughtInfoTable = () => {
                     <TableCell><b>Description</b></TableCell>
                 </TableRow>
                 <TableRow>
-                    <TableCell>Accumulated Rainfall (past 7 days) (mm)</TableCell>
-                    <TableCell>
-                        <b>Overview:</b> This provides the total rainfall received during the past 7 days in mm.<br />
-                        <b>Data Source:</b> IMERG (Integrated Multi-satellitE Retrievals for GPM) – 1day early<br />
-                        <b>Resolution:</b> 10km<br />
-                        <b>Frequency of updating:</b> Every day
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>Average temperature (past 7 days) (C)</TableCell>
-                    <TableCell>
-                        <b>Overview:</b> This provides the average 2m air temperature during the past 7 days in deg C.<br />
-                        <b>Data Source:</b> NCEP GFS Reanalysis (0.25) through Weather Research and Forecasting (WRF) model.<br />
-                        <b>Resolution:</b> 5km<br />
-                        <b>Frequency of updating:</b> Every day
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>Accumulated Rainfall (next 7 days): Forecasted (mm)</TableCell>
-                    <TableCell>
-                        <b>Overview:</b> This provides the prediction of total rainfall likely to receive during the next 7 days in mm.<br />
-                        <b>Data Source:</b> NCEP Global Ensemble Forecast System (GEFS) (0.50) through Weather Research and Forecasting (WRF) model.<br />
-                        <b>Resolution:</b> 5km<br />
-                        <b>Frequency of updating:</b> Every day
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>Average temperature (next 7 days): Forecasted (C)</TableCell>
-                    <TableCell>
-                        <b>Overview:</b> This provides the predicted average 2m air temperature during the next 7 days in deg C.<br />
-                        <b>Data Source:</b> NCEP Global Ensemble Forecast System (GEFS) (0.50) through Weather Research and Forecasting (WRF) model.<br />
-                        <b>Resolution:</b> 5km<br />
-                        <b>Frequency of updating:</b> Every day
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>Rainfall Anomaly (next 3 months): Forecasted (mm)</TableCell>
-                    <TableCell>
-                        <b>Overview:</b> This provides the prediction of anomaly of rainfall during the next 3 months period in mm/month. 1991-2020 period is considered as the baseline period.<br />
-                        <b>Data Source:</b> North American Multi-Model Ensemble (NMME).<br />
-                        <b>Resolution:</b> 5km (through RHEAS model)<br />
-                        <b>Frequency of updating:</b> Every month
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>Temperature Anomaly (next 3 months): Forecasted (C)</TableCell>
-                    <TableCell>
-                        <b>Overview:</b> This provides the prediction of anomaly of 2m air temperature during the next 3 months period in deg C. 1991-2020 period is considered as the baseline period.<br />
-                        <b>Data Source:</b> North American Multi-Model Ensemble (NMME).<br />
-                        <b>Resolution:</b> 5km (through RHEAS model)<br />
-                        <b>Frequency of updating:</b> Every month
-                    </TableCell>
-                </TableRow>
-                <TableRow>
                     <TableCell>CDI</TableCell>
                     <TableCell>
                         <b>Overview:</b> The Combine Drought Index (CDI) is calculated using SPI3, the anomalies of the fraction of Absorbed Photosynthetically Active Radiation (fAPAR) and soil suction (pF). Four warning categories are available as Watch: Precipitation deficit, Warning: Soil moisture deficit, Alert 1: Vegetation stress following precipitation deficit, Alert 2: Vegetation stress following precipitation/soil moisture deficit. (Acknowledge reference: <a href="https://goo.gl/1dBSVe">https://goo.gl/1dBSVe</a>)<br />

@@ -4,7 +4,7 @@ import DroughtInfoTable from '../tables/DroughtInfoTable';
 
 const DroughtModal = ({ isOpen, onClose }) => {
     return (
-        <CustomModal isOpen={isOpen} onClose={onClose} title="Learn About Drought Indices">
+        <CustomModal isOpen={isOpen} onClose={onClose} title="Know About Drought Indices">
             <DroughtInfoTable />
         </CustomModal>
     );

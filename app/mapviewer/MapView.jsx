@@ -17,6 +17,12 @@ import ForestGainLayer from '@/components/layers/ForestGainLayer';
 import ForestLossLayer from '@/components/layers/ForestLossLayer';
 import ForestExtentLayer from '@/components/layers/ForestExtentLayer';
 import DroughtLayer from '@/components/layers/DroughtLayer';
+import PastTemperatureLayer from '@/components/layers/PastTemperatureLayer';
+import PastRainfallLayer from '@/components/layers/PastRainfallLayer';
+import ForecastRainfallLayer from '@/components/layers/ForecastRainfallLayer';
+import ForecastTemperatureLayer from '@/components/layers/ForecastTemperatureLayer';
+import SeasonalRainfallLayer from '@/components/layers/SeasonalRainfallLayer';
+import SeasonalTemperatureLayer from '@/components/layers/SeasonalTemperatureLayer';
 
 export default function MapView() {
     return (
@@ -37,6 +43,12 @@ export default function MapView() {
             <ForestLossLayer />
             <ForestExtentLayer />
             <DroughtLayer />
+            <PastRainfallLayer />
+            <ForecastRainfallLayer />
+            <SeasonalRainfallLayer />
+            <PastTemperatureLayer />
+            <ForecastTemperatureLayer />
+            <SeasonalTemperatureLayer />
         </MapContainer>
     )
 }

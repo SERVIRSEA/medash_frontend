@@ -8,7 +8,7 @@ import { selectedDroughtIndexAtom } from '@/state/atoms';
 
 const DroughtCalendar = () => {
     const [availableDatesByIndex, setAvailableDatesByIndex] = useState({});
-    const [index, setIndex] = useAtom(selectedDroughtIndexAtom); 
+    const [index] = useAtom(selectedDroughtIndexAtom); 
     const [loading, setLoading] = useState(true);
     
     const fetchDates = async (selectedIndex) => {

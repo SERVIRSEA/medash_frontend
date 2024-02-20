@@ -146,17 +146,6 @@ export const fireYearlyMapDataStoreAtom = atom({});
 export const fireChartAtom = atom([]);
 export const fireChartDataLoadingAtom = atom(true);
 
-// Drought monitoring state
-export const accuRFVisAtom = atom(false);
-export const avgTempVisAtom = atom(false);
-export const accuRFForecastVisAtom = atom(false);
-export const avgTempForecastVisAtom = atom(false);
-export const seasonalRFVisAtom = atom(false);
-export const seasonalTempVisAtom = atom(false);
-export const droughtVisAtom = atom(false);
-export const droughtMapDataAtom = atom('');
-export const droughtMapDataStoreAtom = atom({});
-
 // Basemap state
 export const basemapAtom = atom('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}');
 
@@ -176,3 +165,21 @@ export const selectedDroughtDateAtom = atom('');
 // Alert state
 export const alertOpenAtom = atom(false);
 export const alertMessageAtom = atom('');
+
+// Drought monitoring state
+export const weatherDataStoreAtom = atom({});
+export const pastRainfallVisAtom = atom(false);
+export const pastTempVisAtom = atom(false);
+export const forecastRainfallVisAtom = atom(false);
+export const forecastTempVisAtom = atom(true);
+export const seasonalRainfallVisAtom = atom(false);
+export const seasonalTempVisAtom = atom(false);
+export const pastRainfallDataAtom = atom('');
+export const forecastRainfallDataAtom = atom ('');
+export const seasonalRainfallDataAtom = atom('');
+export const pastTemperatureDataAtom = atom('');
+export const forecastTemperatureDataAtom = atom('');
+export const seasonalTemperatureDataAtom = atom('');
+export const droughtVisAtom = atom(false);
+export const droughtMapDataAtom = atom('');
+export const droughtMapDataStoreAtom = atom({});

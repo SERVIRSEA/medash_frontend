@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
 import { ListItem, IconButton, Switch } from '@mui/material';
@@ -8,21 +8,121 @@ import { Fetcher } from '@/fetchers/Fetcher';
 import {
     areaTypeAtom,
     areaIdAtom,
-    accuRFVisAtom,
-    accuRFForecastVisAtom,
-    avgTempVisAtom,
-    avgTempForecastVisAtom,
-    isLoadingAtom
+    weatherDataStoreAtom,
+    pastRainfallVisAtom,
+    pastTempVisAtom,
+    forecastRainfallVisAtom,
+    forecastTempVisAtom,
+    pastRainfallDataAtom,
+    forecastRainfallDataAtom,
+    pastTemperatureDataAtom,
+    forecastTemperatureDataAtom,
+    isLoadingAtom,
 } from '@/state/atoms';
 
 function ShortTermWeatherMap() {
-    const [area_type] = useAtom(areaTypeAtom);
-    const [area_id] = useAtom(areaIdAtom);
+    const [areaType] = useAtom(areaTypeAtom);
+    const [areaId] = useAtom(areaIdAtom);
     const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
-    const [isVisibleAccuRF, setIsVisibleAccuRF] = useAtom(accuRFVisAtom);
-    const [isVisibleAccuRFF, setIsVisibleAccuRFF] = useAtom(accuRFForecastVisAtom);
-    const [isVisibleAvgTemp, setIsVisibleAvgTemp] = useAtom(avgTempVisAtom);
-    const [isVisibleAvgTempF, setIsVisibleAvgTempF] = useAtom(avgTempForecastVisAtom);
+    const [isVisiblePastRainfall, setIsVisiblePastRainfall] = useAtom(pastRainfallVisAtom);
+    const [isVisiblePastTemperature, setIsVisiblePastTemperature] = useAtom(pastTempVisAtom);
+    const [isVisibleForecastRainfall, setIsVisibleForecastRainfall] = useAtom(forecastRainfallVisAtom);
+    const [isVisibleForecastTemperature, setIsVisibleForecastTemperature] = useAtom(forecastTempVisAtom);
+    const [dataStore, setDataStore] = useAtom(weatherDataStoreAtom);
+    const [, setPastRainfallData] = useAtom(pastRainfallDataAtom);
+    const [, setForecastRainfallData] = useAtom(forecastRainfallDataAtom);
+    const [, setPastTemperatureData] = useAtom(pastTemperatureDataAtom);
+    const [, setForecastTemperatureData] = useAtom(forecastTemperatureDataAtom);
+
+    const fetchLatestWeatherMap = async (weatherParam, weatherType, areaType, areaId) => {
+        try {
+            setIsLoading(true);
+            const params = {
+                'area_type': areaType,
+                'area_id': areaId,
+                'weather_param': weatherParam,
+                'weather_type': weatherType,
+            };
+            const key = JSON.stringify(params);
+
+            if (!dataStore[key]) {
+                const action = 'get-weather-map';
+                const data = await Fetcher(action, params);
+
+                setDataStore((prev) => ({ ...prev, [key]: data }));
+
+                switch (weatherType) {
+                    case 'past':
+                        if (weatherParam === 'precipitation') {
+                            setPastRainfallData(data);
+                            setIsVisiblePastRainfall(true);
+                        } else if (weatherParam === 'temperature') {
+                            setPastTemperatureData(data);
+                            setIsVisiblePastTemperature(true);
+                        }
+                        break;
+                    case 'forecast':
+                        if (weatherParam === 'precipitation') {
+                            setForecastRainfallData(data);
+                            setIsVisibleForecastRainfall(true);
+                        } else if (weatherParam === 'temperature') {
+                            setForecastTemperatureData(data);
+                            setIsVisibleForecastTemperature(true);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                const data = dataStore[key];
+
+                switch (weatherType) {
+                    case 'past':
+                        if (weatherParam === 'precipitation') {
+                            setPastRainfallData(data);
+                            setIsVisiblePastRainfall(true);
+                        } else if (weatherParam === 'temperature') {
+                            setPastTemperatureData(data);
+                            setIsVisiblePastTemperature(true);
+                        }
+                        break;
+                    case 'forecast':
+                        if (weatherParam === 'precipitation') {
+                            setForecastRainfallData(data);
+                            setIsVisibleForecastRainfall(true);
+                        } else if (weatherParam === 'temperature') {
+                            setForecastTemperatureData(data);
+                            setIsVisibleForecastTemperature(true);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (isVisiblePastRainfall) {
+            fetchLatestWeatherMap('precipitation', 'past', areaType, areaId);
+        }
+        if (isVisibleForecastRainfall) {
+            fetchLatestWeatherMap('precipitation', 'forecast', areaType, areaId);
+        }
+        if (isVisiblePastTemperature) {
+            fetchLatestWeatherMap('temperature', 'past', areaType, areaId);
+        }
+        if (isVisibleForecastTemperature) {
+            fetchLatestWeatherMap('temperature', 'forecast', areaType, areaId);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [areaType, areaId, isVisiblePastRainfall, isVisibleForecastRainfall, isVisiblePastTemperature, isVisibleForecastTemperature]);
+
 
     return (
         <>
@@ -33,8 +133,8 @@ function ShortTermWeatherMap() {
                 <Switch
                     size="small"
                     sx={{ mr: 0.1 }}
-                    checked={isVisibleAccuRF}
-                    onChange={() => setIsVisibleAccuRF(!isVisibleAccuRF)} 
+                    checked={isVisiblePastRainfall}
+                    onChange={() => setIsVisiblePastRainfall(!isVisiblePastRainfall)}
                 />
                 <Typography variant="body2">Accumulated Rainfall (past 7 days) (mm)</Typography>
             </ListItem>
@@ -45,8 +145,8 @@ function ShortTermWeatherMap() {
                 <Switch
                     size="small"
                     sx={{ mr: 0.1 }}
-                    checked={isVisibleAvgTemp}
-                    onChange={() => setIsVisibleAvgTemp(!isVisibleAvgTemp)} 
+                    checked={isVisiblePastTemperature}
+                    onChange={() => setIsVisiblePastTemperature(!isVisiblePastTemperature)}
                 />
                 <Typography variant="body2">Average temperature (past 7 days) (C)</Typography>
             </ListItem>
@@ -57,8 +157,8 @@ function ShortTermWeatherMap() {
                 <Switch
                     size="small"
                     sx={{ mr: 0.1 }}
-                    checked={isVisibleAccuRFF}
-                    onChange={() => setIsVisibleAccuRFF(!isVisibleAccuRFF)} 
+                    checked={isVisibleForecastRainfall}
+                    onChange={() => setIsVisibleForecastRainfall(!isVisibleForecastRainfall)}
                 />
                 <Typography variant="body2">Accumulated Rainfall (next 7 days): Forecasted (mm)</Typography>
             </ListItem>
@@ -69,8 +169,8 @@ function ShortTermWeatherMap() {
                 <Switch
                     size="small"
                     sx={{ mr: 0.1 }}
-                    checked={isVisibleAvgTempF}
-                    onChange={() => setIsVisibleAvgTempF(!isVisibleAvgTempF)} 
+                    checked={isVisibleForecastTemperature}
+                    onChange={() => setIsVisibleForecastTemperature(!isVisibleForecastTemperature)}
                 />
                 <Typography variant="body2">Average temperature (next 7 days): Forecasted (C)</Typography>
             </ListItem>

@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
-import { ListItem, IconButton, Switch, Box } from '@mui/material';
+import { ListItem, IconButton, Switch, Box, ListSubheader } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Fetcher } from '@/fetchers/Fetcher';
 import { 
@@ -27,12 +27,12 @@ export default function DroughtMap() {
     const [isVisible, setIsVisible] = useAtom(droughtVisAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
     const [, setData] = useAtom(droughtMapDataAtom);
-    const [, setDataStore] = useAtom(droughtMapDataStoreAtom);
+    const [dataStore, setDataStore] = useAtom(droughtMapDataStoreAtom);
     const [date, setSelectedDate] = useAtom(selectedDroughtDateAtom);
     const [, setAlertOpen] = useAtom(alertOpenAtom);
     const [, setAlertMessage] = useAtom(alertMessageAtom);
 
-    const fetchLatestDroughtMap = async (selectedIndex, date) => {
+    const fetchLatestDroughtMap = async (selectedIndex, date, area_type, area_id) => {
         try {
             setIsLoading(true);
             const params = {
@@ -42,25 +42,39 @@ export default function DroughtMap() {
                 'date': date,
             };
             const key = JSON.stringify(params);
-            const action = 'get-drought-index-map';
-            const data = await Fetcher(action, params);
-            setData(data);
-            setDataStore((prev) => ({ ...prev, [key]: data }));
-            setIsVisible(true);
+    
+            // Check if data for the given parameters is already available in the data store
+            if (!dataStore[key]) {
+                // Data not found, fetch it
+                const action = 'get-drought-index-map';
+                const data = await Fetcher(action, params);
+    
+                // Update the data store
+                setDataStore((prev) => ({ ...prev, [key]: data }));
+    
+                // Set the fetched data
+                setData(data);
+                setIsVisible(true);
+            } else {
+                // Data already exists in the data store
+                // Reuse the existing data
+                setData(dataStore[key]);
+                setIsVisible(true);
+            }
         } catch (error) {
             console.error('Error fetching data:', error);
             throw error;
         } finally {
             setIsLoading(false);
         }
-    };
+    };    
 
     useEffect(() => {
         if (index && date) {
-            fetchLatestDroughtMap(index, date);
+            fetchLatestDroughtMap(index, date, area_type, area_id);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [index, date]);
+    }, [index, date, area_type, area_id]);
 
     const handleChange = (event) => {
         setSelectedDate(''); // Reset selected date
@@ -110,16 +124,22 @@ export default function DroughtMap() {
             </Typography>
             <FormControl sx={{ p: 1, minWidth: 120 }} size="small" fullWidth>
                 <Select
-                id="select-index"
-                value={index}
-                onChange={handleChange}
-                style={{ fontSize: '12px' }}
+                    id="select-index"
+                    value={index}
+                    onChange={handleChange}
+                    style={{ fontSize: '12px' }}
                 >
-                    <MenuItem value="cdi" style={{ fontSize: '12px' }}>Combined Drought Index (CDI)*</MenuItem>
-                    <MenuItem value="spi3" style={{ fontSize: '12px' }}>Standardized Precipitation Index (SPI) – 3months*</MenuItem>
+                    <ListSubheader>
+                        <Typography variant="h6" sx={{fontWeight: "bold", fontSize: "14px"}}>Satellite Based</Typography>
+                    </ListSubheader>
                     <MenuItem value="ndvi" style={{ fontSize: '12px' }}>Normalized Difference Vegetation Index (NDVI)</MenuItem>
                     <MenuItem value="vhi" style={{ fontSize: '12px' }}>Vegetation Health Index (VHI)</MenuItem>
                     <MenuItem value="cwsi" style={{ fontSize: '12px' }}>Crop Water Stress Index (CWSI)</MenuItem>
+                    <ListSubheader>
+                        <Typography variant="h6" pt={1} sx={{fontWeight: "bold", fontSize: "14px"}}>Model Based</Typography>
+                    </ListSubheader>
+                    <MenuItem value="cdi" style={{ fontSize: '12px' }}>Combined Drought Index (CDI)*</MenuItem>
+                    <MenuItem value="spi3" style={{ fontSize: '12px' }}>Standardized Precipitation Index (SPI) – 3months*</MenuItem>
                     <MenuItem value="soil_moist" style={{ fontSize: '12px' }}>Soil Moisture*</MenuItem>
                     <MenuItem value="rainfall" style={{ fontSize: '12px' }}>Rainfall (mm)*</MenuItem>
                     <MenuItem value="surf_temp" style={{ fontSize: '12px' }}>Surface Temperature (C)*</MenuItem>

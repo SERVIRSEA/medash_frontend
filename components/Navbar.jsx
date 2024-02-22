@@ -52,7 +52,7 @@ function Navbar(props) {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar component="nav" position="sticky" sx={{ width: '100%' }}>
+            <AppBar component="nav" position="static" sx={{ width: '100%' }}>
                 <Toolbar sx={{ p: 0, m: 0, display: 'flex', justifyContent: 'space-between' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <IconButton

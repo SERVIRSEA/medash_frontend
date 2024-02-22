@@ -5,52 +5,127 @@ import {
     pastRainfallVisAtom,
     pastTempVisAtom,
     forecastRainfallVisAtom,
-    forecastTempVisAtom
+    forecastTempVisAtom,
+    weatherDataStoreAtom,
+    areaTypeAtom,
+    areaIdAtom,
 } from '@/state/atoms';
+
+const precipitationColors = ["#8c510a","#bf812d","#dfc27d","#f6e8c3","#c7eae5","#80cdc1","#35978f","#01665e","#003c30","#011f4b","#08306b"];
+const temperatureColors = ["#2b83ba","#5ea7b1","#91cba8","#bce4a9","#ddf1b4","#ffffbf","#fedf99","#fdbe74","#f59053","#e65538","#d7191c"];
 
 const styles = {
     past_precipitation: {
         title: 'Accumulated Rainfall (past 7 days)(mm)',
-        palette: ['#88A541', '#F89F1D', '#B97A57', '#880015'],
-        text: ['Normal', 'Watch', 'Warning', 'Alert'],
+        palette: precipitationColors,
     },
     past_temperature: {
         title: 'Average Temperature (past 7 days)(°C)',
-        palette:['#880015', '#B97A57', '#F89F1D', '#FFFFFF'],
-        text:['Extreme', 'Severe', 'Moderate', 'Normal']
+        palette: temperatureColors,
     },
     forecast_precipitation: {
         title: 'Accumulated Rainfall (next 7 days)(mm)',
-        palette: ['#1A9641','#58B453','#97D265','#C4E687','#F7FCDF','#FFEDAB','#FEC981','#F99E59','#E85B3A'],
-        text: ['0', '10000'],
+        palette: precipitationColors,
     },
     forecast_temperature: {
         title: 'Average Temperature (next 7 days)(°C)',
-        palette: ['#E85B3A', '#F99E59', '#FEC981', '#FFEDAB', '#F7FCDF', '#C4E687', '#97D265', '#58B453', '#1A9641'],
-        text: ['-10000', '10000'],
+        palette: temperatureColors,
     }
 };
+
+function distributeIntoClasses(min, max, numClasses) {
+    const avg = (min + max) / 2;
+    const quarter1 = (min + avg) / 2;
+    const quarter3 = (max + avg) / 2;
+    return [min, quarter1, avg, quarter3, max];
+}
 
 const ShortTermWeatherLegend = () => {
     const [isPastRainfallVisible] = useAtom(pastRainfallVisAtom);
     const [isPastTempVisible] = useAtom(pastTempVisAtom);
     const [isForecastRainfallVisible] = useAtom(forecastRainfallVisAtom);
     const [isForecastTempVisible] = useAtom(forecastTempVisAtom);
+    const [weatherDataStore] = useAtom(weatherDataStoreAtom);
+    const [areaType] = useAtom(areaTypeAtom);
+    const [areaId] = useAtom(areaIdAtom);
 
     const determineLegends = () => {
         const legends = [];
 
-        if (isPastRainfallVisible) {
-            legends.push('past_precipitation');
+        if (isPastRainfallVisible && weatherDataStore) {
+            const params = {
+                'area_type': areaType,
+                'area_id': areaId,
+                'weather_param': 'precipitation',
+                'weather_type': 'past',
+            };
+            const key = JSON.stringify(params);
+            const data = weatherDataStore[key];
+
+            if (data) {
+                const min = data.min;
+                const max = data.max;
+                const { title, palette } = styles.past_precipitation;
+                const text = distributeIntoClasses(min, max, 11).map(value => value.toFixed(1));
+                legends.push({ title, palette, text });
+            }
         }
-        if (isPastTempVisible) {
-            legends.push('past_temperature');
+
+        if (isPastTempVisible && weatherDataStore) {
+            const params = {
+                'area_type': areaType,
+                'area_id': areaId,
+                'weather_param': 'temperature',
+                'weather_type': 'past',
+            };
+            const key = JSON.stringify(params);
+            const data = weatherDataStore[key];
+
+            if (data) {
+                const min = data.min;
+                const max = data.max;
+                const { title, palette } = styles.past_temperature;
+                const text = distributeIntoClasses(min, max, 11).map(value => value.toFixed(1));
+                legends.push({ title, palette, text });
+            }
         }
-        if (isForecastRainfallVisible) {
-            legends.push('forecast_precipitation');
+
+        if (isForecastRainfallVisible && weatherDataStore) {
+            const params = {
+                'area_type': areaType,
+                'area_id': areaId,
+                'weather_param': 'precipitation',
+                'weather_type': 'forecast',
+            };
+            const key = JSON.stringify(params);
+            const data = weatherDataStore[key];
+
+            if (data) {
+                const min = data.min;
+                const max = data.max;
+                const { title, palette } = styles.forecast_precipitation;
+                const text = distributeIntoClasses(min, max, 11).map(value => value.toFixed(1));
+                legends.push({ title, palette, text });
+            }
         }
-        if (isForecastTempVisible) {
-            legends.push('forecast_temperature');
+
+        if (isForecastTempVisible && weatherDataStore) {
+            const params = {
+                'area_type': areaType,
+                'area_id': areaId,
+                'weather_param': 'temperature',
+                'weather_type': 'forecast',
+            };
+            const key = JSON.stringify(params);
+            const data = weatherDataStore[key];
+
+            if (data) {
+                const min = data.min;
+                const max = data.max;
+                const { title, palette } = styles.forecast_temperature;
+                const text = distributeIntoClasses(min, max, 11).map(value => value.toFixed(1));
+                legends.push({ title, palette, text });
+            }
         }
 
         return legends;
@@ -61,8 +136,8 @@ const ShortTermWeatherLegend = () => {
     return (
         <>
             <Typography variant="body1" fontWeight="bold" sx={{ fontSize: '14px' }} pt={2}>Legend</Typography>
-            {legends.map((legendType, index) => {
-                const { title, palette, text } = styles[legendType];
+            {legends.map((legend, index) => {
+                const { title, palette, text } = legend;
 
                 const colorStops = palette.map((color, index) => `${color} ${(index * 100) / (palette.length - 1)}%`).join(', ');
 

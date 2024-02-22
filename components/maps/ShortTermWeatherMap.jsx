@@ -54,19 +54,19 @@ function ShortTermWeatherMap() {
                 switch (weatherType) {
                     case 'past':
                         if (weatherParam === 'precipitation') {
-                            setPastRainfallData(data);
+                            setPastRainfallData(data["geeURL"]);
                             setIsVisiblePastRainfall(true);
                         } else if (weatherParam === 'temperature') {
-                            setPastTemperatureData(data);
+                            setPastTemperatureData(data["geeURL"]);
                             setIsVisiblePastTemperature(true);
                         }
                         break;
                     case 'forecast':
                         if (weatherParam === 'precipitation') {
-                            setForecastRainfallData(data);
+                            setForecastRainfallData(data["geeURL"]);
                             setIsVisibleForecastRainfall(true);
                         } else if (weatherParam === 'temperature') {
-                            setForecastTemperatureData(data);
+                            setForecastTemperatureData(data["geeURL"]);
                             setIsVisibleForecastTemperature(true);
                         }
                         break;
@@ -79,19 +79,19 @@ function ShortTermWeatherMap() {
                 switch (weatherType) {
                     case 'past':
                         if (weatherParam === 'precipitation') {
-                            setPastRainfallData(data);
+                            setPastRainfallData(data["geeURL"]);
                             setIsVisiblePastRainfall(true);
                         } else if (weatherParam === 'temperature') {
-                            setPastTemperatureData(data);
+                            setPastTemperatureData(data["geeURL"]);
                             setIsVisiblePastTemperature(true);
                         }
                         break;
                     case 'forecast':
                         if (weatherParam === 'precipitation') {
-                            setForecastRainfallData(data);
+                            setForecastRainfallData(data["geeURL"]);
                             setIsVisibleForecastRainfall(true);
                         } else if (weatherParam === 'temperature') {
-                            setForecastTemperatureData(data);
+                            setForecastTemperatureData(data["geeURL"]);
                             setIsVisibleForecastTemperature(true);
                         }
                         break;

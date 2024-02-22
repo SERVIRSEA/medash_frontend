@@ -48,18 +48,18 @@ function SeasonalWeatherMap() {
 
                 // Set the fetched data
                 if (weatherParam === 'precipitation') {
-                    setRainfallData(data);
+                    setRainfallData(data["geeURL"]);
                 } else if (weatherParam === 'temperature') {
-                    setTemperatureData(data);
+                    setTemperatureData(data["geeURL"]);
                 }
             } else {
                 // Data already exists in the data store
                 // Reuse the existing data
                 const data = weatherDataStore[key];
                 if (weatherParam === 'precipitation') {
-                    setRainfallData(data);
+                    setRainfallData(data["geeURL"]);
                 } else if (weatherParam === 'temperature') {
-                    setTemperatureData(data);
+                    setTemperatureData(data["geeURL"]);
                 }
             }
         } catch (error) {

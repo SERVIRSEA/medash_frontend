@@ -35,7 +35,7 @@ export default function Mapviewer() {
                     <DynamicMapView />
                 </div>
                 <Sidebar />
-                <Box sx={{zIndex: 1, width: '350px', marginLeft: '440px'}}>
+                <Box sx={{position: 'fixed', zIndex: 999, width: '350px', marginLeft: '440px'}}>
                     <DashboardControl />
                 </Box>
                 {isLoading && <LoadingIcon />}

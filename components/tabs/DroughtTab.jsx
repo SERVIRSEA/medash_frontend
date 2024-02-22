@@ -203,7 +203,7 @@ export default function DroughtTab() {
                 </Box>
                 <SeasonalWeatherMap />
                 <Box pl={2} pr={2} pb={1}>
-                    {isSeasonalOpen  && ( <DroughtLegend /> )}
+                    {isSeasonalOpen  && ( <SeasonalWeatherLegend /> )}
                 </Box>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>

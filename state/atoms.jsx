@@ -159,7 +159,7 @@ export const drawControlAtom= atom(false);
 export const guidingModalAtom = atom(true);
 
 // Drought index selector
-export const selectedDroughtIndexAtom = atom('cdi');
+export const selectedDroughtIndexAtom = atom('ndvi');
 export const selectedDroughtDateAtom = atom('');
 
 // Alert state

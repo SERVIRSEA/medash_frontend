@@ -163,7 +163,7 @@ const RubberAreaBMChart = () => {
                 chartData.baselineArea || 0,
                 chartData.measureArea || 0
             ],
-            color: "#2b5154"
+            color: "#AAFF00"
         }]
     };
 

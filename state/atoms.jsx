@@ -1,5 +1,11 @@
 import { atom } from 'jotai';
 
+// Initial selected atom
+export const menuTitleAtom = atom("Biophysical Monitoring");
+export const activeTabAtom = atom("block");
+export const activeMenuAtom = atom(0);
+export const activeTabPanelAtom = atom(0);
+
 // State for sidebar expand/collapse
 export const sidebarAtom = atom(0);
 export const maxRetryAttemptsAtom = atom(100);

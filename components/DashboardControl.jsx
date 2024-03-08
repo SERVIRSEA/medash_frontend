@@ -15,7 +15,7 @@ import UpdateMapButton from './UpdateMap';
 
 import { 
     tempAreaNameAtom,
-    guidingModalAtom
+    guidingModalAtom,
 } from '@/state/atoms';
 
 export default function DashboardControl() {

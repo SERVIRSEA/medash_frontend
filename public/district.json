@@ -1,0 +1,778 @@
+[
+    {
+        "id": "2301",
+        "name": "Damnak Chang'aeur"
+    },
+    {
+        "id": "2302",
+        "name": "Krong Kaeb"
+    },
+    {
+        "id": "2101",
+        "name": "Angkor Borei"
+    },
+    {
+        "id": "2102",
+        "name": "Bati"
+    },
+    {
+        "id": "2103",
+        "name": "Borei Cholsar"
+    },
+    {
+        "id": "2104",
+        "name": "Kiri Vong"
+    },
+    {
+        "id": "2105",
+        "name": "Kaoh Andaet"
+    },
+    {
+        "id": "2106",
+        "name": "Prey Kabbas"
+    },
+    {
+        "id": "2107",
+        "name": "Samraong"
+    },
+    {
+        "id": "2108",
+        "name": "Krong Doun Kaev"
+    },
+    {
+        "id": "2109",
+        "name": "Tram Kak"
+    },
+    {
+        "id": "2110",
+        "name": "Treang"
+    },
+    {
+        "id": "0701",
+        "name": "Angkor Chey"
+    },
+    {
+        "id": "0702",
+        "name": "Banteay Meas"
+    },
+    {
+        "id": "0703",
+        "name": "Chhuk"
+    },
+    {
+        "id": "0704",
+        "name": "Chum Kiri"
+    },
+    {
+        "id": "0705",
+        "name": "Dang Tong"
+    },
+    {
+        "id": "0706",
+        "name": "Kampong Trach"
+    },
+    {
+        "id": "0707",
+        "name": "Tuek Chhou"
+    },
+    {
+        "id": "0708",
+        "name": "Krong Kampot"
+    },
+    {
+        "id": "0803",
+        "name": "Khsach Kandal"
+    },
+    {
+        "id": "0804",
+        "name": "Kaoh Thum"
+    },
+    {
+        "id": "0805",
+        "name": "Leuk Daek"
+    },
+    {
+        "id": "0806",
+        "name": "Lvea Aem"
+    },
+    {
+        "id": "0810",
+        "name": "S'ang"
+    },
+    {
+        "id": "0808",
+        "name": "Angk Snuol"
+    },
+    {
+        "id": "0809",
+        "name": "Popnhea Lueu"
+    },
+    {
+        "id": "0802",
+        "name": "Kien Svay"
+    },
+    {
+        "id": "0807",
+        "name": "Mukh kampul"
+    },
+    {
+        "id": "0801",
+        "name": "Kandal Stueng"
+    },
+    {
+        "id": "0811",
+        "name": "Krong Ta Khmau"
+    },
+    {
+        "id": "1001",
+        "name": "Chhloung"
+    },
+    {
+        "id": "1002",
+        "name": "Krong Kracheh"
+    },
+    {
+        "id": "1003",
+        "name": "Preaek Prasab"
+    },
+    {
+        "id": "1004",
+        "name": "Sambour"
+    },
+    {
+        "id": "1005",
+        "name": "Snuol"
+    },
+    {
+        "id": "1006",
+        "name": "Chitr Borie"
+    },
+    {
+        "id": "2401",
+        "name": "Krong Pailin"
+    },
+    {
+        "id": "2402",
+        "name": "Sala Krau"
+    },
+    {
+        "id": "1501",
+        "name": "Bakan"
+    },
+    {
+        "id": "1502",
+        "name": "Kandieng"
+    },
+    {
+        "id": "1503",
+        "name": "Krakor"
+    },
+    {
+        "id": "1504",
+        "name": "Phnum Kravanh"
+    },
+    {
+        "id": "1505",
+        "name": "Krong Pursat"
+    },
+    {
+        "id": "1506",
+        "name": "Veal Veaeng"
+    },
+    {
+        "id": "0901",
+        "name": "Botum Sakor"
+    },
+    {
+        "id": "0902",
+        "name": "Kiri Sakor"
+    },
+    {
+        "id": "0903",
+        "name": "Koh Kong"
+    },
+    {
+        "id": "0904",
+        "name": "Krong Khemarak Phoumin"
+    },
+    {
+        "id": "0905",
+        "name": "Mondol Seima"
+    },
+    {
+        "id": "0906",
+        "name": "Srae Ambel"
+    },
+    {
+        "id": "0907",
+        "name": "Thma Bang"
+    },
+    {
+        "id": "1401",
+        "name": "Ba Phnum"
+    },
+    {
+        "id": "1402",
+        "name": "Kamchay Mear"
+    },
+    {
+        "id": "1403",
+        "name": "Kampong Trabaek"
+    },
+    {
+        "id": "1404",
+        "name": "Kanhchriech"
+    },
+    {
+        "id": "1405",
+        "name": "Me Sang"
+    },
+    {
+        "id": "1406",
+        "name": "Peam Chor"
+    },
+    {
+        "id": "1407",
+        "name": "Peam Ro"
+    },
+    {
+        "id": "1408",
+        "name": "Pea Reang"
+    },
+    {
+        "id": "1409",
+        "name": "Preah Sdach"
+    },
+    {
+        "id": "1410",
+        "name": "Krong Prey Veng"
+    },
+    {
+        "id": "1411",
+        "name": "Kampong Leav"
+    },
+    {
+        "id": "1412",
+        "name": "Sithor Kandal"
+    },
+    {
+        "id": "1413",
+        "name": "Svay Antor"
+    },
+    {
+        "id": "1713",
+        "name": "Svay Leu"
+    },
+    {
+        "id": "1714",
+        "name": "Varin"
+    },
+    {
+        "id": "1707",
+        "name": "Puok"
+    },
+    {
+        "id": "1709",
+        "name": "Prasat Bakong"
+    },
+    {
+        "id": "1710",
+        "name": "Krong Siem Reab"
+    },
+    {
+        "id": "1711",
+        "name": "Soutr Nikom"
+    },
+    {
+        "id": "1712",
+        "name": "Srei Snam"
+    },
+    {
+        "id": "1701",
+        "name": "Angkor Chum"
+    },
+    {
+        "id": "1702",
+        "name": "Angkor Thum"
+    },
+    {
+        "id": "1703",
+        "name": "Banteay Srei"
+    },
+    {
+        "id": "1704",
+        "name": "Chi Kraeng"
+    },
+    {
+        "id": "1706",
+        "name": "Kralanh"
+    },
+    {
+        "id": "1201",
+        "name": "Chamkar Mon"
+    },
+    {
+        "id": "1202",
+        "name": "Doun Penh"
+    },
+    {
+        "id": "1203",
+        "name": "Prampir Meakkakra"
+    },
+    {
+        "id": "1204",
+        "name": "Tuol Kouk"
+    },
+    {
+        "id": "1209",
+        "name": "Pou Senchey"
+    },
+    {
+        "id": "1205",
+        "name": "Dangkao"
+    },
+    {
+        "id": "1206",
+        "name": "Mean Chey"
+    },
+    {
+        "id": "1208",
+        "name": "Saensokh"
+    },
+    {
+        "id": "1207",
+        "name": "Ruessei Kaev"
+    },
+    {
+        "id": "2007",
+        "name": "Svay Teab"
+    },
+    {
+        "id": "2008",
+        "name": "Krong Bavet"
+    },
+    {
+        "id": "2001",
+        "name": "Chantrea"
+    },
+    {
+        "id": "2002",
+        "name": "Kampong Rou"
+    },
+    {
+        "id": "2003",
+        "name": "Rumduol"
+    },
+    {
+        "id": "2004",
+        "name": "Romeas Haek"
+    },
+    {
+        "id": "2005",
+        "name": "Svay Chrum"
+    },
+    {
+        "id": "2006",
+        "name": "Krong Svay Rieng"
+    },
+    {
+        "id": "0201",
+        "name": "Banan"
+    },
+    {
+        "id": "0202",
+        "name": "Thma Koul"
+    },
+    {
+        "id": "0203",
+        "name": "Krong Battambang"
+    },
+    {
+        "id": "0204",
+        "name": "Bavel"
+    },
+    {
+        "id": "0205",
+        "name": "Aek Phnum"
+    },
+    {
+        "id": "0206",
+        "name": "Moung Ruessei"
+    },
+    {
+        "id": "0207",
+        "name": "Rotonak Mondol"
+    },
+    {
+        "id": "0208",
+        "name": "Sangkae"
+    },
+    {
+        "id": "0209",
+        "name": "Samlout"
+    },
+    {
+        "id": "0210",
+        "name": "Sampov Lun"
+    },
+    {
+        "id": "0211",
+        "name": "Phnom Proek"
+    },
+    {
+        "id": "0212",
+        "name": "Kamrieng"
+    },
+    {
+        "id": "0213",
+        "name": "Koas Krala"
+    },
+    {
+        "id": "0214",
+        "name": "Rukhak Kiri"
+    },
+    {
+        "id": "1101",
+        "name": "Kaev Seima"
+    },
+    {
+        "id": "1102",
+        "name": "Kaoh Nheaek"
+    },
+    {
+        "id": "1103",
+        "name": "Ou Reang"
+    },
+    {
+        "id": "1104",
+        "name": "Pech Chreada"
+    },
+    {
+        "id": "1105",
+        "name": "Krong Saen Monourom"
+    },
+    {
+        "id": "1901",
+        "name": "Sesan"
+    },
+    {
+        "id": "1902",
+        "name": "Siem Bouk"
+    },
+    {
+        "id": "1903",
+        "name": "Siem Pang"
+    },
+    {
+        "id": "1904",
+        "name": "Krong Stueng Traeng"
+    },
+    {
+        "id": "1905",
+        "name": "Thala Barivat"
+    },
+    {
+        "id": "0301",
+        "name": "Batheay"
+    },
+    {
+        "id": "0302",
+        "name": "Chamkar Leu"
+    },
+    {
+        "id": "0303",
+        "name": "Cheung Prey"
+    },
+    {
+        "id": "0304",
+        "name": "Dambae"
+    },
+    {
+        "id": "0305",
+        "name": "Krong Kampong Cham"
+    },
+    {
+        "id": "0306",
+        "name": "Kampong Siem"
+    },
+    {
+        "id": "0307",
+        "name": "Kang Meas"
+    },
+    {
+        "id": "0308",
+        "name": "Kaoh Soutin"
+    },
+    {
+        "id": "0309",
+        "name": "Krouch Chhmar"
+    },
+    {
+        "id": "0310",
+        "name": "Memot"
+    },
+    {
+        "id": "0311",
+        "name": "Ou Reang Ov"
+    },
+    {
+        "id": "0312",
+        "name": "Ponhea Kraek"
+    },
+    {
+        "id": "0313",
+        "name": "Prey Chhor"
+    },
+    {
+        "id": "0314",
+        "name": "Srei Santhor"
+    },
+    {
+        "id": "0315",
+        "name": "Stueng Trang"
+    },
+    {
+        "id": "0316",
+        "name": "Tboung Khmum"
+    },
+    {
+        "id": "0317",
+        "name": "Krong Suong"
+    },
+    {
+        "id": "0501",
+        "name": "Basedth"
+    },
+    {
+        "id": "0502",
+        "name": "Krong Chbar Mon"
+    },
+    {
+        "id": "0503",
+        "name": "Kong Pisei"
+    },
+    {
+        "id": "0504",
+        "name": "Aoral"
+    },
+    {
+        "id": "0505",
+        "name": "Odongk"
+    },
+    {
+        "id": "0506",
+        "name": "Phnum Sruoch"
+    },
+    {
+        "id": "0507",
+        "name": "Samraong Tong"
+    },
+    {
+        "id": "0508",
+        "name": "Thpong"
+    },
+    {
+        "id": "0608",
+        "name": "Stoung"
+    },
+    {
+        "id": "0601",
+        "name": "Baray"
+    },
+    {
+        "id": "0602",
+        "name": "Kampong Svay"
+    },
+    {
+        "id": "0607",
+        "name": "Santuk"
+    },
+    {
+        "id": "0603",
+        "name": "Krong Stueng Saen"
+    },
+    {
+        "id": "0604",
+        "name": "Prasat Ballangk"
+    },
+    {
+        "id": "0605",
+        "name": "Prasat Sambour"
+    },
+    {
+        "id": "0606",
+        "name": "Sandan"
+    },
+    {
+        "id": "1301",
+        "name": "Chey Saen"
+    },
+    {
+        "id": "1302",
+        "name": "Chhaeb"
+    },
+    {
+        "id": "1303",
+        "name": "Choam Khsant"
+    },
+    {
+        "id": "1304",
+        "name": "Kuleaen"
+    },
+    {
+        "id": "1305",
+        "name": "Rovieng"
+    },
+    {
+        "id": "1306",
+        "name": "Sangkum Thmei"
+    },
+    {
+        "id": "1307",
+        "name": "Tbaeng Mean Chey"
+    },
+    {
+        "id": "1308",
+        "name": "Krong Preah Vihear"
+    },
+    {
+        "id": "1601",
+        "name": "Andoung Meas"
+    },
+    {
+        "id": "1602",
+        "name": "Krong Ban Lung"
+    },
+    {
+        "id": "1603",
+        "name": "Bar Kaev"
+    },
+    {
+        "id": "1604",
+        "name": "Koun Mom"
+    },
+    {
+        "id": "1605",
+        "name": "Lumphat"
+    },
+    {
+        "id": "1606",
+        "name": "Ou Chum"
+    },
+    {
+        "id": "1607",
+        "name": "Ou Ya Dav"
+    },
+    {
+        "id": "1608",
+        "name": "Ta Veaeng"
+    },
+    {
+        "id": "1609",
+        "name": "Veun Sai"
+    },
+    {
+        "id": "2201",
+        "name": "Anlong Veaeng"
+    },
+    {
+        "id": "2202",
+        "name": "Banteay Ampil"
+    },
+    {
+        "id": "2203",
+        "name": "Chong Kal"
+    },
+    {
+        "id": "2204",
+        "name": "Krong Samraong"
+    },
+    {
+        "id": "2205",
+        "name": "Trapeang Prasat"
+    },
+    {
+        "id": "1801",
+        "name": "Krong Preah Sihanouk"
+    },
+    {
+        "id": "1802",
+        "name": "Prey Nob"
+    },
+    {
+        "id": "1803",
+        "name": "Stueng Hav"
+    },
+    {
+        "id": "1804",
+        "name": "Kampong Seila"
+    },
+    {
+        "id": "0401",
+        "name": "Baribour"
+    },
+    {
+        "id": "0402",
+        "name": "Chol Kiri"
+    },
+    {
+        "id": "0403",
+        "name": "Krong Kampong Chhnang"
+    },
+    {
+        "id": "0404",
+        "name": "Kampong Leaeng"
+    },
+    {
+        "id": "0405",
+        "name": "Kampong Tralach"
+    },
+    {
+        "id": "0406",
+        "name": "Rolea B'ier"
+    },
+    {
+        "id": "0407",
+        "name": "Sameakki Mean Chey"
+    },
+    {
+        "id": "0408",
+        "name": "Tuek Phos"
+    },
+    {
+        "id": "0102",
+        "name": "Mongkol Borei"
+    },
+    {
+        "id": "0103",
+        "name": "Phnum Srok"
+    },
+    {
+        "id": "0104",
+        "name": "Preah Netr Preah"
+    },
+    {
+        "id": "0105",
+        "name": "Ou Chrov"
+    },
+    {
+        "id": "0106",
+        "name": "Krong Serei Saophoan"
+    },
+    {
+        "id": "0107",
+        "name": "Thma Puok"
+    },
+    {
+        "id": "0108",
+        "name": "Svay Chek"
+    },
+    {
+        "id": "0109",
+        "name": "Malai"
+    },
+    {
+        "id": "0110",
+        "name": "Krong Paoy Paet"
+    }
+]

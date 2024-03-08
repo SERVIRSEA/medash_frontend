@@ -11,6 +11,8 @@ if (typeof Highcharts === 'object') {
     ExportData(Highcharts);
 }
 import { 
+    measureMinYearAtom,
+    measureMaxYearAtom,
     minYearForestGain,
     maxYearForestGain,
     areaTypeAtom,
@@ -28,8 +30,8 @@ const ForestNonForestChart = () => {
     const [loading, setLoading] = useAtom(forestNonForestChartLoadingAtom);
     const [error, setError] = useState(null);
     const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
-    const [studyLow] = useAtom(minYearForestGain);
-    const [studyHigh] = useAtom(maxYearForestGain);
+    const [studyLow] = useAtom(measureMinYearAtom);
+    const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
     const [attempts, setAttempts] = useState(0);
@@ -115,10 +117,20 @@ const ForestNonForestChart = () => {
         xAxis: {
             categories: years,
             title: false,
+            labels: {
+                style: {
+                    fontSize: '12px'
+                }
+            }
         },
         yAxis: {
             min: 0,
             title: false,
+            labels: {
+                style: {
+                    fontSize: '12px'
+                }
+            }
             // title: {
             //     text: 'Area (Hectares)'
             // },
@@ -129,8 +141,9 @@ const ForestNonForestChart = () => {
         },
         plotOptions: {
             bar: {
-                pointPadding: 0.0, 
-                groupPadding: 0.0, 
+                pointPadding: 0.1, 
+                groupPadding: 0.2, 
+                // pointWidth: 8,
                 stacking: 'normal',
                 dataLabels: {
                     enabled: false
@@ -140,21 +153,26 @@ const ForestNonForestChart = () => {
         series: [{
             name: 'Forest',
             data: forestData,
-            color: '#138D75'
+            color: '#138D75',
         }, {
             name: 'Non-Forest',
             data: nonForestData,
             color: '#919F94'
         }],
         legend: {
-            enabled: true
+            enabled: true,
+            itemStyle: {
+                fontSize: '12px' 
+            }
         },
         exporting: {
             buttons: {
                 contextButton: {
                     align: 'right',      
                     verticalAlign: 'top', 
-                    marginBottom: '10px',
+                    marginTop: '100px',
+                    x: 10, 
+                    y: -12, 
                     menuItems: [
                         'viewFullscreen',
                         'separator',

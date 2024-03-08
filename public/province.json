@@ -1,0 +1,102 @@
+[
+    {
+        "id": 1,
+        "name": "Banteay Mean Cheay"
+    },
+    {
+        "id": 2,
+        "name": "Baat Dambang"
+    },
+    {
+        "id": 3,
+        "name": null
+    },
+    {
+        "id": 4,
+        "name": "Kompong Cham"
+    },
+    {
+        "id": 5,
+        "name": "Kompong Chnang"
+    },
+    {
+        "id": 6,
+        "name": "Kompong Speu"
+    },
+    {
+        "id": 7,
+        "name": "Kampong Thom"
+    },
+    {
+        "id": 8,
+        "name": "Kandaal"
+    },
+    {
+        "id": 9,
+        "name": "Koh Kong"
+    },
+    {
+        "id": 10,
+        "name": "Keb"
+    },
+    {
+        "id": 11,
+        "name": "Krachen"
+    },
+    {
+        "id": 12,
+        "name": "Pailin"
+    },
+    {
+        "id": 13,
+        "name": "Kampong Saom"
+    },
+    {
+        "id": 14,
+        "name": "Mondul Kiri"
+    },
+    {
+        "id": 15,
+        "name": null
+    },
+    {
+        "id": 16,
+        "name": "Phnom Penh"
+    },
+    {
+        "id": 17,
+        "name": "Pursat"
+    },
+    {
+        "id": 18,
+        "name": null
+    },
+    {
+        "id": 19,
+        "name": "Prey Veaeng"
+    },
+    {
+        "id": 20,
+        "name": "Rotanak Kiri"
+    },
+    {
+        "id": 21,
+        "name": "Siem Reap"
+    },
+    {
+        "id": 22,
+        "name": "Stung Treng"
+    },
+    {
+        "id": 23,
+        "name": "Svaay Rieng"
+    },
+    {
+        "id": 24,
+        "name": "Takeo"
+    },
+    {
+        "id": 25,
+        "name": null
+    }
+]

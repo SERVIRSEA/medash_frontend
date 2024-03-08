@@ -97,9 +97,9 @@ export default function BiophysicalPanel(){
                 <InfoIcon onClick={handleOpenLCLayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
             </Box>
             <LandCoverInfoModal isOpen={isLCModalOpen} onClose={handleCloseLCModal} />
-            <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>
+            {/* <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>
                 From {minYLC} To {maxYLC}
-            </Typography>
+            </Typography> */}
             <LandCoverChart />
         </Box>
     )

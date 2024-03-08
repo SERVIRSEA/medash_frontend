@@ -4,8 +4,8 @@ import ColorLegend from './ColorLegend'
 
 const ForestGainLossLegend = () => {
     const Legends = [
-        { color: 'green', text: 'Forest Gain' },
-        { color: 'red', text: 'Forest Loss' },
+        { color: '#173F5F', text: 'Forest Gain' },
+        { color: '#fdb827', text: 'Forest Loss' },
     ];
     return (
         <Box pt={2} pl={2} pb={4}>

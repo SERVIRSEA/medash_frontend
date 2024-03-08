@@ -152,12 +152,12 @@ const ForestChangeGainLossChart = () => {
         series: [{
             name: 'LOSS',
             data: [data.statsRefLoss, data.statsStudyLoss],
-            color: 'red'
+            color: '#fdb827'
 
         }, {
             name: 'GAIN',
             data: [data.statsRefGain, data.statsStudyGain],
-            color: 'green'
+            color: '#173F5F'
 
         }],
     };

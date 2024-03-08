@@ -135,7 +135,7 @@ const RubberLineChart = () => {
         }],
         plotOptions: {
             series: {
-                color: "#2b5154"
+                color: "#99e600"
             }
         },
         // legend: {

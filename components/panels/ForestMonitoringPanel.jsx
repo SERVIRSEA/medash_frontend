@@ -74,14 +74,14 @@ export default function ForestMonitoringPanel(){
                 {isForestCoverOpen  && ( <ForestCoverLegend /> )}
                 <ForestExtentMap />
                 <br />
-                <Typography variant="body2" sx={{fontWeight: 'bold'}} pb={1}>
+                {/* <Typography variant="body2" sx={{fontWeight: 'bold'}} pb={1}>
                     AREA OF FOREST COVER
                 </Typography>
                 <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>
                 From {studyLow} To {studyHigh}
                 </Typography>
                 <ForestCoverChart />
-                <br />
+                <br /> */}
                 <Typography variant="body2" sx={{fontWeight: 'bold'}} pb={1}>
                     AREA OF FOREST AND NON-FOREST
                 </Typography>

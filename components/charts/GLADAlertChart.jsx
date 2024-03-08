@@ -130,7 +130,7 @@ const GLADAlertChart = () => {
             column: {
                 pointPadding: 0.1, 
                 groupPadding: 0.1, 
-                color: '#d95252'
+                color: '#a31545'
             }
         },
         legend: {

@@ -130,11 +130,13 @@ const RiceLineChart = () => {
         },
         series: [{
             name: 'Estimated Total Area of Rice Field',
-            data: Object.values(data)
+            data: Object.values(data),
+            // lineWidth: 2,
+            // lineColor: '#000000',
         }],
         plotOptions: {
             series: {
-                color: "#2b5154"
+                color: "#e6c200"
             }
         },
         // legend: {

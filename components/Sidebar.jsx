@@ -14,6 +14,10 @@ import MapLayersPanel from './panels/MapLayersPanel';
 import ReportingPanel from './panels/ReportingPanel';
 import DroughtMonitoringPanel from './panels/DroughtMonitoringPanel';
 import { 
+    menuTitleAtom,
+    activeTabAtom,
+    activeMenuAtom,
+    activeTabPanelAtom,
     eviVisibilityAtom,
     lcVisibilityAtom, 
     forestGainVisibilityAtom,
@@ -24,18 +28,18 @@ import {
     fireVisibilityAtom,
     gladAlertVisibilityAtom,
     sarAlertVisibilityAtom,
+    pastRainfallVisAtom,
+    pastTempVisAtom,
+    forecastRainfallVisAtom,
+    forecastTempVisAtom,
+    seasonalRainfallVisAtom,
+    seasonalTempVisAtom,
     droughtVisAtom
 } from '@/state/atoms';
 
-
-const menuTitleAtom = atom("Biophysical Monitoring");
-const activeTabAtom = atom("block");
-const activeAtom = atom(0);
-const activeTabPanelAtom = atom(0);
-
 function Sidebar(){
     const [sideNav, setActiveSideNav] = useAtom(activeTabAtom);
-    const [selectedIndex, setSelectedIndex] = useAtom(activeAtom);
+    const [selectedIndex, setSelectedIndex] = useAtom(activeMenuAtom);
     const [navContent, setActiveNavContent] = useAtom(activeTabPanelAtom);
     const [menuTitle, setMenuTitle] = useAtom(menuTitleAtom);
     const [, setRiceMapVisibility] = useAtom(riceVisibilityAtom);
@@ -49,7 +53,13 @@ function Sidebar(){
     const [, setForestLossMapVisibility] = useAtom(forestLossVisibilityAtom);
     const [, setEviMapVisibility] = useAtom(eviVisibilityAtom);
     const [, setDroughtMapVisibility] = useAtom(droughtVisAtom)
-    
+    const [, setPastRainfallMapVis] = useAtom(pastRainfallVisAtom);
+    const [, setPastTempMapVis] = useAtom(pastTempVisAtom);
+    const [, setForecastRainfallMapVis] = useAtom(forecastRainfallVisAtom);
+    const [, setForecastTempMapVis] = useAtom(forecastTempVisAtom);
+    const [, setSeasonalRainfallMapVis] = useAtom(seasonalRainfallVisAtom);
+    const [, setSeasonalTempMapVis] = useAtom(seasonalTempVisAtom);
+
     const sidebarStyle = {
         background: "#eee",
         color: "#000",
@@ -86,7 +96,8 @@ function Sidebar(){
     const contentContainerStyle = {
         background: "#fff",
         color: "#000",
-        width: "350px",
+        // width: "350px",
+        width: selectedIndex === 7 ? "700px" : "350px",
         height: "calc(100% - 15px)",
         position: 'fixed',
         marginLeft: '80px',
@@ -131,7 +142,7 @@ function Sidebar(){
         },
         {
             name: 'Drought Monitoring',
-            icon: '/assets/icons/menu/fire-burned-green.png', //FireHotspotIcon,
+            icon: '/assets/icons/menu/drought.jpg', //FireHotspotIcon,
             text: 'Drought Monitoring',
             panel: <DroughtMonitoringPanel />,
         },
@@ -159,12 +170,12 @@ function Sidebar(){
     }
 
     const mapVisibilityMappings = {
-        0: { eviMap: true, lcMap: true, riceMap: false, rubberMap: false },
+        0: { eviMap: false, lcMap: true, riceMap: false, rubberMap: false },
         1: { riceMap: false, rubberMap: false, lcMap: false, forestExtentMap: true, forestGainMap: true, forestLossMap: true },
         2: { riceMap: true, rubberMap: true, lcMap: false },
         3: { riceMap: false, rubberMap: false, lcMap: false, gladMap: true, sarMap: true },
         4: { riceMap: false, rubberMap: false, lcMap: false,  fireMap: true},
-        5: {droughtMap: true}
+        5: { pastRainMap: false, frcstRainMap: false, pastTempMap: false, frcstTempMap: true, sesRainMap: false, sesTempMap: false, droughtMap: false }
     };
       
     const handleListItemClick = (event, index) => {
@@ -186,6 +197,12 @@ function Sidebar(){
         setForestGainMapVisibility(mapVisibility.forestGainMap || false);
         setForestLossMapVisibility(mapVisibility.forestLossMap || false);
         setDroughtMapVisibility(mapVisibility.droughtMap || false);
+        setPastRainfallMapVis(mapVisibility.pastRainMap || false);
+        setPastTempMapVis(mapVisibility.pastTempMap || false);
+        setForecastRainfallMapVis(mapVisibility.frcstRainMap || false);
+        setForecastTempMapVis(mapVisibility.frcstTempMap || false);
+        setSeasonalRainfallMapVis(mapVisibility.sesRainMap || false);
+        setSeasonalTempMapVis(mapVisibility.sesTempMap || false);
     };
 
     const handleCloseClick = () => {

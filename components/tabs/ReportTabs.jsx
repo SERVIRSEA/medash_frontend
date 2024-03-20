@@ -11,6 +11,8 @@ import {
     measureMinYearAtom,
     measureMaxYearAtom,
     areaNameAtom,
+    minYearForestGain, 
+    maxYearForestGain, 
     lcVisibilityAtom, 
     forestGainVisibilityAtom,
     forestLossVisibilityAtom,
@@ -19,9 +21,11 @@ import {
     selectedYearAtom,
     selectedYearRiceAtom,
     selectedYearFireAtom,
+    forestGainApiAtom,
+    forestLossApiAtom,
     fireApiAtom,
     isLoadingAtom,
-    fireYearlyMapDataStoreAtom
+    riceApiAtom
 } from '@/state/atoms';
 import EVIPieChart from '../charts/EVIPieChart';
 import EVILineChart from '../charts/EVILineChart';
@@ -37,6 +41,8 @@ import { Fetcher } from "@/fetchers/Fetcher";
 
 export default function ReportTabs() {
     const [value, setValue] = useState(0);
+    const [min] = useAtom(minYearForestGain);
+    const [max] = useAtom(maxYearForestGain);
     const [refLow] = useAtom(baselineMinYearAtom);
     const [refHigh] = useAtom(baselineMaxYearAtom);
     const [studyLow] = useAtom(measureMinYearAtom);
@@ -50,9 +56,11 @@ export default function ReportTabs() {
     const [, setSelectedYearLC] = useAtom(selectedYearAtom);
     const [, setSelectedYearRice] = useAtom(selectedYearRiceAtom);
     const [, setSelectedYearFire] = useAtom(selectedYearFireAtom);
-    const [, setFireMapStore] = useAtom(fireYearlyMapDataStoreAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
-    const [fireData, setFireData] = useAtom(fireApiAtom);
+    const [, setFireData] = useAtom(fireApiAtom);
+    const [, setRiceData] = useAtom(riceApiAtom);
+    const [, setForestGainData] = useAtom(forestGainApiAtom);
+    const [, setForestLossData] = useAtom(forestLossApiAtom);
 
     useEffect(() => {
         // Set LC Map visibility to true when component mounts
@@ -61,10 +69,15 @@ export default function ReportTabs() {
     }, []);
 
     useEffect(() => {
-        if (value === 3 && !fireData) {
+        if (value === 1) {
+            fetchForestGainMap();
+            fetchForestLossMap();
+        } else if (value == 2) {
+            fetchRiceMapData();
+        } else if (value === 3) {
             fetchFireMap();
-        }
-    }, [value, fireData]);
+        } 
+    }, [value]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -77,11 +90,13 @@ export default function ReportTabs() {
         };
 
         if (newValue == 0){
-            setSelectedYearLC(studyHigh)
+            setSelectedYearLC(studyHigh);
         } else if(newValue == 2) {
-            setSelectedYearRice(studyHigh)
+            setSelectedYearRice(studyHigh);
+        } else if(newValue == 3) {
+            setSelectedYearFire(studyHigh);
         } 
-
+        
         const mapVisibility = visibilityMappings[newValue] || {};
 
         setForestGainMapVisibility(mapVisibility.forestGainMap || false);
@@ -89,6 +104,65 @@ export default function ReportTabs() {
         setRiceMapVisibility(mapVisibility.riceMap || false);
         setLCMapVisibility(mapVisibility.lcMap || false);
         setFireMapVisibility(mapVisibility.fireMap || false);
+    };
+
+    const fetchForestGainMap = async () => {
+        setIsLoading(true);
+        const action = 'get-forest-gain-map';
+        const params = {
+            'area_type': area_type,
+            'area_id': area_id,
+            'studyLow': min,
+            'studyHigh': max,
+        };
+        try {
+            const data = await Fetcher(action, params);
+            setForestGainData(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error; 
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    const fetchForestLossMap = async () => {
+        setIsLoading(true);
+        const params = {
+            'area_type': area_type,
+            'area_id': area_id,
+            'studyLow': min,
+            'studyHigh': max,
+        };
+        const action = 'get-forest-loss-map';
+        try {
+            const data = await Fetcher(action, params);
+            setForestLossData(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error; 
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    const fetchRiceMapData = async () => {
+        setIsLoading(true);
+        const action = 'get-landcover-rice-map';
+        const params = {
+            'area_type': area_type,
+            'area_id': area_id,
+            'year': studyHigh,
+        };
+        try {
+            const data = await Fetcher(action, params);
+            setRiceData(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error;
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const fetchFireMap = async () => {
@@ -99,12 +173,9 @@ export default function ReportTabs() {
             'area_id': area_id,
             'year': studyHigh
         };
-        // const key = JSON.stringify(params);
         try {
             const data = await Fetcher(action, params);
             setFireData(data);
-            console.log(data)
-            // setFireMapStore(prev => ({ ...prev, [key]: data }));
         } catch (error) {
             console.error('Error fetching data:', error);
             throw error; 

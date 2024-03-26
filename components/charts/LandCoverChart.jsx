@@ -23,7 +23,8 @@ import {
     // minYearLandCover,
     // maxYearLandCover,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    landcoverTextAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 
@@ -40,6 +41,7 @@ const LandCoverChart = () => {
     const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
     const [attempts, setAttempts] = useState(0);
     const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
+    const [, setLandcoverText] = useAtom(landcoverTextAtom); 
 
     useEffect(() => {
         const fetchDataWithRetry = async () => {
@@ -200,7 +202,29 @@ const LandCoverChart = () => {
             };
         });
     
-    
+
+        // get the start and end years from the data
+        const landCoverData= dataPeriod2
+        const years = Object.keys(landCoverData);
+        const startYear = years[0];
+        const endYear = years[years.length - 1];
+
+        // Calculate agriculture land and urban area data
+        const agricultureLandStart = landCoverData[startYear]["cropland"] + landCoverData[startYear]["rice"];
+        const agricultureLandEnd = landCoverData[endYear]["cropland"] + landCoverData[endYear]["rice"];
+        const agricultureChange = agricultureLandEnd - agricultureLandStart;
+        const agriculturePercentageChange = (agricultureChange / agricultureLandStart) * 100;
+
+        const urbanAreasStart = landCoverData[startYear]["built"] + landCoverData[startYear]["village"];
+        const urbanAreasEnd = landCoverData[endYear]["built"] + landCoverData[endYear]["village"];
+        const urbanChange = urbanAreasEnd - urbanAreasStart;
+        const urbanPercentageChange = (urbanChange / urbanAreasStart) * 100;
+
+        const paragraph = `In the period ${startYear} - ${endYear}, agriculture land includes all crop types (crop land and rice) have changed from ${agricultureLandStart.toFixed(2)} ha to ${agricultureLandEnd.toFixed(2)} ha, 
+        equivalent of ${agriculturePercentageChange.toFixed(2)}% of its land area. 
+        Urban areas (built up and village class) have changed from ${urbanAreasStart.toFixed(2)} ha to ${urbanAreasEnd.toFixed(2)} ha, equivalent of ${urbanPercentageChange.toFixed(2)}% of its land area.`;
+
+        setLandcoverText(paragraph)
 
         // Configuring the Highcharts for period1
         const optionsPeriod1 = {
@@ -263,7 +287,6 @@ const LandCoverChart = () => {
                     function capitalizeFirstLetter(str) {
                         return str.charAt(0).toUpperCase() + str.slice(1);
                     }
-                    
                     // Replace "built" with "built-up" and "semi" with "semi-evergreen" before formatting the label
                     var name = this.name.replace('built', 'built-up area').replace('semi', 'semi-evergreen');
                     

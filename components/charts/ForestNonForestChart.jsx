@@ -20,7 +20,11 @@ import {
     forestNonForestChartDataAtom,
     forestNonForestChartLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    textForestReportAtom,
+    areaNameAtom,
+    forestCoverStudyHighAtom,
+    forestCoverGainLossTextAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -34,8 +38,13 @@ const ForestNonForestChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [selectedArea] = useAtom(areaNameAtom);
     const [attempts, setAttempts] = useState(0);
     const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
+    const [, setTextForestReport] = useAtom(textForestReportAtom);
+    const [, setForestCoverStudyHigh] = useAtom(forestCoverStudyHighAtom);
+    const [, setForestCoverGainLossText] = useAtom(forestCoverGainLossTextAtom);
+
 
     useEffect(() => {
         const fetchDataWithRetry = async () => {
@@ -51,6 +60,72 @@ const ForestNonForestChart = () => {
                         'studyHigh': studyHigh
                     };
                     const data = await Fetcher(action, params);
+
+                    //  generate text reporting
+                    const startYear = studyLow.toString();
+                    const endYear = studyHigh.toString();
+                    setForestCoverStudyHigh(data[endYear].forest);
+                    const startYearForestArea = data[startYear].forest;
+                    const endYearForestArea = data[endYear].forest;
+
+                    // Calculate the total forest cover loss
+                    const totalLoss = startYearForestArea - endYearForestArea;
+
+                    // Determine the word based on total change
+                    const changeWord = totalLoss < 0 ? "gained" : "lost";
+                    const changeType = totalLoss < 0 ? "increase" : "decrease";
+
+                    // Calculate the absolute percentage change
+                    const percentageChange = ((Math.abs(totalLoss) / startYearForestArea) * 100).toFixed(2);
+
+        
+                    // Find the year with the maximum forest cover loss
+                    let maxLossYear = "";
+                    let maxLoss = 0;
+                    Object.keys(data).forEach(year => {
+                        if (year > startYear) { // Skip the first year for loss calculation
+                            const loss = data[year - 1].forest - data[year].forest;
+                            if (loss > maxLoss) {
+                                maxLoss = loss;
+                                maxLossYear = year;
+                            }
+                        }
+                    });
+
+                    const paragraph = `From ${studyLow} to ${studyHigh}, ${selectedArea} ${changeWord} ${Math.abs(totalLoss).toFixed(2)} ha of forest cover, equivalent to ${percentageChange}% decrease in forest cover since ${studyLow}. The most forest loss recorded in a year for ${selectedArea} was in ${maxLossYear}, with ${maxLoss.toFixed(2)} ha forest cover loss in a year.`;
+                    setTextForestReport(paragraph);
+
+                    let totalForestGain = 0;
+                    let totalForestLoss = 0;
+                    let yearOfMostForestGain = '';
+                    let valueOfMostForestGain = 0;
+                    let yearOfMostForestLoss = '';
+                    let valueOfMostForestLoss = 0;
+
+                    Object.keys(data).reduce((previousValue, year) => {
+                        const currentForest = data[year].forest;
+                        if (previousValue !== 0) {
+                            const change = currentForest - previousValue;
+                            if (change > 0) {
+                                totalForestGain += change;
+                                if (change > valueOfMostForestGain) {
+                                    valueOfMostForestGain = change;
+                                    yearOfMostForestGain = year;
+                                }
+                            } else {
+                                totalForestLoss -= change; // Subtract to add the positive value of the loss
+                                if (-change > valueOfMostForestLoss) { // Change is negative for loss, so we negate it
+                                    valueOfMostForestLoss = -change;
+                                    yearOfMostForestLoss = year;
+                                }
+                            }
+                        }
+                        return currentForest;
+                    }, 0);
+
+                    const paragraphForestGainLoss = `In the period of 2010 to 2022, ${selectedArea} gained the total amount of ${totalForestGain.toFixed(2)} ha in forest cover but also lost ${totalForestLoss.toFixed(2)} ha. The most recorded amount of forest gain is in ${yearOfMostForestGain} with ${valueOfMostForestGain.toFixed(2)} ha, and the most recorded amount of forest loss is in ${yearOfMostForestLoss} with ${valueOfMostForestLoss.toFixed(2)} ha.`;
+                    setForestCoverGainLossText(paragraphForestGainLoss)
+
                     setChartData(data);
                     setAttempts(0);
                     setLoading(false);
@@ -151,13 +226,14 @@ const ForestNonForestChart = () => {
             }
         },
         series: [{
-            name: 'Forest',
-            data: forestData,
-            color: '#138D75',
-        }, {
             name: 'Non-Forest',
             data: nonForestData,
             color: '#919F94'
+        },
+        {
+            name: 'Forest',
+            data: forestData,
+            color: '#138D75',
         }],
         legend: {
             enabled: true,

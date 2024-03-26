@@ -17,7 +17,9 @@ import {
     riceChartAtom,
     riceChartDataLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    riceAreaTextAtom,
+    areaNameAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -30,9 +32,11 @@ const RiceLineChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [selectedArea] = useAtom(areaNameAtom);
     const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
     const [attempts, setAttempts] = useState(0);
     const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
+    const [, setRiceAreaText] = useAtom(riceAreaTextAtom);
 
     useEffect(() => {
         const fetchRiceChartDataWithRetry = async () => {
@@ -49,14 +53,40 @@ const RiceLineChart = () => {
                     };
                     const key = JSON.stringify(params);
                     const data = await Fetcher(action, params);
+
+                    let riceData = {};
                     // console.log(data)
                     if (['country', 'province', 'district', 'protected_area'].includes(area_type)) {
                         //  'district', 'protected_area'
                         const parsedData = JSON.parse(data);
+                        riceData = parsedData;
                         setChartData(parsedData);
                     } else {
+                        riceData = data;
                         setChartData(data);
                     }
+
+                    const startYear = Object.keys(riceData)[0]; // Automatically get the first year
+                    const endYear = Object.keys(riceData).pop(); // Automatically get the last year
+                    const startYearArea = riceData[startYear];
+                    const endYearArea = riceData[endYear];
+                    const change = endYearArea - startYearArea;
+                    const changeDirection = change > 0 ? "increase" : "decrease";
+                    const changeWord = change > 0 ? "growth" : "reduction";
+                    const absoluteChange = Math.abs(change);
+                    const percentageChange = (absoluteChange / startYearArea) * 100;
+                    // Find the year with the most rice plantation
+                    let yearWithMostRice = startYear;
+                    let maxRiceArea = startYearArea;
+                    for (const [year, area] of Object.entries(riceData)) {
+                        if (area > maxRiceArea) {
+                            yearWithMostRice = year;
+                            maxRiceArea = area;
+                        }
+                    }
+                    const paragraph = `From ${startYear} to ${endYear}, in ${selectedArea},  Rice plantation ${changeDirection} ${absoluteChange.toFixed(2)} ha, equivalent ${changeWord} of ${percentageChange.toFixed(2)}% in rice plantation since ${startYear}. 
+                    The most rice plantation recorded in a year for ${selectedArea} was in ${yearWithMostRice}, with ${maxRiceArea.toFixed(2)} ha.`;
+                    setRiceAreaText(paragraph);
                     setLoading(false);
                     setAttempts(0);
                     return; // Break out of the loop if successful

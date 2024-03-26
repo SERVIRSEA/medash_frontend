@@ -19,8 +19,16 @@ import {
     forestChangeGainLossAreaAtom,
     forestChangeLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    areaNameAtom,
+    forestCoverStudyHighAtom,
+    forestNetChangeTextAtom,
+    forestGainTextAtom,
+    forestBaselineLossTextAtom,
+    forestStudyLossTextAtom,
+    forestLossPercentTextAtom
 } from '@/state/atoms';
+
 
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -32,12 +40,19 @@ const ForestChangeGainLossChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [selectedArea] = useAtom(areaNameAtom);
     const [changeData, setChangeData] = useAtom(forestChangeGainLossAreaAtom);
     const [loading, setLoading] = useAtom(forestChangeLoadingAtom);
     const [error, setError] = useState(null);
     const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
     const [attempts, setAttempts] = useState(0);
     const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
+    const [forestCoverStudyHigh] = useAtom(forestCoverStudyHighAtom);
+    const [, setForestNetChange] = useAtom(forestNetChangeTextAtom);
+    const [, setForestGain] = useAtom(forestGainTextAtom);
+    const [, setForestBaselineLoss] = useAtom(forestBaselineLossTextAtom);
+    const [, setForestStudyLoss] = useAtom(forestStudyLossTextAtom);
+    const [, setForestLossPercent] = useAtom(forestLossPercentTextAtom);
 
     useEffect(() => {
         const fetchChartDataWithRetry = async () => {
@@ -56,6 +71,48 @@ const ForestChangeGainLossChart = () => {
                     };
 
                     const data = await Fetcher(action, params);
+
+                    // set time waiting for forestCoverStudyHigh
+                    setTimeout(()=>{
+                        const treeCoverArea = forestCoverStudyHigh; // Total tree cover area at the beginning
+                        const baselineNetLoss = data.statsRefLoss.toFixed(2);
+                        const studyNetLoss = data.statsStudyLoss.toFixed(2);
+                        // Calculating net change in forest loss
+                        const netLossChange = baselineNetLoss - studyNetLoss;
+                        // Determine the word based on total change
+                        const changeWord = netLossChange < 0 ? "increase" : "decrease";
+                        const changeIndicating = netLossChange > 0 ? "improving" : "worsening";
+
+                        // Calculating percentage
+                        const percentageOfForestLoss = Math.abs((Math.abs(netLossChange) / baselineNetLoss) * 100).toFixed(2);
+                        
+                        const paragraph1 = `Baseline Period (${refLow}-${refHigh}): Total net forest loss of ${baselineNetLoss} ha`
+                        setForestBaselineLoss(paragraph1)
+
+                        const paragraph2 = `Measurement Period (${studyLow}-${studyHigh}): Total net forest loss of ${studyNetLoss} ha.`
+                        setForestStudyLoss(paragraph2)
+
+                        const paragraph3 = `The measurement period experienced a ${percentageOfForestLoss}% ${changeWord} in net forest loss compared to the baseline, indicating ${changeIndicating} deforestation.`
+                        setForestLossPercent(paragraph3)
+
+                        // Calculating net change in tree cover
+                        const netChange = Math.abs(data.statsStudyGain - data.statsStudyLoss);
+                        // Calculating percentage of net gain of total tree cover area
+                        const percentageOfChange = Math.abs((netChange / treeCoverArea) * 100).toFixed(2);
+                        // paragraph in forest gain and loss reporting
+                        const paragraph4 = `From ${studyLow} to ${studyHigh}, ${selectedArea} experienced a net change of ${netChange} ha (${percentageOfChange}%) in tree cover.`
+                        setForestNetChange(paragraph4)
+
+                        // forest gain in given year period
+                        const gain = data.statsStudyGain;
+                        // Calculating percentage of net gain of total tree cover area
+                        const percentageOfGain = Math.abs((gain / treeCoverArea) * 100).toFixed(2);
+                        // tree cover gain paragraph
+                        const paragraph5 = `From ${studyLow} to ${studyHigh}, in ${selectedArea} gain ${gain} ha of tree cover, equivalent to a ${percentageOfGain}% of total tree cover in ${studyHigh}.`
+                        setForestGain(paragraph5)   
+                    },200)
+
+
                     setChangeData(data);
                     setLoading(false);
                     setAttempts(0);

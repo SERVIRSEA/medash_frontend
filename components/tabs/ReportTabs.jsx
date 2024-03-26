@@ -23,9 +23,24 @@ import {
     selectedYearFireAtom,
     forestGainApiAtom,
     forestLossApiAtom,
+    landCoverApiAtom,
     fireApiAtom,
     isLoadingAtom,
-    riceApiAtom
+    riceApiAtom,
+    bioTextAtom,
+    textForestReportAtom,
+    forestNetChangeTextAtom,
+    forestGainTextAtom,
+    forestBaselineLossTextAtom,
+    forestStudyLossTextAtom,
+    forestLossPercentTextAtom,
+    forestCoverGainLossTextAtom,
+    riceAreaTextAtom,
+    rubberAreaTextAtom,
+    fireHotspotTextAtom,
+    landcoverTextAtom,
+    areaTypeAtom,
+    areaIdAtom
 } from '@/state/atoms';
 import EVIPieChart from '../charts/EVIPieChart';
 import EVILineChart from '../charts/EVILineChart';
@@ -47,7 +62,24 @@ export default function ReportTabs() {
     const [refHigh] = useAtom(baselineMaxYearAtom);
     const [studyLow] = useAtom(measureMinYearAtom);
     const [studyHigh] = useAtom(measureMaxYearAtom);
-    const [selectedArea] = useAtom(areaNameAtom);
+    const [textBioReport] = useAtom(bioTextAtom); 
+    const [textLandCover] = useAtom(landcoverTextAtom); 
+    const [textForestReport] = useAtom(textForestReportAtom);
+    const [textForestNetChange] = useAtom(forestNetChangeTextAtom);
+    const [textForestGain] = useAtom(forestGainTextAtom);
+    const [textForestBaselineLoss] = useAtom(forestBaselineLossTextAtom);
+    const [textForestStudyLoss] = useAtom(forestStudyLossTextAtom);
+    const [textForestLossPercent] = useAtom(forestLossPercentTextAtom); 
+    const [textForestCoverGainLoss] = useAtom(forestCoverGainLossTextAtom); 
+    const [textRiceArea] = useAtom(riceAreaTextAtom); 
+    const [textRubberArea] = useAtom(rubberAreaTextAtom); 
+    const [textFireHotspot] = useAtom(fireHotspotTextAtom); 
+    const [selectedAreaType] = useAtom(areaTypeAtom); 
+    const [selectedAreaId] = useAtom(areaIdAtom);
+    const [selectedArea] = useAtom(areaNameAtom); 
+
+    
+    
     const [, setRiceMapVisibility] = useAtom(riceVisibilityAtom);
     const [, setLCMapVisibility] = useAtom(lcVisibilityAtom);
     const [, setFireMapVisibility] = useAtom(fireVisibilityAtom);
@@ -61,23 +93,30 @@ export default function ReportTabs() {
     const [, setRiceData] = useAtom(riceApiAtom);
     const [, setForestGainData] = useAtom(forestGainApiAtom);
     const [, setForestLossData] = useAtom(forestLossApiAtom);
+    const [, setLandCoverData] = useAtom(landCoverApiAtom);
+
 
     useEffect(() => {
         // Set LC Map visibility to true when component mounts
         setLCMapVisibility(true);
         setSelectedYearLC(studyHigh);
+
     }, []);
 
     useEffect(() => {
-        if (value === 1) {
-            fetchForestGainMap();
-            fetchForestLossMap();
-        } else if (value == 2) {
-            fetchRiceMapData();
-        } else if (value === 3) {
-            fetchFireMap();
-        } 
-    }, [value]);
+        if(selectedAreaId) {
+            if (value === 1) {
+                fetchForestGainMap();
+                fetchForestLossMap();
+            } else if (value == 2) {
+                fetchRiceMapData();
+            } else if (value === 3) {
+                fetchFireMap();
+            } else {
+                fetchLandcoverMap();
+            }
+          }
+    }, [value, selectedAreaId]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -110,8 +149,8 @@ export default function ReportTabs() {
         setIsLoading(true);
         const action = 'get-forest-gain-map';
         const params = {
-            'area_type': area_type,
-            'area_id': area_id,
+            'area_type': selectedAreaType,
+            'area_id': selectedAreaId,
             'studyLow': min,
             'studyHigh': max,
         };
@@ -126,11 +165,30 @@ export default function ReportTabs() {
         }
     }
 
+    const fetchLandcoverMap = async () => {
+        setIsLoading(true);
+        const action = 'get-landcover-map';
+        const params = {
+            'area_type': selectedAreaType,
+            'area_id': selectedAreaId,
+            'year': max
+        };
+        try {
+            const data = await Fetcher(action, params);
+            setLandCoverData(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error; 
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     const fetchForestLossMap = async () => {
         setIsLoading(true);
         const params = {
-            'area_type': area_type,
-            'area_id': area_id,
+            'area_type': selectedAreaType,
+            'area_id': selectedAreaId,
             'studyLow': min,
             'studyHigh': max,
         };
@@ -150,8 +208,8 @@ export default function ReportTabs() {
         setIsLoading(true);
         const action = 'get-landcover-rice-map';
         const params = {
-            'area_type': area_type,
-            'area_id': area_id,
+            'area_type': selectedAreaType,
+            'area_id': selectedAreaId,
             'year': studyHigh,
         };
         try {
@@ -169,8 +227,8 @@ export default function ReportTabs() {
         setIsLoading(true);
         const action = 'get-burned-area';
         const params = {
-            'area_type': area_type,
-            'area_id': area_id,
+            'area_type': selectedAreaType,
+            'area_id': selectedAreaId,
             'year': studyHigh
         };
         try {
@@ -230,31 +288,34 @@ export default function ReportTabs() {
                 Selected Area: {selectedArea}
             </Typography> */}
             <CustomTabPanel value={value} index={0}>
-                <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} p={1}>
-                    LAND COVER
-                </Typography>
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
-                    In {studyLow}, Cambodia (selected region) had XX  Mha of natural forest, extending over XX% of its land area. 
-                    In {studyHigh}, it lost XX ha of forest. 
-                    In XX% of forest lost, there are XX% has been converted to agriculture land.
-                    In the period  {studyLow} - {studyHigh}, Agriculture land includes all crop types have changed from from XX ha to XX ha, equivalent of XX% of its land area. 
-                    Urban areas have changed from XX ha to XX ha, equivalent of XX% of its land area.
-                </Typography>
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
-                    Interactive charts and maps below summarize land cover change in Cambodia (selected region)  From XXXX (Starting year of evaluation) To XXXX(Ending year of evaluation period) . 
-                </Typography>
-
+            
                 <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} p={1}>
                     BIOPHYSICAL HEALTH
                 </Typography>
+
                 <Typography variant="body2" sx={{fontSize: '12px'}} pl={1} pb={2}>
-                    From {studyLow} To {studyHigh}
+                    {textBioReport}
                 </Typography>
+
                 <EVIPieChart />
                 <br />
                 <EVILineChart />
                 <br />
+
+                <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} p={1}>
+                    LAND COVER
+                </Typography>
+                
+
+                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                    Interactive charts and maps below summarize land cover change in {selectedArea} in baseline peroid ({refLow} to {refHigh}) and evaluation peroid ({studyLow} to {studyHigh}). 
+                </Typography>
+                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                    {textLandCover}
+                </Typography>
+
                 <LandCoverChart />
+
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 {/* <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} pl={1} pb={1}>
@@ -268,36 +329,78 @@ export default function ReportTabs() {
                 <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} pl={1} pb={1}>
                     AREA OF FOREST AND NON-FOREST
                 </Typography>
-                <Typography variant="body2" sx={{fontSize: '12px'}} pl={1} pb={2}>
-                    From {studyLow} To {studyHigh}
-                </Typography>
+
                 <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
-                    From {studyLow} to {studyHigh}, {selectedArea} lost XXX ha of forest cover, equivalent to XXX% decrease in forest cover since {studyLow}. The most forest loss recorded in a year for {selectedArea} was in XXXX, with XXXX ha forest cover loss in a year.
+                    {textForestReport}
                 </Typography>
+
                 <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
-                    In the period of {studyLow} to {studyHigh} the max landcover overlap with forest loss is the most contributor to the forest loss in {selectedArea} with of category of max SUM of forest loss overlap with land cover ha, equivalent of percentage of deforestation of previous value / total area of interest % of total total area of interest area.
+                    {textForestGain}
                 </Typography>
+
+                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                    {textForestCoverGainLoss}
+                </Typography>
+
+                
                 <ForestNonForestChart />
                 <br />
-                <Typography variant="body2" sx={{fontWeight: 'bold'}} pb={1}>
+                <Typography variant="body2" sx={{fontWeight: 'bold'}} p={1}>
                     THE CHANGE OF FOREST GAIN AND LOSS
                 </Typography>
-                <ForestGainLoss />
+
+                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                    {textForestBaselineLoss}
+                </Typography>
+                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                    {textForestStudyLoss}
+                </Typography>
+                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                    {textForestLossPercent}
+                </Typography>
+
+                {/* <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>
+                    {textForestNetChange}
+                </Typography> */}
+
+                {/* <ForestGainLoss /> */}
                  <br />
                 <ForestChangeGainLossChart />
+
+
+
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
+
+                <Typography variant="body2" sx={{fontWeight: 'bold'}} p={1}>
+                    RICE 
+                </Typography>
+
+                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                    {textRiceArea}
+                </Typography>
                 <RiceLineChart />
                 <br />
+                <Typography variant="body2" sx={{fontWeight: 'bold'}} p={1}>
+                    RUBBER 
+                </Typography>
+
+                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                    {textRubberArea}
+                </Typography>
+
                 <RubberLineChart />
+
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
                 <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} pl={1} pt={1} pb={1}>
                     NUMBER OF FIRE HOTSPOT
                 </Typography>
-                <Typography variant="body2" sx={{fontSize: '12px'}} pl={1} pb={2}>
-                    From {studyLow} To {studyHigh}
+
+                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                    {textFireHotspot}
                 </Typography>
+                
                 <FireHotspotChart />
             </CustomTabPanel>
             

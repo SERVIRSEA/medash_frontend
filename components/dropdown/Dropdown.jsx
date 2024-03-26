@@ -2,14 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAtom } from 'jotai';
 import { FormControl, InputLabel, MenuItem, Select, Grid } from '@mui/material';
-import { areaTypeAtom, areaIdAtom } from '@/state/atoms';
+import { areaTypeAtom, areaIdAtom, areaNameAtom, tempAreaTypeAtom, tempAreaIdAtom } from '@/state/atoms';
 
 const Dropdown = () => {
     const [, setAreaType] = useAtom(areaTypeAtom);
     const [, setAreaId] = useAtom(areaIdAtom);
+    const [, setAreaName] = useAtom(areaNameAtom);
     const [selectedCategory, setSelectedCategory] = useState('country');
     const [selectedItem, setSelectedItem] = useState('');
     const [options, setOptions] = useState([]);
+    // const [selectedAreaType, setSelectedAreaType] = useAtom(tempAreaTypeAtom); 
+    // const [selectedAreaId, setSelectedAreaId] = useAtom(tempAreaIdAtom); 
+
 
     useEffect(() => {
         // Fetch data based on selected category
@@ -21,16 +25,18 @@ const Dropdown = () => {
                     const defaultSelectedItem = response.data[0];
                     setSelectedItem(defaultSelectedItem.name);
                     setAreaId(defaultSelectedItem.id);
+                    setAreaName(defaultSelectedItem.name);
                 } else {
                     setSelectedItem(''); // If no options are available, clear the selected item
                     setAreaId('');
+                    setAreaName('');
                 }
                 setAreaType(selectedCategory);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
             });
-    }, [selectedCategory, setAreaType, setAreaId]);
+    }, [selectedCategory, setAreaType, setAreaId, setAreaName]);
 
     const handleCategoryChange = (event) => {
         const selectedCategoryValue = event.target.value;
@@ -43,6 +49,7 @@ const Dropdown = () => {
         const selectedItem = options.find(option => option.name === selectedItemValue);
         if (selectedItem) {
             setAreaId(selectedItem.id);
+            setAreaName(selectedItem.name);
         }
     };
 

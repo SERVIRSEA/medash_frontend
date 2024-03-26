@@ -44,7 +44,7 @@ const SARAlertMap = () => {
         setIsFetching(true);
         setIsLoading(true);
 
-        const action = 'get-burned-area';
+        const action = 'get-sar-alert-map';
         const params = {
             'area_type': area_type,
             'area_id': area_id,

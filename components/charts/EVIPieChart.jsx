@@ -18,10 +18,12 @@ import {
     measureMaxYearAtom,
     areaTypeAtom,
     areaIdAtom,
+    areaNameAtom,
     eviPieChartDataLoadingAtom,
     eviPieChartAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    bioTextAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 
@@ -36,8 +38,15 @@ const EVIPieChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [selectedArea] = useAtom(areaNameAtom);
     const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
     const [attempts, setAttempts] = useState(0);
+    const [, setBioText] = useAtom(bioTextAtom); 
+
+    // parse float with two decimal 
+    const numberToFixed = (number) => {
+        return number.toFixed(2)
+    };
 
     useEffect(() => {
         const fetchEVIPieChartDataWithRetry = async () => {
@@ -66,6 +75,34 @@ const EVIPieChart = () => {
                         total_area_evi = total_area_evi + data[i];
                     }
                     setEviPieChartData(graphDataEVI);
+
+                    // get the number of large improvement of biophysical health
+                    const largeImprove = graphDataEVI.find(item => item.name === 'Large improvement').y;
+                    const largeImproveText = numberToFixed(largeImprove);
+                    const largeImprovePct = numberToFixed((largeImprove/total_area_evi) * 100)
+
+                    // get the number of improvement of biophysical health
+                    const underStress = graphDataEVI.find(item => item.name === 'Under Stress').y;
+                    const underStressText = numberToFixed(underStress);
+                    const underStressPct = numberToFixed((underStress/total_area_evi) * 100)
+
+
+                    // get the number of under stress of biophysical health
+                    const improvement = graphDataEVI.find(item => item.name === 'improvement').y;
+                    const improvementText = numberToFixed(improvement);
+                    const improvementPct = numberToFixed((improvement/total_area_evi) * 100)
+
+                    // get the number of severe stress of biophysical health
+                    const severeStress = graphDataEVI.find(item => item.name === 'Severe stress').y;
+                    const severeStressText = numberToFixed(severeStress);
+                    const severeStressPct = numberToFixed((severeStress/total_area_evi) * 100)
+      
+
+                    const paragraph = `The biophysical health of ${selectedArea} compare between baseline period (${refLow}-${refHigh}) and evaluation period (${studyLow}-${studyHigh}) has been 
+                    large improvement of ${largeImproveText} ha equal to  ${largeImprovePct}% (from chart), improvement ${improvementText} ha equal to ${improvementPct}% 
+                    under stress of ${underStressText} ha, equal to ${underStressPct}% and severe stress of ${severeStressText} , equal to ${severeStressPct}%.`
+                    setBioText(paragraph);
+        
                     setLoading(false);
                     setAttempts(0);
                     return; // Break out of the loop if successful

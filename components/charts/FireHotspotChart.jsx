@@ -17,7 +17,9 @@ import {
     fireChartAtom,
     fireChartDataLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    areaNameAtom,
+    fireHotspotTextAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -34,6 +36,8 @@ const FireHotspotChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [selectedArea] = useAtom(areaNameAtom);
+    const [, setFireHotspotText] = useAtom(fireHotspotTextAtom);
 
     useEffect(() => {
         const fetchFireChartDataWithRetry = async () => {
@@ -50,6 +54,16 @@ const FireHotspotChart = () => {
                     };
 
                     const data = await Fetcher(action, params);
+  
+                    const startOfMeasurement = Object.keys(data)[0];
+                    const endOfMeasurement = Object.keys(data).pop();
+                    const sumOfHotspot = Object.values(data).reduce((acc, val) => acc + val, 0);
+                    const yearWithMostFire = Object.keys(data).reduce((a, b) => data[a] > data[b] ? a : b);
+                    const sumOfYearWithMostFire = data[yearWithMostFire];
+
+                    const paragraph = `In ${selectedArea}, there have been ${sumOfHotspot} VIIRS fire alerts reported so far from ${startOfMeasurement} to ${endOfMeasurement} considering high confidence alerts only. The most fires recorded in a year was ${yearWithMostFire}, with ${sumOfYearWithMostFire}.`;
+                    setFireHotspotText(paragraph)
+
                     setChartData(data);
                     setLoading(false);
                     setAttempts(0);

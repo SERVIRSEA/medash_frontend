@@ -189,3 +189,34 @@ export const seasonalTemperatureDataAtom = atom('');
 export const droughtVisAtom = atom(false);
 export const droughtMapDataAtom = atom('');
 export const droughtMapDataStoreAtom = atom({});
+
+
+// selected area type and area id
+export const selectedAreaTypeAtom = atom();
+export const selectedAreaIdAtom = atom();
+
+// Reporting state
+export const studyLowForestArea = atom('');
+export const studyHighForestArea = atom('');
+
+// Reporting landcover
+export const landcoverTextAtom = atom('');
+// Reporting biophysical health state
+export const bioTextAtom = atom('');
+
+// Reporting forest tab
+export const textForestReportAtom = atom('');
+export const forestCoverStudyHighAtom = atom('');
+export const forestCoverGainLossTextAtom = atom('');
+export const forestNetChangeTextAtom = atom('');
+export const forestGainTextAtom = atom('');
+export const forestBaselineLossTextAtom = atom('');
+export const forestStudyLossTextAtom = atom('');
+export const forestLossPercentTextAtom = atom('');
+
+// Reporting crop monitoring
+export const riceAreaTextAtom = atom('');
+export const rubberAreaTextAtom = atom('');
+
+// Reporting fire hotspot
+export const fireHotspotTextAtom = atom('');

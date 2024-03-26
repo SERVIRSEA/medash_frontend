@@ -18,7 +18,9 @@ import {
     rubberChartAtom,
     rubberChartDataLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    rubberAreaTextAtom,
+    areaNameAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
@@ -32,9 +34,11 @@ const RubberLineChart = () => {
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [selectedArea] = useAtom(areaNameAtom);
     const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
     const [attempts, setAttempts] = useState(0);
     const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
+    const [, setRubberAreaText] = useAtom(rubberAreaTextAtom);
 
     useEffect(() => {
         const fetchRubberChartDataWithRetry = async () => {
@@ -52,12 +56,45 @@ const RubberLineChart = () => {
                     const key = JSON.stringify(params);
                     
                     const data = await Fetcher(action, params);
+                    let rubberData = {};
                     if (['country', 'province', 'district', 'protected_area'].includes(area_type)) { // 'district', 'protected_area'
                         const parsedData = JSON.parse(data);
+                        rubberData = parsedData;
                         setChartData(parsedData);
                     } else {
+                        rubberData = data;
                         setChartData(data);
                     }
+
+                    if (Object.keys(rubberData).length > 0) {
+                        const startYear = Object.keys(rubberData)[0]; // Automatically get the first year
+                        const endYear = Object.keys(rubberData).pop(); // Automatically get the last year
+                        const startYearArea = rubberData[startYear];
+                        const endYearArea = rubberData[endYear];
+                        const change = endYearArea - startYearArea;
+                        const changeDirection = change > 0 ? "increase" : "decrease";
+                        const changeWord = change > 0 ? "growth" : "reduction";
+                        const absoluteChange = Math.abs(change);
+                        const percentageChange = (absoluteChange / startYearArea) * 100;
+                        // Find the year with the most rice plantation
+                        let yearWithMostRubber = startYear;
+                        let maxRubberArea = startYearArea;
+                        for (const [year, area] of Object.entries(rubberData)) {
+                            if (area > maxRubberArea) {
+                                yearWithMostRubber = year;
+                                maxRubberArea = area;
+                            }
+                        }
+                        const paragraph = `From ${startYear} to ${endYear}, in ${selectedArea} rubber plantation ${changeDirection} ${absoluteChange.toFixed(2)} ha, equivalent ${changeWord} of ${percentageChange.toFixed(2)}% in rubber plantation since ${startYear}.
+                        The most rubber plantation recorded in a year for ${selectedArea} was in ${yearWithMostRubber}, with ${maxRubberArea.toFixed(2)} ha.`;
+
+                        setRubberAreaText(paragraph);
+                    } else {
+                        setRubberAreaText(`There is no rubber plantation in ${selectedArea}`);
+                    }
+
+
+
                     setLoading(false);
                     setAttempts(0);
                     return; // Break out of the loop if successful

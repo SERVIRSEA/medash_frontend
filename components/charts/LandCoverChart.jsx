@@ -210,20 +210,30 @@ const LandCoverChart = () => {
         const endYear = years[years.length - 1];
 
         // Calculate agriculture land and urban area data
-        const agricultureLandStart = landCoverData[startYear]["cropland"] + landCoverData[startYear]["rice"];
-        const agricultureLandEnd = landCoverData[endYear]["cropland"] + landCoverData[endYear]["rice"];
+        const agricultureLandStart = landCoverData[startYear]["cropland"] + landCoverData[startYear]["rice"]  || 0;
+        const agricultureLandEnd = landCoverData[endYear]["cropland"] + landCoverData[endYear]["rice"]  || 0;
         const agricultureChange = agricultureLandEnd - agricultureLandStart;
-        const agriculturePercentageChange = (agricultureChange / agricultureLandStart) * 100;
+        let agriculturePercentageChange = 0;
+        let agricultureText = `agriculture land includes all crop types (crop land and rice) has expanded to cover ${agricultureLandEnd.toFixed(2)} ha.`
+        if (agricultureLandStart > 0) {
+            agriculturePercentageChange = (agricultureChange / agricultureLandStart) * 100;
+            agricultureText = `agriculture land includes all crop types (crop land and rice) have changed from ${agricultureLandStart.toFixed(2)} ha to ${agricultureLandEnd.toFixed(2)} ha, 
+            equivalent of ${agriculturePercentageChange.toFixed(2)}% of its land area. `
+        }
 
-        const urbanAreasStart = landCoverData[startYear]["built"] + landCoverData[startYear]["village"];
-        const urbanAreasEnd = landCoverData[endYear]["built"] + landCoverData[endYear]["village"];
-        const urbanChange = urbanAreasEnd - urbanAreasStart;
-        const urbanPercentageChange = (urbanChange / urbanAreasStart) * 100;
+        const urbanAreasStart = landCoverData[startYear]["built"] + landCoverData[startYear]["village"]  || 0;
+        const urbanAreasEnd = landCoverData[endYear]["built"] + landCoverData[endYear]["village"]  || 0;
+        const urbanChange = urbanAreasEnd - urbanAreasStart || 0;
 
-        const paragraph = `In the period ${startYear} - ${endYear}, agriculture land includes all crop types (crop land and rice) have changed from ${agricultureLandStart.toFixed(2)} ha to ${agricultureLandEnd.toFixed(2)} ha, 
-        equivalent of ${agriculturePercentageChange.toFixed(2)}% of its land area. 
-        Urban areas (built up and village class) have changed from ${urbanAreasStart.toFixed(2)} ha to ${urbanAreasEnd.toFixed(2)} ha, equivalent of ${urbanPercentageChange.toFixed(2)}% of its land area.`;
-
+        // Check if urbanAreasStart is 0 to avoid division by zero
+        let urbanPercentageChange = 0;
+        let urbanText = `Urban areas (built up and village class) have develop to cover ${urbanAreasEnd.toFixed(2)} ha.`;
+        if (urbanAreasStart > 0) {
+            urbanPercentageChange = (urbanChange / urbanAreasStart) * 100;
+            urbanText = `Urban areas (built up and village class) have changed from ${urbanAreasStart.toFixed(2)} ha to ${urbanAreasEnd.toFixed(2)} ha, equivalent of ${urbanPercentageChange.toFixed(2)}% of its land area.`
+        }
+        
+        const paragraph = `In the period ${startYear} - ${endYear}, ${agricultureText} ${urbanText}`;
         setLandcoverText(paragraph)
 
         // Configuring the Highcharts for period1

@@ -2,7 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAtom } from 'jotai';
 import { FormControl, InputLabel, MenuItem, Select, Grid } from '@mui/material';
-import { areaTypeAtom, areaIdAtom, areaNameAtom, tempAreaTypeAtom, tempAreaIdAtom } from '@/state/atoms';
+import { 
+    areaTypeAtom, 
+    areaIdAtom, 
+    areaNameAtom,
+    protectedAreaVisibilityAtom, 
+    provinceVisibilityAtom, 
+    districtVisibilityAtom
+ } from '@/state/atoms';
 
 const Dropdown = () => {
     const [, setAreaType] = useAtom(areaTypeAtom);
@@ -11,18 +18,20 @@ const Dropdown = () => {
     const [selectedCategory, setSelectedCategory] = useState('country');
     const [selectedItem, setSelectedItem] = useState('');
     const [options, setOptions] = useState([]);
-    // const [selectedAreaType, setSelectedAreaType] = useAtom(tempAreaTypeAtom); 
-    // const [selectedAreaId, setSelectedAreaId] = useAtom(tempAreaIdAtom); 
+    const [visiblePALayer, setVisiblePALayer] = useAtom(protectedAreaVisibilityAtom);
+    const [visibleProvinceLayer, setVisibleProvinceLayer] = useAtom(provinceVisibilityAtom);
+    const [visibleDistrictLayer, setVisibleDistrictLayer] = useAtom(districtVisibilityAtom);
 
 
     useEffect(() => {
         // Fetch data based on selected category
         axios.get(`${selectedCategory}.json`)
             .then(response => {
-                setOptions(response.data);
+                const options = response.data.sort((a, b) => a.name.localeCompare(b.name));
+                setOptions(options);
                 // Set the default selected item as the first item in the options
-                if (response.data.length > 0) {
-                    const defaultSelectedItem = response.data[0];
+                if (options.length > 0) {
+                    const defaultSelectedItem = options[0];
                     setSelectedItem(defaultSelectedItem.name);
                     setAreaId(defaultSelectedItem.id);
                     setAreaName(defaultSelectedItem.name);
@@ -38,9 +47,25 @@ const Dropdown = () => {
             });
     }, [selectedCategory, setAreaType, setAreaId, setAreaName]);
 
+    const setVisibilityFalse = function() {
+        setVisiblePALayer(false);
+        setVisibleProvinceLayer(false);
+        setVisibleDistrictLayer(false);
+    }
+
     const handleCategoryChange = (event) => {
         const selectedCategoryValue = event.target.value;
         setSelectedCategory(selectedCategoryValue);
+        setVisibilityFalse();
+        if (selectedCategoryValue === 'country'){
+            setVisibleProvinceLayer(true);
+        } else if(selectedCategoryValue === 'province') {
+            setVisibleProvinceLayer(true);
+        }else if(selectedCategoryValue === 'district') {
+            setVisibleDistrictLayer(true);
+        }else if(selectedCategoryValue === 'protected_area') {
+            setVisiblePALayer(true);
+        }
     };
 
     const handleItemChange = (event) => {

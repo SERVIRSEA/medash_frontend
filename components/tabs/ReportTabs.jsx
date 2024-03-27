@@ -78,8 +78,6 @@ export default function ReportTabs() {
     const [selectedAreaId] = useAtom(areaIdAtom);
     const [selectedArea] = useAtom(areaNameAtom); 
 
-    
-    
     const [, setRiceMapVisibility] = useAtom(riceVisibilityAtom);
     const [, setLCMapVisibility] = useAtom(lcVisibilityAtom);
     const [, setFireMapVisibility] = useAtom(fireVisibilityAtom);
@@ -289,12 +287,11 @@ export default function ReportTabs() {
             </Typography> */}
             <CustomTabPanel value={value} index={0}>
             
-                <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px', fontWeight: 'bold'}} p={1}>
                     BIOPHYSICAL HEALTH
                 </Typography>
 
-                <Typography variant="body2" sx={{fontSize: '12px'}} pl={1} pb={2}>
-                    {textBioReport}
+                <Typography variant="body2" sx={{fontSize: '14px'}} pl={1} pb={2} dangerouslySetInnerHTML={{ __html: textBioReport}}>
                 </Typography>
 
                 <EVIPieChart />
@@ -302,15 +299,15 @@ export default function ReportTabs() {
                 <EVILineChart />
                 <br />
 
-                <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px', fontWeight: 'bold'}} p={1}>
                     LAND COVER
                 </Typography>
                 
 
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     Interactive charts and maps below summarize land cover change in {selectedArea} in baseline peroid ({refLow} to {refHigh}) and evaluation peroid ({studyLow} to {studyHigh}). 
                 </Typography>
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textLandCover}
                 </Typography>
 
@@ -326,19 +323,19 @@ export default function ReportTabs() {
                 </Typography>
                 <ForestCoverChart />
                 <br /> */}
-                <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} pl={1} pb={1}>
+                <Typography variant="body2" sx={{fontSize: '14px', fontWeight: 'bold'}} pl={1} pb={1}>
                     AREA OF FOREST AND NON-FOREST
                 </Typography>
 
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textForestReport}
                 </Typography>
 
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textForestGain}
                 </Typography>
 
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textForestCoverGainLoss}
                 </Typography>
 
@@ -349,13 +346,13 @@ export default function ReportTabs() {
                     THE CHANGE OF FOREST GAIN AND LOSS
                 </Typography>
 
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textForestBaselineLoss}
                 </Typography>
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textForestStudyLoss}
                 </Typography>
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textForestLossPercent}
                 </Typography>
 
@@ -376,7 +373,7 @@ export default function ReportTabs() {
                     RICE 
                 </Typography>
 
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textRiceArea}
                 </Typography>
                 <RiceLineChart />
@@ -385,7 +382,7 @@ export default function ReportTabs() {
                     RUBBER 
                 </Typography>
 
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textRubberArea}
                 </Typography>
 
@@ -393,11 +390,11 @@ export default function ReportTabs() {
 
             </CustomTabPanel>
             <CustomTabPanel value={value} index={3}>
-                <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} pl={1} pt={1} pb={1}>
+                <Typography variant="body2" sx={{fontSize: '14px', fontWeight: 'bold'}} pl={1} pt={1} pb={1}>
                     NUMBER OF FIRE HOTSPOT
                 </Typography>
 
-                <Typography variant="body2" sx={{fontSize: '12px'}} p={1}>
+                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textFireHotspot}
                 </Typography>
                 

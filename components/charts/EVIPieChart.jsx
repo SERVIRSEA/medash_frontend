@@ -78,29 +78,38 @@ const EVIPieChart = () => {
 
                     // get the number of large improvement of biophysical health
                     const largeImprove = graphDataEVI.find(item => item.name === 'Large improvement').y;
-                    const largeImproveText = numberToFixed(largeImprove);
-                    const largeImprovePct = numberToFixed((largeImprove/total_area_evi) * 100)
+                    const largeImproveNumber = numberToFixed(largeImprove);
+                    const largeImprovePct = numberToFixed((largeImprove/total_area_evi) * 100);
 
                     // get the number of improvement of biophysical health
                     const underStress = graphDataEVI.find(item => item.name === 'Under Stress').y;
-                    const underStressText = numberToFixed(underStress);
-                    const underStressPct = numberToFixed((underStress/total_area_evi) * 100)
+                    const underStressNumber = numberToFixed(underStress);
+                    const underStressPct = numberToFixed((underStress/total_area_evi) * 100);
 
 
                     // get the number of under stress of biophysical health
                     const improvement = graphDataEVI.find(item => item.name === 'improvement').y;
-                    const improvementText = numberToFixed(improvement);
+                    const improvementNumber = numberToFixed(improvement);
                     const improvementPct = numberToFixed((improvement/total_area_evi) * 100)
 
                     // get the number of severe stress of biophysical health
                     const severeStress = graphDataEVI.find(item => item.name === 'Severe stress').y;
-                    const severeStressText = numberToFixed(severeStress);
-                    const severeStressPct = numberToFixed((severeStress/total_area_evi) * 100)
+                    const severeStressNumber = numberToFixed(severeStress);
+                    const severeStressPct = numberToFixed((severeStress/total_area_evi) * 100);
       
-
-                    const paragraph = `The biophysical health of ${selectedArea} compare between baseline period (${refLow}-${refHigh}) and evaluation period (${studyLow}-${studyHigh}) has been 
-                    large improvement of ${largeImproveText} ha equal to  ${largeImprovePct}% (from chart), improvement ${improvementText} ha equal to ${improvementPct}% 
-                    under stress of ${underStressText} ha, equal to ${underStressPct}% and severe stress of ${severeStressText} , equal to ${severeStressPct}%.`
+                    let largeImprovementText = largeImproveNumber > 0 ? `<li> <b style="color:#264653">large improvement</b> of ${largeImproveNumber} ha equal to  ${largeImprovePct}%; </li>` : ``;
+                    let improvementText = improvementNumber > 0 ?  `<li> <b style="color:#2A9D8F">improvement</b> of ${improvementNumber} ha equal to ${improvementPct}%; </li>` : ``;
+                    let underStressText = underStressNumber > 0 ?  `<li> <b style="color:#F4A261">under stress</b> of ${underStressNumber} ha, equal to ${underStressPct}%; </li>` : ``;
+                    let severeStressText = severeStressNumber > 0 ?  `<li> <b style="color:#E76F51">severe stress</b> of ${severeStressNumber} ha, equal to ${severeStressPct}%; </li>` : ``;
+                    
+                    const paragraph = `The biophysical health of ${selectedArea} compare between baseline period (${refLow}-${refHigh}) and evaluation period (${studyLow}-${studyHigh}).
+                    <ul>
+                        ${largeImprovementText}
+                        ${improvementText}
+                        ${underStressText}
+                        ${severeStressText}
+                    </ul>`
+                    
                     setBioText(paragraph);
         
                     setLoading(false);

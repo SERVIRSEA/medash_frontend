@@ -9,7 +9,7 @@
     },
     {
         "id": 3,
-        "name": null
+        "name": "Kampot"
     },
     {
         "id": 4,
@@ -57,7 +57,7 @@
     },
     {
         "id": 15,
-        "name": null
+        "name": "Oddar Meanchey"
     },
     {
         "id": 16,
@@ -69,7 +69,7 @@
     },
     {
         "id": 18,
-        "name": null
+        "name": "Preah Vihear"
     },
     {
         "id": 19,
@@ -97,6 +97,6 @@
     },
     {
         "id": 25,
-        "name": null
+        "name": "Tbong Kmoum"
     }
 ]

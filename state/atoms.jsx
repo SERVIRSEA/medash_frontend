@@ -29,6 +29,10 @@ export const eviPieChartDataLoadingAtom = atom(true);
 export const landCoverChartAtom = atom([]);
 export const lcChartDataLoadingAtom = atom(true);
 
+// Forest changes chart data state
+export const forestChangesChartAtom = atom([]);
+export const forestChangesDataLoadingAtom = atom(true);
+
 // State for fetch admin data
 export const protectedAreaDataAtom = atom(false); 
 export const provinceDataAtom = atom(false);
@@ -201,6 +205,9 @@ export const studyHighForestArea = atom('');
 
 // Reporting landcover
 export const landcoverTextAtom = atom('');
+export const forestChangesTextAtom = atom('');
+
+
 // Reporting biophysical health state
 export const bioTextAtom = atom('');
 

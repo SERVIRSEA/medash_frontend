@@ -40,7 +40,8 @@ import {
     fireHotspotTextAtom,
     landcoverTextAtom,
     areaTypeAtom,
-    areaIdAtom
+    areaIdAtom,
+    forestChangesTextAtom
 } from '@/state/atoms';
 import EVIPieChart from '../charts/EVIPieChart';
 import EVILineChart from '../charts/EVILineChart';
@@ -50,6 +51,7 @@ import FireHotspotChart from '../charts/FireHotspotChart';
 import ForestCoverChart from '../charts/ForestCoverChart';
 import ForestNonForestChart from '../charts/ForestNonForestChart';
 import LandCoverChart from '../charts/LandCoverChart';
+import ForestChangesChart from '../charts/ForestChangesChart';
 import ForestChangeGainLossChart from '../charts/ForestChangeGainLossChart';
 import ForestGainLoss from '../charts/ForestGainLoss';
 import { Fetcher } from "@/fetchers/Fetcher";
@@ -77,6 +79,8 @@ export default function ReportTabs() {
     const [selectedAreaType] = useAtom(areaTypeAtom); 
     const [selectedAreaId] = useAtom(areaIdAtom);
     const [selectedArea] = useAtom(areaNameAtom); 
+    const [textForestChanges] = useAtom(forestChangesTextAtom); 
+    
 
     const [, setRiceMapVisibility] = useAtom(riceVisibilityAtom);
     const [, setLCMapVisibility] = useAtom(lcVisibilityAtom);
@@ -331,6 +335,7 @@ export default function ReportTabs() {
                     {textForestReport}
                 </Typography>
 
+
                 <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textForestGain}
                 </Typography>
@@ -341,6 +346,16 @@ export default function ReportTabs() {
 
                 
                 <ForestNonForestChart />
+
+                <Typography variant="body2" sx={{fontWeight: 'bold'}} p={1}>
+                    THE CHANGE OF FOREST AREA INTO VARIOUS LAND COVERS
+                </Typography>
+                <Typography variant="body2" sx={{fontSize: '14px'}} pl={1} pb={2}>
+                    {textForestChanges}
+                </Typography>
+                
+                <ForestChangesChart />
+
                 <br />
                 <Typography variant="body2" sx={{fontWeight: 'bold'}} p={1}>
                     THE CHANGE OF FOREST GAIN AND LOSS

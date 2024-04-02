@@ -167,7 +167,6 @@ const LandCoverChart = () => {
         'village': '#A900E6',
         'others': '#f0f8ff'
     };
-
     // Check if lcChartData is defined before accessing its properties
     if (lcChartData && lcChartData.period1 && lcChartData.period2) {
         // Get an array of the land cover types for period1

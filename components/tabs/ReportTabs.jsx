@@ -347,14 +347,14 @@ export default function ReportTabs() {
                 
                 <ForestNonForestChart />
 
-                <Typography variant="body2" sx={{fontWeight: 'bold'}} p={1}>
+                {/* <Typography variant="body2" sx={{fontWeight: 'bold'}} p={1}>
                     THE CHANGE OF FOREST AREA INTO VARIOUS LAND COVERS
                 </Typography>
                 <Typography variant="body2" sx={{fontSize: '14px'}} pl={1} pb={2}>
                     {textForestChanges}
-                </Typography>
+                </Typography> */}
                 
-                <ForestChangesChart />
+                {/* <ForestChangesChart /> */}
 
                 <br />
                 <Typography variant="body2" sx={{fontWeight: 'bold'}} p={1}>

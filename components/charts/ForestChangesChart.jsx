@@ -160,7 +160,7 @@ const ForestChangesChart = () => {
         'wetland': '#86d8dc',
         'rubber': '#AAFF00',
         'floodedForest': '#b3d59f',
-        'semi': '#38A800',
+        'semievergreen': '#38A800',
         'village': '#A900E6',
         'others': '#f0f8ff'
     };
@@ -245,7 +245,7 @@ const ForestChangesChart = () => {
                         return str.charAt(0).toUpperCase() + str.slice(1);
                     }
                     // Replace "built" with "built-up" and "semi" with "semi-evergreen" before formatting the label
-                    var name = this.name.replace('built', 'built-up area').replace('semi', 'semi-evergreen');
+                    var name = this.name.replace('built', 'built-up area').replace('semievergreen', 'semi-evergreen');
                     
                     // Split the string into words, capitalize the first letter of each word, then join them back together.
                     return name.split(' ').map(capitalizeFirstLetter).join(' ');

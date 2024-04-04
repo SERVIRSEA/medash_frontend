@@ -18,8 +18,10 @@ import {
     forestLossVisibilityAtom,
     riceVisibilityAtom, 
     fireVisibilityAtom,
+    rubberVisibilityAtom,
     selectedYearAtom,
     selectedYearRiceAtom,
+    selectedYearRubberAtom,
     selectedYearFireAtom,
     forestGainApiAtom,
     forestLossApiAtom,
@@ -27,6 +29,7 @@ import {
     fireApiAtom,
     isLoadingAtom,
     riceApiAtom,
+    rubberApiAtom,
     bioTextAtom,
     textForestReportAtom,
     forestNetChangeTextAtom,
@@ -81,18 +84,20 @@ export default function ReportTabs() {
     const [selectedArea] = useAtom(areaNameAtom); 
     const [textForestChanges] = useAtom(forestChangesTextAtom); 
     
-
     const [, setRiceMapVisibility] = useAtom(riceVisibilityAtom);
+    const [, setRubberMapVisibility] = useAtom(rubberVisibilityAtom);
     const [, setLCMapVisibility] = useAtom(lcVisibilityAtom);
     const [, setFireMapVisibility] = useAtom(fireVisibilityAtom);
     const [, setForestGainMapVisibility] = useAtom(forestGainVisibilityAtom);
     const [, setForestLossMapVisibility] = useAtom(forestLossVisibilityAtom);
     const [, setSelectedYearLC] = useAtom(selectedYearAtom);
     const [, setSelectedYearRice] = useAtom(selectedYearRiceAtom);
+    const [, setSelectedYearRubber] = useAtom(selectedYearRubberAtom);
     const [, setSelectedYearFire] = useAtom(selectedYearFireAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
     const [, setFireData] = useAtom(fireApiAtom);
     const [, setRiceData] = useAtom(riceApiAtom);
+    const [, setRubberData] = useAtom(rubberApiAtom);
     const [, setForestGainData] = useAtom(forestGainApiAtom);
     const [, setForestLossData] = useAtom(forestLossApiAtom);
     const [, setLandCoverData] = useAtom(landCoverApiAtom);
@@ -112,6 +117,7 @@ export default function ReportTabs() {
                 fetchForestLossMap();
             } else if (value == 2) {
                 fetchRiceMapData();
+                fetchRubberMapData();
             } else if (value === 3) {
                 fetchFireMap();
             } else {
@@ -126,14 +132,15 @@ export default function ReportTabs() {
         const visibilityMappings = {
             0: { lcMap: true },
             1: { forestGainMap: true, forestLossMap: true },
-            2: { riceMap: true },
-            3: { fireMap: true },
+            2: { riceMap: true, rubberMap: true },
+            3: { fireMap: true }
         };
 
         if (newValue == 0){
             setSelectedYearLC(studyHigh);
         } else if(newValue == 2) {
             setSelectedYearRice(studyHigh);
+            setSelectedYearRubber(studyHigh);
         } else if(newValue == 3) {
             setSelectedYearFire(studyHigh);
         } 
@@ -143,6 +150,7 @@ export default function ReportTabs() {
         setForestGainMapVisibility(mapVisibility.forestGainMap || false);
         setForestLossMapVisibility(mapVisibility.forestLossMap || false);
         setRiceMapVisibility(mapVisibility.riceMap || false);
+        setRubberMapVisibility(mapVisibility.rubberMap || false)
         setLCMapVisibility(mapVisibility.lcMap || false);
         setFireMapVisibility(mapVisibility.fireMap || false);
     };
@@ -217,6 +225,25 @@ export default function ReportTabs() {
         try {
             const data = await Fetcher(action, params);
             setRiceData(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const fetchRubberMapData = async () => {
+        setIsLoading(true);
+        const action = 'get-landcover-rubber-map';
+        const params = {
+            'area_type': selectedAreaType,
+            'area_id': selectedAreaId,
+            'year': studyHigh,
+        };
+        try {
+            const data = await Fetcher(action, params);
+            setRubberData(data);
         } catch (error) {
             console.error('Error fetching data:', error);
             throw error;
@@ -352,9 +379,9 @@ export default function ReportTabs() {
                 </Typography>
                 <Typography variant="body2" sx={{fontSize: '14px'}} pl={1} pb={2}>
                     {textForestChanges}
-                </Typography> */}
+                </Typography>
                 
-                {/* <ForestChangesChart /> */}
+                <ForestChangesChart /> */}
 
                 <br />
                 <Typography variant="body2" sx={{fontWeight: 'bold'}} p={1}>

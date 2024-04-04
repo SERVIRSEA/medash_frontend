@@ -47,11 +47,11 @@ export const districtVisibilityAtom = atom(false);
 export const baselineMinYearAtom = atom(2000);
 export const baselineMaxYearAtom = atom(2008);
 export const measureMinYearAtom = atom(2010);
-export const measureMaxYearAtom = atom(2022);
+export const measureMaxYearAtom = atom(2023);
 export const tempBaselineMinYearAtom = atom(2000);
 export const tempBaselineMaxYearAtom = atom(2008);
 export const tempMeasureMinYearAtom = atom(2010);
-export const tempMeasureMaxYearAtom = atom(2022);
+export const tempMeasureMaxYearAtom = atom(2023);
 
 // State for selected admin area
 export const areaTypeAtom = atom('country'); // Use when trigger update map button click
@@ -63,7 +63,7 @@ export const tempAreaNameAtom = atom('Cambodia');
 
 // State for land cover map
 export const minYearLandCover = atom(2000);
-export const maxYearLandCover = atom(2022);
+export const maxYearLandCover = atom(2023);
 export const selectedYearAtom = atom(null); // For year switches 
 export const landCoverApiAtom = atom(''); // Store land cover gee data url for map visualization
 export const lcVisibilityAtom = atom(true);
@@ -95,14 +95,14 @@ export const rubberBMDataLoadingAtom = atom(true);
 
 // State for Forest Gain map
 export const minYearForestGain = atom(2000);
-export const maxYearForestGain = atom(2022);
+export const maxYearForestGain = atom(2023);
 export const forestGainApiAtom = atom('');
 export const forestGainVisibilityAtom = atom(true);
 export const forestGainMapDataStoreAtom = atom({});
 
 // State for Forest Loss map
 export const minYearForestLoss = atom(2000);
-export const maxYearForestLoss = atom(2022);
+export const maxYearForestLoss = atom(2023);
 export const forestLossApiAtom = atom('');
 export const forestLossVisibilityAtom = atom(false);
 export const forestLossMapDataStoreAtom = atom({});
@@ -136,7 +136,7 @@ export const gladAlertChartDataLoadingAtom = atom(true);
 
 // State for SAR Alert map
 export const minYearSARAlert = atom(2018);
-export const maxYearSARAlert = atom(2022);
+export const maxYearSARAlert = atom(2023);
 export const selectedYearSARAlertAtom = atom(null); 
 export const sarAlertApiAtom = atom('');
 export const sarAlertVisibilityAtom = atom(false);

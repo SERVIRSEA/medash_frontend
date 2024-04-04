@@ -13,13 +13,7 @@ import EVILegend from '../legend/EVILegend';
 import LandCoverLegend from '../legend/LandCoverLegend';
 import BioInfoModal from '../modals/BioInfoModal';
 import LandCoverInfoModal from '../modals/LandCoverInfoModal';
-import { 
-    measureMinYearAtom,
-    measureMaxYearAtom,
-    areaNameAtom,
-    minYearLandCover,
-    maxYearLandCover,
-} from '@/state/atoms';
+import { measureMinYearAtom, measureMaxYearAtom, areaNameAtom, minYearLandCover, maxYearLandCover, } from '@/state/atoms';
 
 export default function BiophysicalPanel(){
     const [studyLow] = useAtom(measureMinYearAtom);

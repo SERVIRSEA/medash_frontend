@@ -61,7 +61,7 @@ const FireHotspotChart = () => {
                     const yearWithMostFire = Object.keys(data).reduce((a, b) => data[a] > data[b] ? a : b);
                     const sumOfYearWithMostFire = data[yearWithMostFire];
 
-                    const paragraph = `In ${selectedArea}, there have been ${sumOfHotspot} VIIRS fire alerts reported so far from ${startOfMeasurement} to ${endOfMeasurement} considering high confidence alerts only. The most fires recorded in a year was ${yearWithMostFire}, with ${sumOfYearWithMostFire} alerts.`;
+                    const paragraph = `In ${selectedArea}, there have been ${sumOfHotspot.toLocaleString()} VIIRS fire alerts reported so far from ${startOfMeasurement} to ${endOfMeasurement} considering high confidence alerts only. The most fires recorded in a year was ${yearWithMostFire}, with ${sumOfYearWithMostFire} alerts.`;
                     setFireHotspotText(paragraph)
 
                     setChartData(data);

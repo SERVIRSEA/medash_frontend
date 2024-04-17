@@ -90,8 +90,8 @@ const RiceLineChart = () => {
                         if (allZero) {
                             paragraph = `There is no rice plantations in ${selectedArea}`;
                         } else {
-                            paragraph = `From ${startYear} to ${endYear}, in ${selectedArea},  Rice plantations ${changeDirection} ${absoluteChange.toFixed(2)} ha, equivalent to a ${changeWord} of ${percentageChange.toFixed(2)}% in rice plantations since ${startYear}. 
-                        The most rice plantation recorded in a year for ${selectedArea} was in ${yearWithMostRice}, with an amount of ${maxRiceArea.toFixed(2)} ha.`;
+                            paragraph = `From ${startYear} to ${endYear}, in ${selectedArea},  Rice plantations ${changeDirection} ${absoluteChange.toLocaleString()} ha, equivalent to a ${changeWord} of ${percentageChange.toFixed(2)}% in rice plantations since ${startYear}. 
+                        The most rice plantation recorded in a year for ${selectedArea} was in ${yearWithMostRice}, with an amount of ${maxRiceArea.toLocaleString()} ha.`;
                         }
                         setRiceAreaText(paragraph);
                     } else {

@@ -73,8 +73,8 @@ const ForestChangeGainLossChart = () => {
                     // set time waiting for forestCoverStudyHigh
                     setTimeout(()=>{
                         const treeCoverArea = forestCoverStudyHigh; // Total tree cover area at the beginning
-                        const baselineNetLoss = data.statsRefLoss.toFixed(2);
-                        const studyNetLoss = data.statsStudyLoss.toFixed(2);
+                        const baselineNetLoss = data.statsRefLoss;
+                        const studyNetLoss = data.statsStudyLoss;
                         // Calculating net change in forest loss
                         const netLossChange = baselineNetLoss - studyNetLoss;
                         // Determine the word based on total change
@@ -86,7 +86,7 @@ const ForestChangeGainLossChart = () => {
                         
                         let paragraph1 = ``
                         if (baselineNetLoss > 0) {
-                            paragraph1 = `Baseline Period (${refLow}-${refHigh}): Total net forest loss of ${baselineNetLoss} ha`
+                            paragraph1 = `Baseline Period (${refLow}-${refHigh}): Total net forest loss of ${baselineNetLoss.toLocaleString()} ha`
                         } else {
                             paragraph1 = `Baseline Period (${refLow}-${refHigh}): No net forest loss occurred.`
                         }
@@ -94,7 +94,7 @@ const ForestChangeGainLossChart = () => {
 
                         let paragraph2 = ``
                         if (studyNetLoss > 0) {
-                            paragraph2 = `Measurement Period (${studyLow}-${studyHigh}): Total net forest loss of ${studyNetLoss} ha.`
+                            paragraph2 = `Measurement Period (${studyLow}-${studyHigh}): Total net forest loss of ${studyNetLoss.toLocaleString()} ha.`
                         } else {
                             paragraph2 = `Baseline Period (${studyLow}-${studyHigh}): No net forest loss occurred.`
                         }
@@ -113,7 +113,7 @@ const ForestChangeGainLossChart = () => {
                         // Calculating percentage of net gain of total tree cover area
                         const percentageOfChange = Math.abs((netChange / treeCoverArea) * 100).toFixed(2);
                         // paragraph in forest gain and loss reporting
-                        const paragraph4 = `From ${studyLow} to ${studyHigh}, ${selectedArea} experienced a net change of ${netChange} ha (${percentageOfChange}%) in tree cover.`
+                        const paragraph4 = `From ${studyLow} to ${studyHigh}, ${selectedArea} experienced a net change of ${netChange.toLocaleString()} ha (${percentageOfChange}%) in tree cover.`
                         setForestNetChange(paragraph4)
 
                     },2000)

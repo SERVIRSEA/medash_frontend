@@ -91,8 +91,8 @@ const RubberLineChart = () => {
                         if (allZero) {
                             paragraph = `There is no rubber plantations in ${selectedArea}`;
                         } else {
-                            paragraph = `From ${startYear} to ${endYear}, in ${selectedArea}, Rubber plantations ${changeDirection} ${absoluteChange.toFixed(2)} ha, equivalent to a ${changeWord} of ${percentageChange.toFixed(2)}% in rubber plantations since ${startYear}.
-                            The most rubber plantations recorded in a year for ${selectedArea} was in ${yearWithMostRubber}, with an amount of ${maxRubberArea.toFixed(2)} ha.`;
+                            paragraph = `From ${startYear} to ${endYear}, in ${selectedArea}, Rubber plantations ${changeDirection} ${absoluteChange.toLocaleString()} ha, equivalent to a ${changeWord} of ${percentageChange.toFixed(2)}% in rubber plantations since ${startYear}.
+                            The most rubber plantations recorded in a year for ${selectedArea} was in ${yearWithMostRubber}, with an amount of ${maxRubberArea.toLocaleString()} ha.`;
                         }
                         setRubberAreaText(paragraph);
                     } else {

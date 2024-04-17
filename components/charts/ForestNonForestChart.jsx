@@ -113,8 +113,8 @@ const ForestNonForestChart = () => {
                         paragraphForestGainLoss = ``;
                     
                     } else {
-                        paragraph = `From ${startYear} to ${endYear}, ${selectedArea} experienced a ${changeType} in forest cover, with ${totalLoss.toFixed(2)} hectares lost, while simultaneously gaining ${Math.abs(totalGain.toFixed(2))} hectares in tree cover. This resulted in a net forest cover ${LossDirection} of ${Math.abs(forestLoss).toFixed(2)} hectares, a ${Math.abs(percentageReduction).toFixed(2)}% ${LossPercentDirection} relative to the forest cover in ${startYear}.`;
-                        paragraphForestGainLoss = `The year ${maxLossYear} recorded the largest annual decrease, with ${maxLoss.toFixed(2)} hectares of forest lost. Conversely, ${maxGainYear} marked the most significant gain, with ${maxGain.toFixed(2)} hectares of new forest cover.`;
+                        paragraph = `From ${startYear} to ${endYear}, ${selectedArea} experienced a ${changeType} in forest cover, with ${totalLoss.toLocaleString()} hectares lost, while simultaneously gaining ${Math.abs(totalGain).toLocaleString()} hectares in tree cover. This resulted in a net forest cover ${LossDirection} of ${Math.abs(forestLoss).toLocaleString()} hectares, a ${Math.abs(percentageReduction).toFixed(2)}% ${LossPercentDirection} relative to the forest cover in ${startYear}.`;
+                        paragraphForestGainLoss = `The year ${maxLossYear} recorded the largest annual decrease, with ${maxLoss.toLocaleString()} hectares of forest lost. Conversely, ${maxGainYear} marked the most significant gain, with ${maxGain.toLocaleString()} hectares of new forest cover.`;
                     
                     }
                     setTextForestReport(paragraph);

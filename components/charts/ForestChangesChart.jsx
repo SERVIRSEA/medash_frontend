@@ -56,7 +56,7 @@ const ForestChangesChart = () => {
                     const key = JSON.stringify(params);
                     const action = 'get-forestchange-chart';
                     const data = await Fetcher(action, params);
-
+                    
                     // Calculate the sum of each category
                     const sumByCategory = {};
                     Object.values(data).forEach(yearData => {

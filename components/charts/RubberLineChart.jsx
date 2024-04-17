@@ -72,7 +72,7 @@ const RubberLineChart = () => {
                         const startYearArea = rubberData[startYear];
                         const endYearArea = rubberData[endYear];
                         const change = endYearArea - startYearArea;
-                        const changeDirection = change > 0 ? "increase" : "decrease";
+                        const changeDirection = change > 0 ? "increased" : "decreased";
                         const changeWord = change > 0 ? "growth" : "reduction";
                         const absoluteChange = Math.abs(change);
                         const percentageChange = (absoluteChange / startYearArea) * 100;
@@ -85,12 +85,18 @@ const RubberLineChart = () => {
                                 maxRubberArea = area;
                             }
                         }
-                        const paragraph = `From ${startYear} to ${endYear}, in ${selectedArea} rubber plantation ${changeDirection} ${absoluteChange.toFixed(2)} ha, equivalent ${changeWord} of ${percentageChange.toFixed(2)}% in rubber plantation since ${startYear}.
-                        The most rubber plantation recorded in a year for ${selectedArea} was in ${yearWithMostRubber}, with ${maxRubberArea.toFixed(2)} ha.`;
-
+                        // Check if all values are 0
+                        const allZero = Object.values(rubberData).every(value => value === 0);
+                        let paragraph = '';
+                        if (allZero) {
+                            paragraph = `There is no rubber plantations in ${selectedArea}`;
+                        } else {
+                            paragraph = `From ${startYear} to ${endYear}, in ${selectedArea}, Rubber plantations ${changeDirection} ${absoluteChange.toFixed(2)} ha, equivalent to a ${changeWord} of ${percentageChange.toFixed(2)}% in rubber plantations since ${startYear}.
+                            The most rubber plantations recorded in a year for ${selectedArea} was in ${yearWithMostRubber}, with an amount of ${maxRubberArea.toFixed(2)} ha.`;
+                        }
                         setRubberAreaText(paragraph);
                     } else {
-                        setRubberAreaText(`There is no rubber plantation in ${selectedArea}`);
+                        setRubberAreaText(`There is no rubber plantations in ${selectedArea}`);
                     }
 
 

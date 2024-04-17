@@ -33,7 +33,6 @@ import {
     bioTextAtom,
     textForestReportAtom,
     forestNetChangeTextAtom,
-    forestGainTextAtom,
     forestBaselineLossTextAtom,
     forestStudyLossTextAtom,
     forestLossPercentTextAtom,
@@ -71,7 +70,6 @@ export default function ReportTabs() {
     const [textLandCover] = useAtom(landcoverTextAtom); 
     const [textForestReport] = useAtom(textForestReportAtom);
     const [textForestNetChange] = useAtom(forestNetChangeTextAtom);
-    const [textForestGain] = useAtom(forestGainTextAtom);
     const [textForestBaselineLoss] = useAtom(forestBaselineLossTextAtom);
     const [textForestStudyLoss] = useAtom(forestStudyLossTextAtom);
     const [textForestLossPercent] = useAtom(forestLossPercentTextAtom); 
@@ -336,7 +334,7 @@ export default function ReportTabs() {
                 
 
                 <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
-                    Interactive charts and maps below summarize land cover change in {selectedArea} in baseline peroid ({refLow} to {refHigh}) and evaluation peroid ({studyLow} to {studyHigh}). 
+                    Interactive charts and maps below summarize land cover change in {selectedArea} in baseline period ({refLow} to {refHigh}) and evaluation peroid ({studyLow} to {studyHigh}).
                 </Typography>
                 <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textLandCover}
@@ -360,11 +358,6 @@ export default function ReportTabs() {
 
                 <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
                     {textForestReport}
-                </Typography>
-
-
-                <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>
-                    {textForestGain}
                 </Typography>
 
                 <Typography variant="body2" sx={{fontSize: '14px'}} p={1}>

@@ -213,10 +213,10 @@ const LandCoverChart = () => {
         const agricultureLandEnd = landCoverData[endYear]["cropland"] + landCoverData[endYear]["rice"]  || 0;
         const agricultureChange = agricultureLandEnd - agricultureLandStart;
         let agriculturePercentageChange = 0;
-        let agricultureText = `agriculture land includes all crop types (crop land and rice) has expanded to cover ${agricultureLandEnd.toFixed(2)} ha.`
+        let agricultureText = `agricultural land including all crop types (crop land and rice) have expanded to cover ${agricultureLandEnd.toFixed(2)} ha.`
         if (agricultureLandStart > 0) {
             agriculturePercentageChange = (agricultureChange / agricultureLandStart) * 100;
-            agricultureText = `agriculture land includes all crop types (crop land and rice) have changed from ${agricultureLandStart.toFixed(2)} ha to ${agricultureLandEnd.toFixed(2)} ha, 
+            agricultureText = `agricultural land including all crop types (crop land and rice) have changed from ${agricultureLandStart.toFixed(2)} ha to ${agricultureLandEnd.toFixed(2)} ha, 
             equivalent of ${agriculturePercentageChange.toFixed(2)}% of its land area. `
         }
 
@@ -226,10 +226,12 @@ const LandCoverChart = () => {
 
         // Check if urbanAreasStart is 0 to avoid division by zero
         let urbanPercentageChange = 0;
+        const changeDirection = urbanChange > 0 ? "expansion" : "decrease";
         let urbanText = `Urban areas (built up and village class) have develop to cover ${urbanAreasEnd.toFixed(2)} ha.`;
         if (urbanAreasStart > 0) {
             urbanPercentageChange = (urbanChange / urbanAreasStart) * 100;
-            urbanText = `Urban areas (built up and village class) have changed from ${urbanAreasStart.toFixed(2)} ha to ${urbanAreasEnd.toFixed(2)} ha, equivalent of ${urbanPercentageChange.toFixed(2)}% of its land area.`
+            urbanText = `Urban areas (built up and village class) have changed from ${urbanAreasStart.toFixed(2)} ha to ${urbanAreasEnd.toFixed(2)} ha, equivalent to ${urbanPercentageChange.toFixed(2)}% ${changeDirection} during the measurement period.
+            `
         }
         
         const paragraph = `In the period ${startYear} - ${endYear}, ${agricultureText} ${urbanText}`;

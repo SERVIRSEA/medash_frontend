@@ -23,7 +23,6 @@ import {
     areaNameAtom,
     forestCoverStudyHighAtom,
     forestNetChangeTextAtom,
-    forestGainTextAtom,
     forestBaselineLossTextAtom,
     forestStudyLossTextAtom,
     forestLossPercentTextAtom
@@ -49,7 +48,6 @@ const ForestChangeGainLossChart = () => {
     const [RetryMaxAttempts] = useAtom(maxRetryAttemptsAtom);
     const [forestCoverStudyHigh] = useAtom(forestCoverStudyHighAtom);
     const [, setForestNetChange] = useAtom(forestNetChangeTextAtom);
-    const [, setForestGain] = useAtom(forestGainTextAtom);
     const [, setForestBaselineLoss] = useAtom(forestBaselineLossTextAtom);
     const [, setForestStudyLoss] = useAtom(forestStudyLossTextAtom);
     const [, setForestLossPercent] = useAtom(forestLossPercentTextAtom);
@@ -118,13 +116,6 @@ const ForestChangeGainLossChart = () => {
                         const paragraph4 = `From ${studyLow} to ${studyHigh}, ${selectedArea} experienced a net change of ${netChange} ha (${percentageOfChange}%) in tree cover.`
                         setForestNetChange(paragraph4)
 
-                        // forest gain in given year period
-                        const gain = data.statsStudyGain;
-                        // Calculating percentage of net gain of total tree cover area
-                        const percentageOfGain = Math.abs((gain / treeCoverArea) * 100).toFixed(2);
-                        // tree cover gain paragraph
-                        const paragraph5 = `From ${studyLow} to ${studyHigh}, in ${selectedArea} gain ${gain} ha of tree cover, equivalent to a ${percentageOfGain}% of total tree cover in ${studyHigh}.`
-                        setForestGain(paragraph5)   
                     },2000)
 
 

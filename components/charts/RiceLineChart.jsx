@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
@@ -9,7 +9,7 @@ if (typeof Highcharts === 'object') {
     Exporting(Highcharts);
     ExportData(Highcharts);
 }
-import { 
+import {
     measureMinYearAtom,
     measureMaxYearAtom,
     areaTypeAtom,
@@ -65,28 +65,38 @@ const RiceLineChart = () => {
                         riceData = data;
                         setChartData(data);
                     }
-
-                    const startYear = Object.keys(riceData)[0]; // Automatically get the first year
-                    const endYear = Object.keys(riceData).pop(); // Automatically get the last year
-                    const startYearArea = riceData[startYear];
-                    const endYearArea = riceData[endYear];
-                    const change = endYearArea - startYearArea;
-                    const changeDirection = change > 0 ? "increase" : "decrease";
-                    const changeWord = change > 0 ? "growth" : "reduction";
-                    const absoluteChange = Math.abs(change);
-                    const percentageChange = (absoluteChange / startYearArea) * 100;
-                    // Find the year with the most rice plantation
-                    let yearWithMostRice = startYear;
-                    let maxRiceArea = startYearArea;
-                    for (const [year, area] of Object.entries(riceData)) {
-                        if (area > maxRiceArea) {
-                            yearWithMostRice = year;
-                            maxRiceArea = area;
+                    if (Object.keys(riceData).length > 0) {
+                        const startYear = Object.keys(riceData)[0]; // Automatically get the first year
+                        const endYear = Object.keys(riceData).pop(); // Automatically get the last year
+                        const startYearArea = riceData[startYear];
+                        const endYearArea = riceData[endYear];
+                        const change = endYearArea - startYearArea;
+                        const changeDirection = change > 0 ? "increased" : "decreased";
+                        const changeWord = change > 0 ? "growth" : "reduction";
+                        const absoluteChange = Math.abs(change);
+                        const percentageChange = (absoluteChange / startYearArea) * 100;
+                        // Find the year with the most rice plantation
+                        let yearWithMostRice = startYear;
+                        let maxRiceArea = startYearArea;
+                        for (const [year, area] of Object.entries(riceData)) {
+                            if (area > maxRiceArea) {
+                                yearWithMostRice = year;
+                                maxRiceArea = area;
+                            }
                         }
+                        // Check if all values are 0
+                        const allZero = Object.values(riceData).every(value => value === 0);
+                        let paragraph = '';
+                        if (allZero) {
+                            paragraph = `There is no rice plantations in ${selectedArea}`;
+                        } else {
+                            paragraph = `From ${startYear} to ${endYear}, in ${selectedArea},  Rice plantations ${changeDirection} ${absoluteChange.toFixed(2)} ha, equivalent to a ${changeWord} of ${percentageChange.toFixed(2)}% in rice plantations since ${startYear}. 
+                        The most rice plantation recorded in a year for ${selectedArea} was in ${yearWithMostRice}, with an amount of ${maxRiceArea.toFixed(2)} ha.`;
+                        }
+                        setRiceAreaText(paragraph);
+                    } else {
+                        setRubberAreaText(`There is no rice plantations in ${selectedArea}`);
                     }
-                    const paragraph = `From ${startYear} to ${endYear}, in ${selectedArea},  Rice plantation ${changeDirection} ${absoluteChange.toFixed(2)} ha, equivalent ${changeWord} of ${percentageChange.toFixed(2)}% in rice plantation since ${startYear}. 
-                    The most rice plantation recorded in a year for ${selectedArea} was in ${yearWithMostRice}, with ${maxRiceArea.toFixed(2)} ha.`;
-                    setRiceAreaText(paragraph);
                     setLoading(false);
                     setAttempts(0);
                     return; // Break out of the loop if successful
@@ -141,10 +151,10 @@ const RiceLineChart = () => {
             // marginRight: 40  
         },
         title: false,
-		subtitle: false,
+        subtitle: false,
         tooltip: {
             formatter: function () {
-                return 'Estimated Area: ' +  this.point.y.toFixed(2) ;
+                return 'Estimated Area: ' + this.point.y.toFixed(2);
             }
         },
         xAxis: {
@@ -178,8 +188,8 @@ const RiceLineChart = () => {
         exporting: {
             buttons: {
                 contextButton: {
-                    align: 'right',      
-                    verticalAlign: 'top', 
+                    align: 'right',
+                    verticalAlign: 'top',
                     marginBottom: '10px',
                     menuItems: [
                         'viewFullscreen',

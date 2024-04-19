@@ -1,102 +1,102 @@
 [
     {
-        "id": 1,
-        "name": "Banteay Mean Cheay"
+      "id": 1,
+      "name": "Banteay Meanchey"
     },
     {
-        "id": 2,
-        "name": "Baat Dambang"
+      "id": 2,
+      "name": "Battambang"
     },
     {
-        "id": 3,
-        "name": "Kampot"
+      "id": 3,
+      "name": "Kampot"
     },
     {
-        "id": 4,
-        "name": "Kompong Cham"
+      "id": 4,
+      "name": "Kampong Cham"
     },
     {
-        "id": 5,
-        "name": "Kompong Chnang"
+      "id": 5,
+      "name": "Kampong Chhnang"
     },
     {
-        "id": 6,
-        "name": "Kompong Speu"
+      "id": 6,
+      "name": "Kampong Speu"
     },
     {
-        "id": 7,
-        "name": "Kampong Thom"
+      "id": 7,
+      "name": "Kampong Thom"
     },
     {
-        "id": 8,
-        "name": "Kandaal"
+      "id": 8,
+      "name": "Kandal"
     },
     {
-        "id": 9,
-        "name": "Koh Kong"
+      "id": 9,
+      "name": "Koh Kong"
     },
     {
-        "id": 10,
-        "name": "Keb"
+      "id": 10,
+      "name": "Kep"
     },
     {
-        "id": 11,
-        "name": "Krachen"
+      "id": 11,
+      "name": "Kratie"
     },
     {
-        "id": 12,
-        "name": "Pailin"
+      "id": 12,
+      "name": "Pailin"
     },
     {
-        "id": 13,
-        "name": "Kampong Saom"
+      "id": 13,
+      "name": "Preah Sihanouk"
     },
     {
-        "id": 14,
-        "name": "Mondul Kiri"
+      "id": 14,
+      "name": "Mondul Kiri"
     },
     {
-        "id": 15,
-        "name": "Oddar Meanchey"
+      "id": 15,
+      "name": "Oddar Meanchey"
     },
     {
-        "id": 16,
-        "name": "Phnom Penh"
+      "id": 16,
+      "name": "Phnom Penh"
     },
     {
-        "id": 17,
-        "name": "Pursat"
+      "id": 17,
+      "name": "Pursat"
     },
     {
-        "id": 18,
-        "name": "Preah Vihear"
+      "id": 18,
+      "name": "Preah Vihear"
     },
     {
-        "id": 19,
-        "name": "Prey Veaeng"
+      "id": 19,
+      "name": "Prey Veng"
     },
     {
-        "id": 20,
-        "name": "Rotanak Kiri"
+      "id": 20,
+      "name": "Ratanak Kiri"
     },
     {
-        "id": 21,
-        "name": "Siem Reap"
+      "id": 21,
+      "name": "Siemreap"
     },
     {
-        "id": 22,
-        "name": "Stung Treng"
+      "id": 22,
+      "name": "Stung Treng"
     },
     {
-        "id": 23,
-        "name": "Svaay Rieng"
+      "id": 23,
+      "name": "Svay Rieng"
     },
     {
-        "id": 24,
-        "name": "Takeo"
+      "id": 24,
+      "name": "Takeo"
     },
     {
-        "id": 25,
-        "name": "Tbong Kmoum"
+      "id": 25,
+      "name": "Tboung Khmum"
     }
-]
+  ]

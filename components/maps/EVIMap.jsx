@@ -87,7 +87,20 @@ function EVIMap(){
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [updateTrigger, visibleEVILayer, area_type, area_id, refLow, refHigh, studyLow, studyHigh]);
 
-
+    const downloadLandCoverMap = (year) => {
+        // Set download parameters from props
+        const params = {
+            'area_type': area_type,
+            'area_id': area_id,
+            'year': year
+        };
+        const action = 'download-landcover-map';
+        setDownloadParams(params);
+        setDownloadAction(action);
+        setDataset('Landcover');
+        openForm();
+    };
+    
     const downloadEVIMap = async ()=> {
         try {
             setIsLoading(true);

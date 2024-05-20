@@ -58,7 +58,7 @@ function ForestLossMap(){
             } else {
                 try {
                     const data = await Fetcher(action, params);
-                    console.log(data)
+                    
                     setForestLossData(data);
                     setForestLossMapStore(prev => ({ ...prev, [key]: data }));
                 } catch (error) {

@@ -125,6 +125,7 @@ const ForestNonForestChart = () => {
                     setLoading(false);
                     return; // Break out of the loop if successful
                 } catch (error) {
+                    console.log(error)
                     // Retry if it's a network error
                     if (error.isAxiosError && error.code === 'ECONNABORTED') {
                         // Increment attempts

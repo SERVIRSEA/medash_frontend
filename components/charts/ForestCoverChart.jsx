@@ -39,7 +39,7 @@ const ForestCoverChart = () => {
         const fetchChartDataWithRetry = async () => {
             while (attempts < RetryMaxAttempts) {
                 try {
-                    setError(null);
+                    // setError(null);
                     setLoading(true);
                     const action = 'get-forest-nonforest-chart-data';
                     const params = {
@@ -55,6 +55,7 @@ const ForestCoverChart = () => {
                     setAttempts(0);
                     return; // Break out of the loop if successful
                 } catch (error) {
+                   
                     // Retry if it's a network error
                     if (error.isAxiosError && error.code === 'ECONNABORTED') {
                         // Increment attempts
@@ -73,7 +74,7 @@ const ForestCoverChart = () => {
             }
 
             // Handle max retry attempts reached
-            setError('Max retry attempts reached. Please click again on the update button.');
+            // setError('Max retry attempts reached. Please click again on the update button.');
         };
 
         // Check for updateTrigger to initiate fetch

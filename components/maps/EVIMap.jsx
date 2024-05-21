@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
 import { ListItem, IconButton } from '@mui/material';
@@ -22,6 +22,8 @@ import {
     alertOpenAtom, 
     alertMessageAtom 
 } from '@/state/atoms';
+import DownloadForm from '../modals/DownloadForm';
+
 
 function EVIMap(){
     const [visibleEVILayer, setEVILayerVisibility] = useAtom(eviVisibilityAtom);
@@ -37,6 +39,8 @@ function EVIMap(){
     const [updateTrigger] = useAtom(updateTriggerAtom);
     const [, setAlertOpen] = useAtom(alertOpenAtom);
     const [, setAlertMessage] = useAtom(alertMessageAtom);
+    const [isFormOpen, setIsFormOpen] = useState(false); 
+    const [downloadParams, setDownloadParams] = useState(null);
 
     const handleCheckboxChange = async () => {
         setEVILayerVisibility(!visibleEVILayer);
@@ -87,53 +91,61 @@ function EVIMap(){
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [updateTrigger, visibleEVILayer, area_type, area_id, refLow, refHigh, studyLow, studyHigh]);
 
-    const downloadLandCoverMap = (year) => {
-        // Set download parameters from props
+    const openForm = () => {
+        setIsFormOpen(true);
+    };
+
+    const closeForm = () => {
+        setIsFormOpen(false);
+    };
+
+    const downloadEVIMap = async () => {
         const params = {
             'area_type': area_type,
             'area_id': area_id,
-            'year': year
-        };
-        const action = 'download-landcover-map';
+            'refLow': refLow,
+            'refHigh': refHigh,
+            'studyLow': studyLow,
+            'studyHigh': studyHigh,
+            'dataset': 'EVI'
+        }
         setDownloadParams(params);
-        setDownloadAction(action);
-        setDataset('Landcover');
         openForm();
     };
     
-    const downloadEVIMap = async ()=> {
-        try {
-            setIsLoading(true);
-            const params = {
-                'area_type': area_type,
-                'area_id': area_id,
-                'refLow': refLow,
-                'refHigh': refHigh,
-                'studyLow': studyLow,
-                'studyHigh': studyHigh
-            }
-            const action = 'download-evi-map';
-            const data = await Fetcher(action, params);
-            if (data.success === 'success' && data.downloadURL) {
-                const downloadURL = data.downloadURL;
-                // Create a hidden <a> element to trigger the download
-                const a = document.createElement('a');
-                a.href = downloadURL;
-                document.body.appendChild(a);
-                a.click();
-                // Cleanup
-                a.remove();
-            } else {
-                setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-                setAlertOpen(true);
-                throw new Error('Failed to download map.');
-            }
-        } catch (error) {
-            console.error('Error downloading map:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    }
+    // const downloadEVIMap = async ()=> {
+    //     try {
+    //         setIsLoading(true);
+    //         const params = {
+    //             'area_type': area_type,
+    //             'area_id': area_id,
+    //             'refLow': refLow,
+    //             'refHigh': refHigh,
+    //             'studyLow': studyLow,
+    //             'studyHigh': studyHigh
+    //         }
+    //         const action = 'download-evi-map';
+    //         const data = await Fetcher(action, params);
+    //         if (data.success === 'success' && data.downloadURL) {
+    //             const downloadURL = data.downloadURL;
+    //             // Create a hidden <a> element to trigger the download
+    //             const a = document.createElement('a');
+    //             a.href = downloadURL;
+    //             document.body.appendChild(a);
+    //             a.click();
+    //             // Cleanup
+    //             a.remove();
+    //         } else {
+    //             setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
+    //             setAlertOpen(true);
+    //             throw new Error('Failed to download map.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error downloading map:', error);
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // }
 
     return(
         <>
@@ -143,6 +155,11 @@ function EVIMap(){
                 </IconButton>
                 <FormControlLabel control={<Checkbox checked={visibleEVILayer} size="small" sx={{ mr: 0.1 }} />} label="Vegetation health" onChange={handleCheckboxChange} /> 
             </ListItem>
+            <DownloadForm 
+                isOpen={isFormOpen} 
+                onClose={closeForm} 
+                downloadParams={downloadParams} 
+            />  
         </>
     )
 }

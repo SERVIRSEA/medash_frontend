@@ -36,9 +36,9 @@ function LandCoverMap(){
     const [, setAlertOpen] = useAtom(alertOpenAtom);
     const [, setAlertMessage] = useAtom(alertMessageAtom);
     const [isFormOpen, setIsFormOpen] = useState(false); 
-    const [downloadAction, setDownloadAction] = useState('');
+    // const [downloadAction, setDownloadAction] = useState('');
     const [downloadParams, setDownloadParams] = useState(null);
-    const [dataset, setDataset] = useState('');
+    // const [dataset, setDataset] = useState('');
     
     // setSelectedYear(max);
     useEffect(() => { 
@@ -116,12 +116,13 @@ function LandCoverMap(){
         const params = {
             'area_type': area_type,
             'area_id': area_id,
-            'year': year
+            'year': year,
+            'dataset': 'Landcover'
         };
-        const action = 'download-landcover-map';
+        // const action = 'download-landcover-map';
         setDownloadParams(params);
-        setDownloadAction(action);
-        setDataset('Landcover');
+        // setDownloadAction(action);
+        // setDataset('Landcover');
         openForm();
     };
 
@@ -179,9 +180,9 @@ function LandCoverMap(){
             <DownloadForm 
                 isOpen={isFormOpen} 
                 onClose={closeForm} 
-                downloadAction={downloadAction} 
+                // downloadAction={downloadAction} 
                 downloadParams={downloadParams} 
-                dataset={dataset} 
+                // dataset={dataset} 
             />  
         </Grid>
     );

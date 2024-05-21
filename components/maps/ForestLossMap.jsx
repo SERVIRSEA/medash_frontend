@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import { useAtom } from 'jotai';
 import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-
 import { 
     areaTypeAtom, 
     areaIdAtom, 
@@ -17,6 +16,7 @@ import {
     alertMessageAtom 
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
+import DownloadForm from "../modals/DownloadForm";
 
 function ForestLossMap(){
     const [area_type] = useAtom(areaTypeAtom);
@@ -31,6 +31,8 @@ function ForestLossMap(){
     const [isFetching, setIsFetching] = useState(false);
     const [, setAlertOpen] = useAtom(alertOpenAtom);
     const [, setAlertMessage] = useAtom(alertMessageAtom);
+    const [isFormOpen, setIsFormOpen] = useState(false); 
+    const [downloadParams, setDownloadParams] = useState(null);
 
     useEffect(() => { 
         const fetchForestLossMap = async () => {
@@ -78,37 +80,57 @@ function ForestLossMap(){
         setIsForestLossMapVisible(!isForestLossMapVisible);
     };
 
-    const downloadForestLossMap = async () =>{
-        try{
-            setIsLoading(true)
-            const action = 'download-forest-loss-map';
-            const params = {
-                'area_type': area_type,
-                'area_id': area_id,
-                'studyLow': min,
-                'studyHigh': max,
-            }
-            const data = await Fetcher(action, params);
-            if (data.success === 'success' && data.downloadURL) {
-                const downloadURL = data.downloadURL;
-                // Create a hidden <a> element to trigger the download
-                const a = document.createElement('a');
-                a.href = downloadURL;
-                document.body.appendChild(a);
-                a.click();
-                // Cleanup
-                a.remove();
-            } else {
-                setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-                setAlertOpen(true);
-                throw new Error('Failed to download map.');
-            }
-        } catch (error) {
-            console.error('Error downloading drought map:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    }
+    const openForm = () => {
+        setIsFormOpen(true);
+    };
+
+    const closeForm = () => {
+        setIsFormOpen(false);
+    };
+
+    const downloadForestLossMap = async (year) => {
+        const params = {
+            'area_type': area_type,
+            'area_id': area_id,
+            'studyLow': min,
+            'studyHigh': max,
+            'dataset': 'ForestLoss'
+        };
+        setDownloadParams(params);
+        openForm();
+    };
+
+    // const downloadForestLossMap = async () =>{
+    //     try{
+    //         setIsLoading(true)
+    //         const action = 'download-forest-loss-map';
+    //         const params = {
+    //             'area_type': area_type,
+    //             'area_id': area_id,
+    //             'studyLow': min,
+    //             'studyHigh': max,
+    //         }
+    //         const data = await Fetcher(action, params);
+    //         if (data.success === 'success' && data.downloadURL) {
+    //             const downloadURL = data.downloadURL;
+    //             // Create a hidden <a> element to trigger the download
+    //             const a = document.createElement('a');
+    //             a.href = downloadURL;
+    //             document.body.appendChild(a);
+    //             a.click();
+    //             // Cleanup
+    //             a.remove();
+    //         } else {
+    //             setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
+    //             setAlertOpen(true);
+    //             throw new Error('Failed to download map.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error downloading drought map:', error);
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // }
 
     return (
         <Grid container spacing={0}>
@@ -126,6 +148,11 @@ function ForestLossMap(){
                     <Typography variant="body2">Forest Loss</Typography>
                 </ListItem>
             </Grid>
+            <DownloadForm 
+                isOpen={isFormOpen} 
+                onClose={closeForm} 
+                downloadParams={downloadParams} 
+            /> 
         </Grid>
     );
 }

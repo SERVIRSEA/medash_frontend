@@ -17,7 +17,7 @@ import {
     alertMessageAtom 
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
-
+import DownloadForm from "../modals/DownloadForm";
 
 function ForestExtentMap(){
     const [area_type] = useAtom(areaTypeAtom);
@@ -34,6 +34,8 @@ function ForestExtentMap(){
     const [, setIsVisible] = useAtom(forestExtentVisibilityAtom);
     const [, setAlertOpen] = useAtom(alertOpenAtom);
     const [, setAlertMessage] = useAtom(alertMessageAtom);
+    const [isFormOpen, setIsFormOpen] = useState(false); 
+    const [downloadParams, setDownloadParams] = useState(null);
 
     const fetchForestExtentMap = async (year) => {
         if (isFetching) {
@@ -95,40 +97,59 @@ function ForestExtentMap(){
         });
     }
 
-    const downloadForestExtentMap = async (year) =>{
-        try {
-            setIsLoading(true);
-            const action = 'download-forest-extent-map';
-            const params = {
-                'area_type': area_type,
-                'area_id': area_id,
-                'studyLow': min,
-                'studyHigh': max,
-                'year': year
-            }
-            const data = await Fetcher(action, params);
-            if (data.success === 'success' && data.downloadURL) {
-                const downloadURL = data.downloadURL;
-                // Create a hidden <a> element to trigger the download
-                const a = document.createElement('a');
-                a.href = downloadURL;
-                document.body.appendChild(a);
-                a.click();
-                // Cleanup
-                a.remove();
-            } else {
-                setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-                setAlertOpen(true);
-                throw new Error('Failed to download map.');
-            }
-        } catch (error) {
-            setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-            setAlertOpen(true);
-            console.error('Error downloading drought map:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    }
+    const openForm = () => {
+        setIsFormOpen(true);
+    };
+
+    const closeForm = () => {
+        setIsFormOpen(false);
+    };
+
+    const downloadForestExtentMap = async (year) => {
+        const params = {
+            'area_type': area_type,
+            'area_id': area_id,
+            'year': year,
+            'dataset': 'Forestcover'
+        };
+        setDownloadParams(params);
+        openForm();
+    };
+
+    // const downloadForestExtentMap = async (year) =>{
+    //     try {
+    //         setIsLoading(true);
+    //         const action = 'download-forest-extent-map';
+    //         const params = {
+    //             'area_type': area_type,
+    //             'area_id': area_id,
+    //             'studyLow': min,
+    //             'studyHigh': max,
+    //             'year': year
+    //         }
+    //         const data = await Fetcher(action, params);
+    //         if (data.success === 'success' && data.downloadURL) {
+    //             const downloadURL = data.downloadURL;
+    //             // Create a hidden <a> element to trigger the download
+    //             const a = document.createElement('a');
+    //             a.href = downloadURL;
+    //             document.body.appendChild(a);
+    //             a.click();
+    //             // Cleanup
+    //             a.remove();
+    //         } else {
+    //             setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
+    //             setAlertOpen(true);
+    //             throw new Error('Failed to download map.');
+    //         }
+    //     } catch (error) {
+    //         setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
+    //         setAlertOpen(true);
+    //         console.error('Error downloading drought map:', error);
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // }
 
     return (
         <Grid container spacing={0}>
@@ -148,6 +169,11 @@ function ForestExtentMap(){
                     </ListItem>
                 </Grid>
             ))}
+            <DownloadForm 
+                isOpen={isFormOpen} 
+                onClose={closeForm} 
+                downloadParams={downloadParams} 
+            />  
         </Grid>
     );
 }

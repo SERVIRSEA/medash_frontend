@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
 import { ListItem, IconButton, Switch } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Fetcher } from '@/fetchers/Fetcher';
-
+import DownloadForm from "../modals/DownloadForm";
 import {
     areaTypeAtom,
     areaIdAtom,
@@ -33,6 +33,8 @@ function ShortTermWeatherMap() {
     const [, setForecastRainfallData] = useAtom(forecastRainfallDataAtom);
     const [, setPastTemperatureData] = useAtom(pastTemperatureDataAtom);
     const [, setForecastTemperatureData] = useAtom(forecastTemperatureDataAtom);
+    const [isFormOpen, setIsFormOpen] = useState(false); 
+    const [downloadParams, setDownloadParams] = useState(null);
 
     const fetchLatestWeatherMap = async (weatherParam, weatherType, areaType, areaId) => {
         try {
@@ -123,38 +125,58 @@ function ShortTermWeatherMap() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [areaType, areaId, isVisiblePastRainfall, isVisibleForecastRainfall, isVisiblePastTemperature, isVisibleForecastTemperature]);
 
-    const downloadShortTermWeatherMap = async (param, type) =>{
-        try{
-            setIsLoading(true)
-            const action = 'download-weather-map';
-            const params = {
-                'area_type': areaType,
-                'area_id': areaId,
-                'weather_param': param,
-                'weather_type': type,
-            }
-            const data = await Fetcher(action, params);
+    const openForm = () => {
+        setIsFormOpen(true);
+    };
+
+    const closeForm = () => {
+        setIsFormOpen(false);
+    };
+
+    const downloadShortTermWeatherMap = async (param, type) => {
+        const params = {
+            'area_type': areaType,
+            'area_id': areaId,
+            'weather_param': param,
+            'weather_type': type,
+            'dataset': 'ShortTermWeather'
+        };
+        setDownloadParams(params);
+        openForm();
+    };
+
+    // const downloadShortTermWeatherMap = async (param, type) =>{
+    //     try{
+    //         setIsLoading(true)
+    //         const action = 'download-weather-map';
+    //         const params = {
+    //             'area_type': areaType,
+    //             'area_id': areaId,
+    //             'weather_param': param,
+    //             'weather_type': type,
+    //         }
+    //         const data = await Fetcher(action, params);
             
-            if (data.success === 'success' && data.downloadURL) {
-                const downloadURL = data.downloadURL;
-                // Create a hidden <a> element to trigger the download
-                const a = document.createElement('a');
-                a.href = downloadURL;
-                document.body.appendChild(a);
-                a.click();
-                // Cleanup
-                a.remove();
-            } else {
-                setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-                setAlertOpen(true);
-                throw new Error('Failed to download map.');
-            }
-        } catch (error) {
-            console.error('Error downloading drought map:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    }
+    //         if (data.success === 'success' && data.downloadURL) {
+    //             const downloadURL = data.downloadURL;
+    //             // Create a hidden <a> element to trigger the download
+    //             const a = document.createElement('a');
+    //             a.href = downloadURL;
+    //             document.body.appendChild(a);
+    //             a.click();
+    //             // Cleanup
+    //             a.remove();
+    //         } else {
+    //             setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
+    //             setAlertOpen(true);
+    //             throw new Error('Failed to download map.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error downloading drought map:', error);
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // }
 
     return (
         <>
@@ -212,6 +234,11 @@ function ShortTermWeatherMap() {
                 />
                 <Typography variant="body2">Average temperature (next 7 days): Forecasted (C)</Typography>
             </ListItem>
+            <DownloadForm 
+                isOpen={isFormOpen} 
+                onClose={closeForm} 
+                downloadParams={downloadParams} 
+            />  
         </>
     );
 }

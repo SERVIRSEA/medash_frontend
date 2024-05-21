@@ -227,3 +227,10 @@ export const rubberAreaTextAtom = atom('');
 
 // Reporting fire hotspot
 export const fireHotspotTextAtom = atom('');
+
+export const nameAtom = atom('');
+export const emailAtom = atom('');
+export const institutionAtom = atom('');
+export const jobTitleAtom = atom('');
+export const purposeOfDownloadAtom = atom('');
+export const isFormSubmittedAtom = atom(false); 

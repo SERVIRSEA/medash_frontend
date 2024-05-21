@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
 import { ListItem, IconButton, Switch } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Fetcher } from '@/fetchers/Fetcher';
-
+import DownloadForm from "../modals/DownloadForm";
 import {
     areaTypeAtom,
     areaIdAtom,
@@ -25,6 +25,8 @@ function SeasonalWeatherMap() {
     const [rainfallData, setRainfallData] = useAtom(seasonalRainfallDataAtom);
     const [temperatureData, setTemperatureData] = useAtom(seasonalTemperatureDataAtom);
     const [weatherDataStore, setWeatherDataStore] = useAtom(weatherDataStoreAtom);
+    const [isFormOpen, setIsFormOpen] = useState(false); 
+    const [downloadParams, setDownloadParams] = useState(null);
 
     const fetchLatestWeatherMap = async (weatherParam, weatherType, areaType, areaId) => {
         try {
@@ -76,38 +78,58 @@ function SeasonalWeatherMap() {
         }
     }, [areaType, areaId, isVisibleRainfall, isVisibleTemperature]);
 
-    const downloadSeasonalWeatherMap = async (param, type) =>{
-        try{
-            setIsLoading(true)
-            const action = 'download-weather-map';
-            const params = {
-                'area_type': areaType,
-                'area_id': areaId,
-                'weather_param': param,
-                'weather_type': type,
-            }
-            const data = await Fetcher(action, params);
+    const openForm = () => {
+        setIsFormOpen(true);
+    };
+
+    const closeForm = () => {
+        setIsFormOpen(false);
+    };
+
+    const downloadSeasonalWeatherMap = async (param, type) => {
+        const params = {
+            'area_type': areaType,
+            'area_id': areaId,
+            'weather_param': param,
+            'weather_type': type,
+            'dataset': 'LongTermWeather'
+        };
+        setDownloadParams(params);
+        openForm();
+    };
+
+    // const downloadSeasonalWeatherMap = async (param, type) =>{
+    //     try{
+    //         setIsLoading(true)
+    //         const action = 'download-weather-map';
+    //         const params = {
+    //             'area_type': areaType,
+    //             'area_id': areaId,
+    //             'weather_param': param,
+    //             'weather_type': type,
+    //         }
+    //         const data = await Fetcher(action, params);
             
-            if (data.success === 'success' && data.downloadURL) {
-                const downloadURL = data.downloadURL;
-                // Create a hidden <a> element to trigger the download
-                const a = document.createElement('a');
-                a.href = downloadURL;
-                document.body.appendChild(a);
-                a.click();
-                // Cleanup
-                a.remove();
-            } else {
-                setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-                setAlertOpen(true);
-                throw new Error('Failed to download map.');
-            }
-        } catch (error) {
-            console.error('Error downloading drought map:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    }
+    //         if (data.success === 'success' && data.downloadURL) {
+    //             const downloadURL = data.downloadURL;
+    //             // Create a hidden <a> element to trigger the download
+    //             const a = document.createElement('a');
+    //             a.href = downloadURL;
+    //             document.body.appendChild(a);
+    //             a.click();
+    //             // Cleanup
+    //             a.remove();
+    //         } else {
+    //             setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
+    //             setAlertOpen(true);
+    //             throw new Error('Failed to download map.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error downloading drought map:', error);
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // }
 
     return (
         <>
@@ -135,6 +157,11 @@ function SeasonalWeatherMap() {
                 />
                 <Typography variant="body2">Temperature Anomaly (next 3 months): Forecasted (C)</Typography>
             </ListItem>
+            <DownloadForm 
+                isOpen={isFormOpen} 
+                onClose={closeForm} 
+                downloadParams={downloadParams} 
+            />  
         </>
     );
 }

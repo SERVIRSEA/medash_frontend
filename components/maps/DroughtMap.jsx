@@ -19,6 +19,7 @@ import {
     alertOpenAtom, 
     alertMessageAtom 
 } from '@/state/atoms';
+import DownloadForm from "../modals/DownloadForm";
 
 export default function DroughtMap() {
     const [area_type] = useAtom(areaTypeAtom);
@@ -31,6 +32,8 @@ export default function DroughtMap() {
     const [date, setSelectedDate] = useAtom(selectedDroughtDateAtom);
     const [, setAlertOpen] = useAtom(alertOpenAtom);
     const [, setAlertMessage] = useAtom(alertMessageAtom);
+    const [isFormOpen, setIsFormOpen] = useState(false); 
+    const [downloadParams, setDownloadParams] = useState(null);
 
     const fetchLatestDroughtMap = async (selectedIndex, date, area_type, area_id) => {
         try {
@@ -81,41 +84,61 @@ export default function DroughtMap() {
         setIndex(event.target.value);
     };
 
-    const downloadDroughtMap = async () => {
-        try {
-            setIsLoading(true);
-
-            const params = {
-                'area_type': area_type,
-                'area_id': area_id,
-                'index': index,
-                'date': date,
-            };
-
-            const action = 'download-drought-index-map';
-            const data = await Fetcher(action, params);
-
-            if (data.success === 'success' && data.downloadURL) {
-                const downloadURL = data.downloadURL;
-
-                // Create a hidden <a> element to trigger the download
-                const a = document.createElement('a');
-                a.href = downloadURL;
-                document.body.appendChild(a);
-                a.click();
-                // Cleanup
-                a.remove();
-            } else {
-                setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-                setAlertOpen(true);
-                throw new Error('Failed to download drought map.');
-            }
-        } catch (error) {
-            console.error('Error downloading drought map:', error);
-        } finally {
-            setIsLoading(false);
-        }
+    const openForm = () => {
+        setIsFormOpen(true);
     };
+
+    const closeForm = () => {
+        setIsFormOpen(false);
+    };
+
+    const downloadDroughtMap = async (year) => {
+        const params = {
+            'area_type': area_type,
+            'area_id': area_id,
+            'index': index,
+            'date': date,
+            'dataset': 'Drought'
+        };
+        setDownloadParams(params);
+        openForm();
+    };
+
+    // const downloadDroughtMap = async () => {
+    //     try {
+    //         setIsLoading(true);
+
+    //         const params = {
+    //             'area_type': area_type,
+    //             'area_id': area_id,
+    //             'index': index,
+    //             'date': date,
+    //         };
+
+    //         const action = 'download-drought-index-map';
+    //         const data = await Fetcher(action, params);
+
+    //         if (data.success === 'success' && data.downloadURL) {
+    //             const downloadURL = data.downloadURL;
+
+    //             // Create a hidden <a> element to trigger the download
+    //             const a = document.createElement('a');
+    //             a.href = downloadURL;
+    //             document.body.appendChild(a);
+    //             a.click();
+    //             // Cleanup
+    //             a.remove();
+    //         } else {
+    //             setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
+    //             setAlertOpen(true);
+    //             throw new Error('Failed to download drought map.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error downloading drought map:', error);
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // };
 
     return (
         <Box p={1}> 
@@ -158,6 +181,11 @@ export default function DroughtMap() {
                 />
                 <Typography variant="body2">Drought Index Map</Typography>
             </ListItem>
+            <DownloadForm 
+                isOpen={isFormOpen} 
+                onClose={closeForm} 
+                downloadParams={downloadParams} 
+            />  
         </Box>
     );
 }

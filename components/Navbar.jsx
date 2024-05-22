@@ -37,9 +37,9 @@ function Navbar(props) {
                 <ListItem>
                     <Link className="navbar-menu-item" href="/" underline="none" sx={{ color: '#000' }}>Home</Link>
                 </ListItem>
-                <ListItem>
+                {/* <ListItem>
                     <Link className="navbar-menu-item" href="/about" underline="none" sx={{ color: '#000' }}>About</Link>
-                </ListItem>
+                </ListItem> */}
                 <ListItem>
                     <Link className="navbar-menu-item" href="/mapviewer" underline="none" sx={{ color: '#000' }}>Mapviewer</Link>
                 </ListItem>
@@ -80,9 +80,9 @@ function Navbar(props) {
                         <Button sx={{ color: '#fff' }}>
                             <Link className="navbar-menu-item" href="/" underline="none" sx={{ color: '#fff' }}>Home</Link>
                         </Button>
-                        <Button sx={{ color: '#fff' }}>
+                        {/* <Button sx={{ color: '#fff' }}>
                             <Link className="navbar-menu-item" href="/about" underline="none" sx={{ color: '#fff' }}>About</Link>
-                        </Button>
+                        </Button> */}
                         <Button sx={{ color: '#fff' }}>
                             <Link className="navbar-menu-item" href="/mapviewer" underline="none" sx={{ color: '#fff' }}>Mapviewer</Link>
                         </Button>

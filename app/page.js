@@ -9,6 +9,7 @@ import { Typography, Button } from "@mui/material";
 import Image from "next/image";
 import LaunchIcon from '@mui/icons-material/Launch';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import DescriptionIcon from '@mui/icons-material/Description';
 import { useRouter } from "next/navigation";
 import Partners from "@/components/Partners";
 import VideoModal from "@/components/VideoModal";
@@ -61,7 +62,6 @@ export default function Home() {
               >
                 LAUNCH TOOL
               </Button>
-              
               <Button
                 component="a"
                 variant="contained"
@@ -75,6 +75,22 @@ export default function Home() {
                 }}
               >
                 WATCH A DEMO VIDEO
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={<DescriptionIcon />}
+                color="primary"
+                href="https://docs.google.com/document/d/e/2PACX-1vTGOYwxTtm_RARo78PDBVTSw3xIqPEfZCG_4LOntU1VjBqQlz3UoTLMYFpBhbDDp53i1zGMqEx_GxfQ/pub"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  marginTop: '30px',
+                  borderRadius: '20px',
+                  paddingLeft: '50px',
+                  paddingRight: '50px',
+                }}
+              >
+                USER GUIDELINE
               </Button>
               <VideoModal isOpen={isOpen} onClose={handleCloseModal} />
             </Grid>

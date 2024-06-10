@@ -194,7 +194,6 @@ export const droughtVisAtom = atom(false);
 export const droughtMapDataAtom = atom('');
 export const droughtMapDataStoreAtom = atom({});
 
-
 // selected area type and area id
 export const selectedAreaTypeAtom = atom();
 export const selectedAreaIdAtom = atom();
@@ -233,4 +232,22 @@ export const emailAtom = atom('');
 export const institutionAtom = atom('');
 export const jobTitleAtom = atom('');
 export const purposeOfDownloadAtom = atom('');
-export const isFormSubmittedAtom = atom(false); 
+export const isFormSubmittedAtom = atom(false);
+
+// legend atom
+export const landcoverLegendAtom = atom(true);
+export const eviLegendAtom = atom(false);
+export const riceLegendAtom = atom(false);
+export const rubberLegendAtom = atom(false);
+export const forestGainLegendAtom = atom(false);
+export const forestLossLegendAtom = atom(false);
+export const forestExtentLegendAtom = atom(false);
+export const forestNonForestLegendAtom = atom(false);
+export const forestChangeLegendAtom = atom(false);
+export const gladAlertLegendAtom = atom(false);
+export const sarAlertLegendAtom = atom(false);
+export const fireHotspotLegendAtom = atom(false);
+export const droughtLegendAtom = atom(true);
+export const shortTermWeatherLegendAtom = atom(true);
+export const longTermWeatherLegendAtom = atom(true);
+export const cropMonitoringLegendAtom = atom(false);

@@ -26,7 +26,10 @@ import {
     forecastTempVisAtom,
     seasonalRainfallVisAtom,
     seasonalTempVisAtom,
-    droughtVisAtom
+    droughtVisAtom,
+    droughtLegendAtom,
+    shortTermWeatherLegendAtom,
+    longTermWeatherLegendAtom
 } from '@/state/atoms';
 
 function CustomTabPanel(props) {
@@ -65,11 +68,11 @@ function a11yProps(index) {
 export default function DroughtTab() {
     const [selectedArea] = useAtom(areaNameAtom);
     const [value, setValue] = useState(0);
-    const [isShortWeatherOpen, setIsShortWeatherOpen] = useState(false);
+    const [isShortWeatherOpen, setIsShortWeatherOpen] = useAtom(shortTermWeatherLegendAtom);
     const [isShortModalOpen, setIsShortModalOpen] = useState(false);
-    const [isSeasonalOpen, setIsSeasonalOpen] = useState(false);
+    const [isSeasonalOpen, setIsSeasonalOpen] = useAtom(longTermWeatherLegendAtom);
     const [isSeasonalModalOpen, setIsSeasonalModalOpen] = useState(false);
-    const [isDroughtOpen, setIsDroughtOpen] = useState(false);
+    const [isDroughtOpen, setIsDroughtOpen] = useAtom(droughtLegendAtom);
     const [isDroughtModalOpen, setIsDroughtModalOpen] = useState(false);
     const [, setPastRainfallMapVis] = useAtom(pastRainfallVisAtom);
     const [, setPastTempMapVis] = useAtom(pastTempVisAtom);

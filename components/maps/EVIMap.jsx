@@ -20,7 +20,8 @@ import {
     isLoadingAtom,
     updateTriggerAtom,
     alertOpenAtom, 
-    alertMessageAtom 
+    alertMessageAtom,
+    eviLegendAtom
 } from '@/state/atoms';
 import DownloadForm from '../modals/DownloadForm';
 
@@ -41,13 +42,17 @@ function EVIMap(){
     const [, setAlertMessage] = useAtom(alertMessageAtom);
     const [isFormOpen, setIsFormOpen] = useState(false); 
     const [downloadParams, setDownloadParams] = useState(null);
+    const [, setEviLegendOnOff] = useAtom(eviLegendAtom);
 
     const handleCheckboxChange = async () => {
         setEVILayerVisibility(!visibleEVILayer);
-
+        
         // Fetch and update data when the checkbox is checked
         if (!visibleEVILayer) {
             await fetchData();
+            setEviLegendOnOff(true);
+        } else {
+            setEviLegendOnOff(false);
         }
     };
 

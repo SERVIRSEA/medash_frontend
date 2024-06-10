@@ -15,10 +15,16 @@ const DownloadForm = ({ isOpen, onClose, downloadAction, downloadParams, dataset
 
     const [downloadURL, setDownloadURL] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
+    
 
     useEffect(() => {
+        if (dataset == 'Landcover'){
+            setMetaData(True);
+        } else {
+            setMetaData(false);
+        }
         setIsSubmitted(false); // Reset form submission status when the modal is opened again
-    }, [isOpen]);
+    }, [isOpen], dataset);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

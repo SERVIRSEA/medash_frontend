@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { Close as CloseIcon } from '@mui/icons-material';
+import DownloadIcon from '@mui/icons-material/Download';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Button, Modal, TextField, Box, Typography, IconButton, CircularProgress } from '@mui/material';
 import { postFetcher } from '@/fetchers/Fetcher';
 import { 
@@ -22,8 +24,18 @@ const DownloadForm = ({ isOpen, onClose, downloadParams }) => {
     const [downloadURL, setDownloadURL] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [metaData, setMetaData] = useState(null);
 
+    const metaDataURL = '/metadata_landcover.csv';
     const isFormFilled = name && email && institution && jobTitle && purposeOfDownload;
+
+    useEffect(() => {
+        if (downloadParams && downloadParams.dataset == 'Landcover'){
+            setMetaData(true);
+        } else {
+            setMetaData(false);
+        }
+    }, [downloadParams]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -109,9 +121,33 @@ const DownloadForm = ({ isOpen, onClose, downloadParams }) => {
                                     </Typography>
                                 </Box>
                             ) : downloadURL ? (
-                                <Button href={downloadURL} variant="outlined" color="primary" target="_blank" rel="noopener noreferrer" style={{ marginTop: '10px' }} onClick={() => setDownloadURL('')}>
-                                    Download Link
-                                </Button>
+                                <>
+                                    <Button 
+                                        href={downloadURL} 
+                                        variant="outlined" 
+                                        color="primary" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        endIcon={<OpenInNewIcon />}
+                                        style={{ marginTop: '10px' }} 
+                                        onClick={() => setDownloadURL('')}
+                                    >
+                                        Download Link
+                                    </Button>
+        
+                                    {metaData && (
+                                        <Button 
+                                            href={metaDataURL} 
+                                            variant="outlined" 
+                                            color="secondary" 
+                                            download
+                                            startIcon={<DownloadIcon />}
+                                            style={{ marginTop: '10px', marginLeft: '10px' }}
+                                        >
+                                            Download Metadata
+                                        </Button>
+                                    )}
+                                </>
                             ) : (
                                 <Button onClick={handleGetDownloadLink} variant="outlined" color="primary" style={{ marginTop: '10px' }}>
                                     Get Download Link

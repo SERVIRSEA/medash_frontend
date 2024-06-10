@@ -1,0 +1,37 @@
+Field,Value
+Title,Annual Land Cover of Cambodia
+Abstract,"This landcover map provides detailed information on anual land cover types in Cambodia. It is intended for use in  natural resource management, planning and land use analysis.
+The Cambodia national Land Cover time series (2000 - 2023) was developed through a collaborative effort led by SERVIR SEA using the Regional Land Cover Monitoring System approach (Saah et al. 2020). The maps were developed under the auspices of the REDD+ task team and the FCPF project in Cambodia to support the FREL. For this purpose, RLCMS was customized to meet Cambodia national land cover typologies. An uncertainty assessment was integrated into the assemblage process. These maps were developed using Landsat annual composites and training data collected by MOE."
+Author,Asian Disaster Preparedness Center (ADPC) under SERVIR South East Asia
+Date of Creation,June 2023 to June 2024
+Geographic Extent,
+West Bound,211350
+East Bound,1150140
+North Bound,784650
+South Bound,1625610
+Data Source,
+Satellite Imagery,"Landsat 5, 7, 8, 9"
+Data Collection,"Reference data distributed by MOE, partner agencies and crowd sources from Collect Earth Online"
+Projection,EPSG:32648 - WGS 84 / UTM zone 48N
+Resolution,30 meters
+Classification Scheme,
+Class ID,Class Name & color
+1,Built-up Area (E600A9)
+2,Mangrove (FFFF00)
+3,OtherPlantation (C49963)
+4,Water (004DA8)
+5,Shrub (FFB752)
+6,Rice (FEFDBD)
+7,Cropland (FFD37F)
+8,Grass (D7C29E)
+9,Evergreen (267300)
+10,Deciduous (71A405)
+11,Wetland (86D8DC)
+12,Rubber (AAFF00)
+13,FloodedForest (B3D59F)
+14,Semi-evergreen (38A800)
+15,Village (A900E6)
+16,Others (FFDCA2)
+Usage Constraints,"The data is provided 'as is' without warranty of any kind, either expressed or implied. The data originator is not responsible for any damages arising from the use of this data."
+Contact Information,
+Contact Organization, servir-contact@adpc.net

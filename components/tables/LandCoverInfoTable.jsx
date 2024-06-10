@@ -21,7 +21,7 @@ const LandCoverInfoTable = () => {
         </TableRow>
         <TableRow>
           <TableCell>Data Source</TableCell>
-          <TableCell>N/A</TableCell> {/* Update this with your data source */}
+          <TableCell>Landsat 5, 7, 8, 9. Reference data distributed by MOE, partner agencies and crowd sources from Collect Earth Online.</TableCell> {/* Update this with your data source */}
         </TableRow>
         <TableRow>
           <TableCell>Frequency updates</TableCell>

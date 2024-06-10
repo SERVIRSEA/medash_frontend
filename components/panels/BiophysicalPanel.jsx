@@ -13,7 +13,7 @@ import EVILegend from '../legend/EVILegend';
 import LandCoverLegend from '../legend/LandCoverLegend';
 import BioInfoModal from '../modals/BioInfoModal';
 import LandCoverInfoModal from '../modals/LandCoverInfoModal';
-import { measureMinYearAtom, measureMaxYearAtom, areaNameAtom, minYearLandCover, maxYearLandCover, } from '@/state/atoms';
+import { measureMinYearAtom, measureMaxYearAtom, areaNameAtom, minYearLandCover, maxYearLandCover, landcoverLegendAtom, eviLegendAtom} from '@/state/atoms';
 
 export default function BiophysicalPanel(){
     const [studyLow] = useAtom(measureMinYearAtom);
@@ -23,8 +23,8 @@ export default function BiophysicalPanel(){
     const [maxYLC] = useAtom(maxYearLandCover);
     const [isBioModalOpen, setIsBioLayerInfoOpen] = useState(false);
     const [isLCModalOpen, setIsLCLayerInfoOpen] = useState(false);
-    const [isLandCoverOpen, setIsLandCoverOpen] = useState(false);
-    const [isEviOpen, setIsEviOpen] = useState(false);
+    const [isLandCoverOpen, setIsLandCoverOpen] = useAtom(landcoverLegendAtom);
+    const [isEviOpen, setIsEviOpen] = useAtom(eviLegendAtom);
 
     const handleLandCoverClick = () => {
         setIsLandCoverOpen(!isLandCoverOpen);

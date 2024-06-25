@@ -24,7 +24,7 @@ function ProtectedAreaLayer(){
             service: 'WFS',
             version: '1.3.0',
             request: 'GetFeature',
-            typeName: 'khm:cambodia_protected_area', 
+            typeName: 'khm:PAs2023_epsg4326', 
             outputFormat: 'application/json',  
         };
         const fetchProtectedAreaData = async () => {
@@ -68,9 +68,9 @@ function ProtectedAreaLayer(){
         // Apply the highlight style
         layer.setStyle(highlightStyle());
 
-        const area_id = featureProperties.map_id;
+        const area_id = featureProperties.PA_ID;
         const area_type = "protected_area";
-        const area_name = featureProperties.name;
+        const area_name = featureProperties.PA_NAME;
 
         setTempAreaType(area_type);
         setTempAreaId(area_id);

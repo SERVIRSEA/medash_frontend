@@ -28,6 +28,7 @@ import {
     fireVisibilityAtom,
     gladAlertVisibilityAtom,
     sarAlertVisibilityAtom,
+    sarfdasAlertVisibilityAtom,
     pastRainfallVisAtom,
     pastTempVisAtom,
     forecastRainfallVisAtom,
@@ -48,6 +49,7 @@ function Sidebar(){
     const [, setFireMapVisibility] = useAtom(fireVisibilityAtom);
     const [, setGLADAlertMapVisibility] = useAtom(gladAlertVisibilityAtom);
     const [, setSARAlertMapVisibility] = useAtom(sarAlertVisibilityAtom);
+    const [, setSARFDASAlertMapVisibility] = useAtom(sarfdasAlertVisibilityAtom);
     const [, setForestExtentMapVisibility] = useAtom(forestExtentVisibilityAtom);
     const [, setForestGainMapVisibility] = useAtom(forestGainVisibilityAtom);
     const [, setForestLossMapVisibility] = useAtom(forestLossVisibilityAtom);
@@ -173,7 +175,7 @@ function Sidebar(){
         0: { eviMap: false, lcMap: true, riceMap: false, rubberMap: false },
         1: { riceMap: false, rubberMap: false, lcMap: false, forestExtentMap: true, forestGainMap: true, forestLossMap: true },
         2: { riceMap: true, rubberMap: true, lcMap: false },
-        3: { riceMap: false, rubberMap: false, lcMap: false, gladMap: true, sarMap: true },
+        3: { riceMap: false, rubberMap: false, lcMap: false, gladMap: true, sarMap: true, sarfdasMap: true },
         4: { riceMap: false, rubberMap: false, lcMap: false,  fireMap: true},
         5: { pastRainMap: false, frcstRainMap: false, pastTempMap: false, frcstTempMap: true, sesRainMap: false, sesTempMap: false, droughtMap: false }
     };
@@ -193,6 +195,7 @@ function Sidebar(){
         setFireMapVisibility(mapVisibility.fireMap || false);
         setGLADAlertMapVisibility(mapVisibility.gladMap || false);
         setSARAlertMapVisibility(mapVisibility.sarMap || false);
+        setSARFDASAlertMapVisibility(mapVisibility.sarfdasMap || false)
         setForestExtentMapVisibility(mapVisibility.forestExtentMap || false)
         setForestGainMapVisibility(mapVisibility.forestGainMap || false);
         setForestLossMapVisibility(mapVisibility.forestLossMap || false);

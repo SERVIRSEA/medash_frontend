@@ -251,3 +251,11 @@ export const droughtLegendAtom = atom(true);
 export const shortTermWeatherLegendAtom = atom(true);
 export const longTermWeatherLegendAtom = atom(true);
 export const cropMonitoringLegendAtom = atom(false);
+
+// SARFDAS Alert
+export const sarfdasAlertVisibilityAtom = atom(false);
+export const minYearSARFDASAlert = atom(2021);
+export const maxYearSARFDASAlert = atom(2024);   
+export const sarfdasYearlyMapDataStoreAtom = atom({}); 
+export const selectedYearSARFDASAtom = atom(null);
+export const sarfdasApiAtom = atom('');

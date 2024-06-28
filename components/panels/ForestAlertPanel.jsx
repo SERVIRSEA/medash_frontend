@@ -15,11 +15,14 @@ import GLADAlertChart from '../charts/GLADAlertChart';
 import SARAlertChart from '../charts/SARAlertChart';
 import GLADAlertLegend from '../legend/GLADAlertLegend';
 import SARAlertLegend from '../legend/SARAlertLegend';
+import SARFDASMap from '../maps/SARFDASMap';
+import SARFDASAlertLegend from '../legend/SARFDASAlertLegend';
 
 export default function ForestAlertPanel(){
     const [selectedArea] = useAtom(areaNameAtom);
     const [isGLADOpen, setIsGLADOpen] = useState(false);
     const [isSAROpen, setIsSAROpen] = useState(false);
+    const [isSARFDASOpen, setIsSARFDASOpen] = useState(false);
     const [isForestAlertOpen, setIsForestAlertInfoOpen] = useState(false);
 
     const handleOpenFALayerInfoModal = () => {
@@ -36,6 +39,10 @@ export default function ForestAlertPanel(){
     
     const handleSARClick = () => {
         setIsSAROpen(!isSAROpen);
+    };
+
+    const handleSARFDASClick = () => {
+        setIsSARFDASOpen(!isSARFDASOpen);
     };
 
     return (
@@ -66,6 +73,15 @@ export default function ForestAlertPanel(){
             <br />
             <SARAlertMap />
             {isSAROpen  && ( <SARAlertLegend /> )}
+            <br />
+            <LayerNameLegendControl
+                title="SARFDAS Alert Map"
+                icon={<LegendToggleIcon />}
+                tooltipTitle="Click to show SARFDAS alert legend"
+                onClick={handleSARFDASClick}
+            />
+            <SARFDASMap />
+            {isSARFDASOpen  && ( <SARFDASAlertLegend /> )}
             <br />
             <Typography variant="body2">
                 TOTAL AREA OF GLAD ALERT SYSTEM 

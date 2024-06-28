@@ -23,6 +23,7 @@ import ForecastRainfallLayer from '@/components/layers/ForecastRainfallLayer';
 import ForecastTemperatureLayer from '@/components/layers/ForecastTemperatureLayer';
 import SeasonalRainfallLayer from '@/components/layers/SeasonalRainfallLayer';
 import SeasonalTemperatureLayer from '@/components/layers/SeasonalTemperatureLayer';
+import SARFDASAlertLayer from '@/components/layers/SARFDASAlertLayer';
 
 export default function MapView() {
     return (
@@ -49,6 +50,7 @@ export default function MapView() {
             <PastTemperatureLayer />
             <ForecastTemperatureLayer />
             <SeasonalTemperatureLayer />
+            <SARFDASAlertLayer />
         </MapContainer>
     )
 }

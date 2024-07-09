@@ -64,7 +64,7 @@ export default function ForestAlertPanel(){
             <GLADAlertMap />
             {isGLADOpen  && ( <GLADAlertLegend /> )}
             <br />
-            <LayerNameLegendControl
+            {/* <LayerNameLegendControl
                 title="Deforestation Area from SAR Alert System"
                 icon={<LegendToggleIcon />}
                 tooltipTitle="Click to show SAR alert legend"
@@ -72,10 +72,10 @@ export default function ForestAlertPanel(){
             />
             <br />
             <SARAlertMap />
-            {isSAROpen  && ( <SARAlertLegend /> )}
-            <br />
+            {isSAROpen  && ( <SARAlertLegend /> )} */}
+            {/* <br /> */}
             <LayerNameLegendControl
-                title="SARFDAS Alert Map"
+                title="Consolidated of GLAD and SAR Alert"
                 icon={<LegendToggleIcon />}
                 tooltipTitle="Click to show SARFDAS alert legend"
                 onClick={handleSARFDASClick}
@@ -89,11 +89,11 @@ export default function ForestAlertPanel(){
             <br />
             <GLADAlertChart />
             <br />
-            <Typography variant="body2">
+            {/* <Typography variant="body2">
                 TOTAL AREA OF SAR ALERT SYSTEM 
             </Typography>
             <br />
-            <SARAlertChart />
+            <SARAlertChart /> */}
         </Box>
     )
 }

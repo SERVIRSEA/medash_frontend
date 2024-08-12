@@ -196,6 +196,9 @@ const EVIPieChart = () => {
           innerSize: '50%',
           data: eviPieChartData
         }],
+        credits: {
+            enabled: false
+        },
         exporting: {
             enabled: true,  // this will enable the exporting functionality
             buttons: {

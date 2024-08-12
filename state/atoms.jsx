@@ -64,7 +64,7 @@ export const tempAreaNameAtom = atom('Cambodia');
 // State for land cover map
 export const minYearLandCover = atom(2000);
 export const maxYearLandCover = atom(2023);
-export const selectedYearAtom = atom(null); // For year switches 
+export const selectedYearAtom = atom(2023); // For year switches 
 export const landCoverApiAtom = atom(''); // Store land cover gee data url for map visualization
 export const lcVisibilityAtom = atom(true);
 export const lcYearlyGEEDataAtom = atom({}); // Store yearly gee fetched url for next time use without refetching
@@ -108,10 +108,13 @@ export const forestLossVisibilityAtom = atom(false);
 export const forestLossMapDataStoreAtom = atom({});
 
 // State for Forest Extent map
-export const selectedYearForestExtentAtom = atom(null); 
+export const minYearForestExtent = atom(2000);
+export const maxYearForestExtent = atom(2023);
+export const selectedYearForestExtentAtom = atom(2023); 
 export const forestExtentApiAtom = atom('');
 export const forestExtentVisibilityAtom = atom(false);
 export const forestExtentMapDataStoreAtom = atom({});
+
 
 // State for Forest Extent map
 export const forestNonForestChartDataAtom = atom({});
@@ -234,13 +237,25 @@ export const jobTitleAtom = atom('');
 export const purposeOfDownloadAtom = atom('');
 export const isFormSubmittedAtom = atom(false);
 
-// legend atom
-export const landcoverLegendAtom = atom(true);
+// SARFDAS Alert
+export const sarfdasAlertVisibilityAtom = atom(false);
+export const minYearSARFDASAlert = atom(2021);
+export const maxYearSARFDASAlert = atom(2024);   
+export const sarfdasYearlyMapDataStoreAtom = atom({}); 
+export const selectedYearSARFDASAtom = atom(null);
+export const sarfdasApiAtom = atom('');
+
+// Legend Panel
+export const legendPanelAtom = atom(true);
+export const lcLegendAtom = atom(true);
 export const eviLegendAtom = atom(false);
-export const riceLegendAtom = atom(false);
-export const rubberLegendAtom = atom(false);
 export const forestGainLegendAtom = atom(false);
 export const forestLossLegendAtom = atom(false);
+export const riceLegendAtom = atom(false);
+export const fireLegendAtom = atom(false);
+export const forestCoverLegendAtom = atom(false);
+export const landcoverLegendAtom = atom(true);
+export const rubberLegendAtom = atom(false);
 export const forestExtentLegendAtom = atom(false);
 export const forestNonForestLegendAtom = atom(false);
 export const forestChangeLegendAtom = atom(false);
@@ -251,11 +266,3 @@ export const droughtLegendAtom = atom(true);
 export const shortTermWeatherLegendAtom = atom(true);
 export const longTermWeatherLegendAtom = atom(true);
 export const cropMonitoringLegendAtom = atom(false);
-
-// SARFDAS Alert
-export const sarfdasAlertVisibilityAtom = atom(false);
-export const minYearSARFDASAlert = atom(2021);
-export const maxYearSARFDASAlert = atom(2024);   
-export const sarfdasYearlyMapDataStoreAtom = atom({}); 
-export const selectedYearSARFDASAtom = atom(null);
-export const sarfdasApiAtom = atom('');

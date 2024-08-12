@@ -131,24 +131,6 @@ const LandCoverChart = () => {
 
     const chartTitle = "LAND COVER IN";
 
-    // const colors = {
-    //     'evergreen': '#267300',
-    //     'semi-evergreen': '#38A800',
-    //     'deciduous': '#70A800',
-    //     'mangrove': '#00A884',
-    //     'flooded forest': '#B4D79E',
-    //     'rubber': '#AAFF00',
-    //     'other plantations': '#F5F57A',
-    //     'rice': '#FFFFBE',
-    //     'cropland': '#FFD37F',
-    //     'surface water': '#004DA8',
-    //     'grassland': '#D7C29E',
-    //     'woodshrub': '#89CD66',
-    //     'built-up area': '#E600A9',
-    //     'village': '#A900E6',
-    //     'other': '#6f6f6f'
-    // };
-
     const colors = {
         'built': '#E600A9',
         'mangrove': '#FFFF00',
@@ -305,7 +287,7 @@ const LandCoverChart = () => {
                     return name.split(' ').map(capitalizeFirstLetter).join(' ');
                 },
                 itemStyle: {
-                    fontSize: '12px' 
+                    fontSize: '8px' 
                 }
             },
             exporting: {
@@ -415,8 +397,11 @@ const LandCoverChart = () => {
                     return name.split(' ').map(capitalizeFirstLetter).join(' ');
                 },
                 itemStyle: {
-                    fontSize: '12px' 
+                    fontSize: '8px' 
                 }
+            },
+            credits: {
+                enabled: false
             },
             exporting: {
                 buttons: {

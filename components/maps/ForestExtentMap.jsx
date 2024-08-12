@@ -1,20 +1,19 @@
 import React, {useEffect, useState} from "react";
 import { useAtom } from 'jotai';
-import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
+import { ListItem, IconButton, Switch, Grid, Typography, FormControl, Select, MenuItem, InputLabel, Tooltip } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { 
     areaTypeAtom, 
     areaIdAtom, 
-    measureMinYearAtom, 
-    measureMaxYearAtom, 
+    minYearForestExtent, 
+    maxYearForestExtent, 
     forestExtentMapDataStoreAtom, 
     selectedYearForestExtentAtom, 
     forestExtentApiAtom,
     isLoadingAtom,
     updateTriggerAtom,
     forestExtentVisibilityAtom,
-    alertOpenAtom, 
-    alertMessageAtom 
+    forestCoverLegendAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
@@ -22,8 +21,8 @@ import DownloadForm from "../modals/DownloadForm";
 function ForestExtentMap(){
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
-    const [min] = useAtom(measureMinYearAtom);
-    const [max] = useAtom(measureMaxYearAtom);
+    const [min] = useAtom(minYearForestExtent);
+    const [max] = useAtom(maxYearForestExtent);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
     const [selectedYear, setSelectedYear] = useAtom(selectedYearForestExtentAtom);
     const [, setForestExtentData] = useAtom(forestExtentApiAtom);
@@ -31,17 +30,15 @@ function ForestExtentMap(){
     const [, setIsLoading] = useAtom(isLoadingAtom);
     const [updateTrigger] = useAtom(updateTriggerAtom);
     const [isFetching, setIsFetching] = useState(false);
-    const [, setIsVisible] = useAtom(forestExtentVisibilityAtom);
-    const [, setAlertOpen] = useAtom(alertOpenAtom);
-    const [, setAlertMessage] = useAtom(alertMessageAtom);
     const [isFormOpen, setIsFormOpen] = useState(false); 
     const [downloadParams, setDownloadParams] = useState(null);
-
+    const [visibility, setVisibility] = useAtom(forestExtentVisibilityAtom);
+    const [, setIsVisibleForestCoverLegend] = useAtom(forestCoverLegendAtom);
+    
     const fetchForestExtentMap = async (year) => {
         if (isFetching) {
             return;
         }
-
         setIsFetching(true);
         setIsLoading(true);
 
@@ -50,7 +47,7 @@ function ForestExtentMap(){
             'area_type': area_type,
             'area_id': area_id,
             'studyLow': min,
-            'studyHigh': max
+            'studyHigh': max,
         };
         const key = JSON.stringify(params);
 
@@ -85,16 +82,10 @@ function ForestExtentMap(){
             fetchForestExtentMap(selectedYear);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [area_type, area_id, min, max, updateTrigger, selectedYear, setIsVisible]);
+    }, [area_type, area_id, min, max, updateTrigger, selectedYear, setVisibility]);
 
     const showOnOffForestExtentMap = async (year) =>{
-        setSelectedYear((prevYear) => {
-            const newYear = prevYear === year ? null : year;
-            if (newYear !== null || updateTrigger > 0) {
-                fetchForestExtentMap(newYear);
-            }
-            return newYear;
-        });
+        fetchForestExtentMap(year);
     }
 
     const openForm = () => {
@@ -106,6 +97,7 @@ function ForestExtentMap(){
     };
 
     const downloadForestExtentMap = async (year) => {
+        // Set download parameters from props
         const params = {
             'area_type': area_type,
             'area_id': area_id,
@@ -116,65 +108,81 @@ function ForestExtentMap(){
         openForm();
     };
 
-    // const downloadForestExtentMap = async (year) =>{
-    //     try {
-    //         setIsLoading(true);
-    //         const action = 'download-forest-extent-map';
-    //         const params = {
-    //             'area_type': area_type,
-    //             'area_id': area_id,
-    //             'studyLow': min,
-    //             'studyHigh': max,
-    //             'year': year
-    //         }
-    //         const data = await Fetcher(action, params);
-    //         if (data.success === 'success' && data.downloadURL) {
-    //             const downloadURL = data.downloadURL;
-    //             // Create a hidden <a> element to trigger the download
-    //             const a = document.createElement('a');
-    //             a.href = downloadURL;
-    //             document.body.appendChild(a);
-    //             a.click();
-    //             // Cleanup
-    //             a.remove();
-    //         } else {
-    //             setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-    //             setAlertOpen(true);
-    //             throw new Error('Failed to download map.');
-    //         }
-    //     } catch (error) {
-    //         setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-    //         setAlertOpen(true);
-    //         console.error('Error downloading drought map:', error);
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
+    const handleYearChange = async (event) => {
+        const newYear = event.target.value;
+        setSelectedYear(newYear);
+        await showOnOffForestExtentMap(newYear);
+    }
+
+    const handleVisibility = (event)=>{
+        const newVisibility = event.target.checked;
+        setVisibility(newVisibility);
+        setIsVisibleForestCoverLegend(newVisibility);
+    }
+
+    const handleDownloadForestCoverMap = () => {
+        downloadForestExtentMap(selectedYear);
+    };
 
     return (
-        <Grid container spacing={0}>
-            {years.map((year) => (
-                <Grid key={year} item xs={6} sx={{py: 0}}>
-                    <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadForestExtentMap(year)}>
-                            <DownloadIcon fontSize="small" />
+        <>
+            <Grid container alignItems="center" spacing={0}>
+                <Grid item>
+                    <Tooltip title="Click Download Forest Extent Map" arrow>
+                        <IconButton
+                            color="primary"
+                            aria-label="download"
+                            size="small"
+                            onClick={handleDownloadForestCoverMap}
+                        >
+                            <DownloadIcon size="small" />
                         </IconButton>
-                        <Switch 
-                            size="small" 
-                            sx={{ mr: 0.1 }} 
-                            checked={year === selectedYear}
-                            onClick={()=>showOnOffForestExtentMap(year)}
-                        />
-                        <Typography variant="body2">{year}</Typography>
-                    </ListItem>
+                    </Tooltip>
                 </Grid>
-            ))}
-            <DownloadForm 
-                isOpen={isFormOpen} 
-                onClose={closeForm} 
-                downloadParams={downloadParams} 
-            />  
-        </Grid>
+                <Grid item>
+                    <Tooltip title="Switch to display or remove the layer from the map." arrow>
+                        <Switch
+                            size="small"
+                            sx={{ marginRight: '10px' }}
+                            checked={visibility}
+                            onChange={handleVisibility}
+                        />
+                    </Tooltip>
+                </Grid>
+                <Grid item xs sx={{ marginTop: '10px', marginRight: '12px' }}>
+                    <FormControl fullWidth size="small" sx={{ marginBottom: 2 }}>
+                        <InputLabel id="select-year-label" sx={{ fontSize: '12px' }}>Selected Year</InputLabel>
+                        <Select
+                            labelId="select-year-label"
+                            value={selectedYear}
+                            onChange={handleYearChange}
+                            displayEmpty
+                            label="Selected Year"
+                            MenuProps={{
+                                PaperProps: {
+                                    style: {
+                                        maxHeight: 200,
+                                    },
+                                },
+                            }}
+                            inputProps={{ 'aria-label': 'Select year' }}
+                            sx={{ fontSize: '12px' }}
+                        >
+                            {years.map((option) => (
+                                <MenuItem key={option} value={option} sx={{ fontSize: '12px' }}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <DownloadForm
+                    isOpen={isFormOpen}
+                    onClose={closeForm}
+                    downloadParams={downloadParams}
+                />
+            </Grid>
+        </>
     );
 }
 export default ForestExtentMap;

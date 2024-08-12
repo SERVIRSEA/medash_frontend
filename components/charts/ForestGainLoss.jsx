@@ -89,7 +89,7 @@ const ForestGainLoss = () => {
                 Compare the area of forest change between the baseline period ({refLow} - {refHigh}) and the measuring period ({studyLow} - {studyHigh})
             </Typography>
             <Typography variant="body2">
-                Gain compared to the baseline <span style={{color: '#173F5F', fontWeight: 'bold'}}>{gainLossData.forestgain}</span>
+                Gain compared to the baseline <span style={{color: '#16a34a', fontWeight: 'bold'}}>{gainLossData.forestgain}</span>
             </Typography>
             <Typography variant="body2">
                 Loss compared to the baseline <span style={{color: '#d69102', fontWeight: 'bold'}}>{gainLossData.forestloss}</span>

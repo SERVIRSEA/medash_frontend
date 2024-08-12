@@ -15,16 +15,21 @@ export default function BaselineSlider() {
         setMaxYear(newValue[1]);
     };
     return(
-        <Box sx={{ paddingTop: '35px', paddingLeft: "15px", paddingRight: "15px"}}>
+        <Box sx={{ paddingTop: '25px', paddingLeft: "15px", paddingRight: "15px"}}>
             <Slider
                 value={[minYear, maxYear]}
                 onChange={handleSliderChange}
                 valueLabelDisplay="on"
-                valueLabelFormat={(value) => <span style={{ fontSize: 10 }}>{value}</span>}
-                min={2000}
-                max={2030}
+                sx={{
+                  '& .MuiSlider-valueLabel': {
+                    fontSize: '8px',
+                  },
+                }}
+                min={2003}
+                max={2022}
                 step={1}
                 marks
+                size='small'
             />
         </Box>
     )

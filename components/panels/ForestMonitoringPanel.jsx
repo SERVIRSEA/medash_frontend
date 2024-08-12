@@ -49,40 +49,25 @@ export default function ForestMonitoringPanel(){
         <>
             <Box p={1} sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}}>
                 <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>MAP LAYERS</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px', fontSize: '13px'}}>MAP LAYERS</Typography>
                     <InfoIcon onClick={handleOpenFMLayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
                 </Box>
                 <ForestMonitoringModal isOpen={isForestMonOpen} onClose={handleCloseFMModal} />
                 <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>
                     Selected Area: {selectedArea}
                 </Typography>
-                <LayerNameLegendControl
-                    title="Forest Gain & Loss Map"
-                    icon={<LegendToggleIcon />}
-                    tooltipTitle="Click to show forest gain & loss legend"
-                    onClick={handleGainLossClick}
-                />
+                <Typography variant="body2" pb={1} sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                    Forest Gain & Loss Map
+                </Typography>
                 <ForestGainMap />
                 <ForestLossMap />
-                {isGainLossOpen  && ( <ForestGainLossLegend /> )}
-                <LayerNameLegendControl
-                    title="Forest Cover Map"
-                    icon={<LegendToggleIcon />}
-                    tooltipTitle="Click to show forest cover legend"
-                    onClick={handleForestCoverClick}
-                />
-                {isForestCoverOpen  && ( <ForestCoverLegend /> )}
+                <Typography variant="body2" pt={2} sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                    Forest Cover Map
+                </Typography>
                 <ForestExtentMap />
                 <br />
-                {/* <Typography variant="body2" sx={{fontWeight: 'bold'}} pb={1}>
-                    AREA OF FOREST COVER
-                </Typography>
-                <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>
-                From {studyLow} To {studyHigh}
-                </Typography>
-                <ForestCoverChart />
-                <br /> */}
-                <Typography variant="body2" sx={{fontWeight: 'bold'}} pb={1}>
+                
+                <Typography variant="body2" sx={{fontWeight: 'bold', fontSize: '12px'}} pb={1}>
                     AREA OF FOREST AND NON-FOREST
                 </Typography>
                 <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>
@@ -90,7 +75,7 @@ export default function ForestMonitoringPanel(){
                 </Typography>
                 <ForestNonForestChart />
                 <br />
-                <Typography variant="body2" sx={{fontWeight: 'bold'}} pb={1}>
+                <Typography variant="body2" sx={{fontWeight: 'bold', fontSize: '12px'}} pb={1}>
                     THE CHANGE OF FOREST GAIN AND LOSS
                 </Typography>
                 <ForestGainLoss />

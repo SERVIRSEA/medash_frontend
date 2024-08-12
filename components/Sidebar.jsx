@@ -35,7 +35,15 @@ import {
     forecastTempVisAtom,
     seasonalRainfallVisAtom,
     seasonalTempVisAtom,
-    droughtVisAtom
+    droughtVisAtom,
+    legendPanelAtom,
+    eviLegendAtom,
+    riceLegendAtom,
+    lcLegendAtom,
+    fireLegendAtom,
+    forestGainLegendAtom,
+    forestLossLegendAtom, 
+    forestCoverLegendAtom,
 } from '@/state/atoms';
 
 function Sidebar(){
@@ -61,7 +69,15 @@ function Sidebar(){
     const [, setForecastTempMapVis] = useAtom(forecastTempVisAtom);
     const [, setSeasonalRainfallMapVis] = useAtom(seasonalRainfallVisAtom);
     const [, setSeasonalTempMapVis] = useAtom(seasonalTempVisAtom);
-
+    const [, setIsVisibleLCLegend] = useAtom(lcLegendAtom);
+    const [, setIsVisibleFireLegend] = useAtom(fireLegendAtom);
+    const [, setIsVisibleForestGainLegend] = useAtom(forestGainLegendAtom);
+    const [, setIsVisibleForestLossLegend] = useAtom(forestLossLegendAtom);
+    const [, setIsVisibleForestCoverLegend] = useAtom(forestCoverLegendAtom);
+    const [, setIsVisibleEVILegend] = useAtom(eviLegendAtom);
+    const [, setIsVisibleRiceLegend] = useAtom(riceLegendAtom);
+    const [, setLegendPanel] = useAtom(legendPanelAtom);
+  
     const sidebarStyle = {
         background: "#eee",
         color: "#000",
@@ -72,37 +88,38 @@ function Sidebar(){
     }
 
     const menuItemStyle = {
-        display: 'flex',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        padding: 0
+        display: "flex",
+        alignItems: "center",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        flexDirection: "column",
+        gap: "4px" 
     };
 
     const titleStyle = {
         textAlign: 'left',
-        fontSize: '16px',
+        fontSize: '14px',
         margin: 0,
         paddingLeft: '10px',
     };
 
     const closeAndTitleContainerStyle = {
-        display: 'flex',
-        flexDirection: 'row', 
-        alignItems: 'center',
-        justifyContent: 'space-between', 
-        paddingRight: '10px',
-        borderBottom: '1px solid #000'
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingRight: "10px",
+        borderBottom: "1px solid #000",
     };
 
     const contentContainerStyle = {
         background: "#fff",
         color: "#000",
         // width: "350px",
-        width: selectedIndex === 7 ? "700px" : "350px",
+        width: selectedIndex === 5 ? "700px" : "300px",
         height: "calc(100% - 15px)",
-        position: 'fixed',
-        marginLeft: '80px',
+        position: "fixed",
+        marginLeft: "80px",
         zIndex: 999,
     };
 
@@ -173,11 +190,19 @@ function Sidebar(){
 
     const mapVisibilityMappings = {
         0: { eviMap: false, lcMap: true, riceMap: false, rubberMap: false },
-        1: { riceMap: false, rubberMap: false, lcMap: false, forestExtentMap: true, forestGainMap: true, forestLossMap: true },
+        1: { riceMap: false, rubberMap: false, lcMap: false, forestExtentMap: false, forestGainMap: true, forestLossMap: true },
         2: { riceMap: true, rubberMap: true, lcMap: false },
         3: { riceMap: false, rubberMap: false, lcMap: false, gladMap: true, sarMap: true, sarfdasMap: true },
         4: { riceMap: false, rubberMap: false, lcMap: false,  fireMap: true},
         5: { pastRainMap: false, frcstRainMap: false, pastTempMap: false, frcstTempMap: true, sesRainMap: false, sesTempMap: false, droughtMap: false }
+    };
+
+    const legendMappings = {
+        0: { eviLegend: false, lcLegend: true, fireLegend: false, forestGainLegend: false, forestLossLegend: false, riceLegend: false },
+        1: { eviLegend: false, lcLegend: false, fireLegend: false, forestGainLegend: true, forestLossLegend: true, riceLegend: false },
+        2: { eviLegend: false, lcLegend: false, fireLegend: false, forestGainLegend: false, forestLossLegend: false, riceLegend: true },
+        3: { eviLegend: false, lcLegend: false, fireLegend: true, forestGainLegend: false, forestLossLegend: false, riceLegend: false, forestCoverLegend: false },
+        5: { eviLegend: false, lcLegend: true, fireLegend: false, forestGainLegend: false, forestLossLegend: false, riceLegend: false },
     };
       
     const handleListItemClick = (event, index) => {
@@ -206,6 +231,16 @@ function Sidebar(){
         setForecastTempMapVis(mapVisibility.frcstTempMap || false);
         setSeasonalRainfallMapVis(mapVisibility.sesRainMap || false);
         setSeasonalTempMapVis(mapVisibility.sesTempMap || false);
+
+        const legendVisibility = legendMappings[index] || {};
+    
+        setIsVisibleEVILegend(legendVisibility.eviLegend || false);
+        setIsVisibleLCLegend(legendVisibility.lcLegend || false);
+        setIsVisibleFireLegend(legendVisibility.fireLegend || false);
+        setIsVisibleForestGainLegend(legendVisibility.forestGainLegend || false);
+        setIsVisibleForestLossLegend(legendVisibility.forestLossLegend || false);
+        setIsVisibleForestCoverLegend(legendVisibility.forestCoverLegend || false);
+        setIsVisibleRiceLegend(legendVisibility.riceLegend || false);
     };
 
     const handleCloseClick = () => {
@@ -219,14 +254,33 @@ function Sidebar(){
                     {menuItems.map((item, index) => (
                         <ListItemButton
                             key={item.name}
-                            sx={{ justifyContent: "center", paddingBottom: 0, paddingTop: 0, paddingLeft:1, paddingRight: 1 }}
+                            sx={{ 
+                            justifyContent: "center", 
+                            paddingBottom: "6px", 
+                            paddingTop:"6px",
+                            backgroundColor: selectedIndex === index ? '#bfdbfe' : 'initial',
+                                '&.Mui-selected': {
+                                    backgroundColor: '#bfdbfe !important',
+                                },
+                                '&:hover': {
+                                    backgroundColor: selectedIndex === index ? '#bfdbfe' : '#dbeafe'
+                                }
+                            }}
                             selected={selectedIndex === index}
                             onClick={(event) => handleListItemClick(event, index)}
                         >
                         <div style={menuItemStyle}>
                             {/* eslint-disable-next-line */}
-                            <img src={item.icon} width={30} height={30} alt={item.text} />
-                            <p style={{ textAlign: 'center', fontSize: '10px', padding: 0 }}>
+                            <img src={item.icon} width={25} height={25} alt={item.text} />
+                            <p  
+                                style={{
+                                    textAlign: "center",
+                                    fontSize: "10px",
+                                    // padding: "0px",
+                                    margin: "0px",
+                                    lineHeight: "1.25"
+                                }}
+                            >
                                 {item.text.split('\n').map((t, i) => <React.Fragment key={i}>{t}<br /></React.Fragment>)}
                             </p>
                         </div>
@@ -239,7 +293,7 @@ function Sidebar(){
                 <div style={closeAndTitleContainerStyle}>
                     <h3 style={titleStyle}>{menuTitle}</h3>
                     <div onClick={handleCloseClick} style={closeIconStyle}>
-                        <FirstPageIcon style={{ marginTop: '10px', fontSize: '30px', cursor: 'pointer' }} />
+                        <FirstPageIcon style={{ marginTop: '10px', fontSize: '20px', cursor: 'pointer' }} />
                     </div>
                 </div>
                 {contentBelowTitle(navContent)}

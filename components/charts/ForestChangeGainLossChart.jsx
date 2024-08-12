@@ -182,8 +182,8 @@ const ForestChangeGainLossChart = () => {
         subtitle: false,
         xAxis: {
             categories: [
-                'BASELINE PERIOD',
-                'MEASURING PERIOD'
+                'Baseline Period',
+                'Measuring Period'
             ],
             crosshair: true
         },
@@ -213,16 +213,19 @@ const ForestChangeGainLossChart = () => {
         //     }
         // },
         series: [{
-            name: 'LOSS',
+            name: 'Loss',
             data: [data.statsRefLoss, data.statsStudyLoss],
             color: '#fdb827'
 
         }, {
-            name: 'GAIN',
+            name: 'Gain',
             data: [data.statsRefGain, data.statsStudyGain],
-            color: '#173F5F'
+            color: '#16a34a'
 
         }],
+        credits: {
+            enabled: false
+        },
     };
 
 

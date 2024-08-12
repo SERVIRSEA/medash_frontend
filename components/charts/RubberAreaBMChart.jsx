@@ -164,7 +164,10 @@ const RubberAreaBMChart = () => {
                 chartData.measureArea || 0
             ],
             color: "#AAFF00"
-        }]
+        }],
+        credits: {
+            enabled: false
+        },
     };
 
     return <HighchartsReact highcharts={Highcharts} options={options} />;

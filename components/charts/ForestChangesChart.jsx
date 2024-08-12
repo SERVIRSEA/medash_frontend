@@ -234,6 +234,9 @@ const ForestChangesChart = () => {
                 }
             },
             series: seriesPeriod1,
+            credits: {
+                enabled: false
+            },
             legend: {
                 // labelFormatter: function() {
                 //     // Split the string into words, capitalize the first letter of each word, then join them back together.

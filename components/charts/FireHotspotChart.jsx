@@ -151,6 +151,9 @@ const FireHotspotChart = () => {
         legend: {
             enabled: false 
         },
+        credits: {
+            enabled: false
+        },
         exporting: {
             buttons: {
                 contextButton: {

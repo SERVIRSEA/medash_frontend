@@ -137,6 +137,9 @@ const SARAlertChart = () => {
         legend: {
             enabled: false 
         },
+        credits: {
+            enabled: false
+        },
         exporting: {
             buttons: {
                 contextButton: {

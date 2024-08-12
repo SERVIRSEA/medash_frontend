@@ -134,7 +134,10 @@ const RiceAreaBMChart = () => {
                 chartData.measureArea || 0
             ],
             color: "#FFF000"
-        }]
+        }],
+        credits: {
+            enabled: false
+        },
     };
 
     return <HighchartsReact highcharts={Highcharts} options={options} />;

@@ -187,6 +187,9 @@ const RubberLineChart = () => {
         //         return this.name.split(' ').map(capitalizeFirstLetter).join(' ');
         //     }
         // },
+        credits: {
+            enabled: false
+        },
         exporting: {
             buttons: {
                 contextButton: {

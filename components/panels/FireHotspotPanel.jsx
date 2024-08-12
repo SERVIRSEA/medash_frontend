@@ -36,24 +36,25 @@ export default function FireHotspotPanel(){
 
     return(
         <Box sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}} pt={1} pl={1}>
-            <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
-                <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>MAP LAYERS</Typography>
-                <InfoIcon onClick={handleOpenFireInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
-            </Box>
+            <Typography variant="body2" sx={{ fontWeight: 'bold', fontSize: '13px', display: 'inline', marginRight: '4px' }}>MAP LAYERS</Typography>
             <FireInfoModal isOpen={isFireHotspotOpen} onClose={handleCloseFireModal} />
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>
                 Selected Area: {selectedArea}
             </Typography>
-            <LayerNameLegendControl
+            <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body2" sx={{ fontWeight: 'bold', fontSize: '12px', display: 'inline', marginRight: '4px' }}>Fire Hotspot</Typography>
+                <InfoIcon onClick={handleOpenFireInfoModal} sx={{ pt: '2px', cursor: 'pointer' }} /> 
+            </Box>
+            {/* <LayerNameLegendControl
                 title="Fire Hotspot Map"
                 icon={<LegendToggleIcon />}
                 tooltipTitle="Click to show fire hotspot legend"
                 onClick={handleFireClick}
             />
-            {isFireOpen  && ( <FireLegend /> )}
+            {isFireOpen  && ( <FireLegend /> )} */}
             <FireMap />
             <br />
-            <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>
+            <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} pb={1}>
                 NUMBER OF FIRE HOTSPOT
             </Typography>
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>

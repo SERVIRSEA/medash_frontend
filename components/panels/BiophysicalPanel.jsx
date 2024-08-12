@@ -52,33 +52,28 @@ export default function BiophysicalPanel(){
 
     return(
         <Box p={1} sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}}>
-            <Typography variant="body2" sx={{fontWeight: 'bold'}}>
+            <Typography variant="body2" sx={{fontWeight: 'bold', fontSize: '13px'}}>
                 MAP LAYERS 
             </Typography>
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>
                 Selected Area: {selectedArea}
             </Typography>
-            <LayerNameLegendControl
-                title="EVI Map"
-                icon={<LegendToggleIcon />}
-                tooltipTitle="Click to show EVI legend"
-                onClick={handleEviClick}
-            />
+            <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                    Enhanced Vegetation Index (EVI)
+                </Typography>
+                <InfoIcon onClick={handleOpenBioLayerInfoModal} sx={{ pt: '8px', cursor: 'pointer' }} /> 
+            </Box>
             <EVIMap />
-            {isEviOpen  && ( <EVILegend /> )}
-            <LayerNameLegendControl
-                title="Land Cover Map"
-                icon={<LegendToggleIcon />}
-                tooltipTitle="Click to show landcover legend"
-                onClick={handleLandCoverClick}
-            />
-            {isLandCoverOpen  && ( <LandCoverLegend /> )}
+            <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                    Land Cover
+                </Typography>
+                <InfoIcon onClick={handleOpenLCLayerInfoModal} sx={{ pt: '8px', cursor: 'pointer' }} /> 
+            </Box>
             <LandCoverMap />
             <br />
-            <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
-                <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>BIOPHYSICAL HEALTH</Typography>
-                <InfoIcon onClick={handleOpenBioLayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
-            </Box>
+            <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>BIOPHYSICAL HEALTH</Typography>
             <BioInfoModal isOpen={isBioModalOpen} onClose={handleCloseBioModal} />
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>
                 From {studyLow} To {studyHigh}
@@ -86,10 +81,7 @@ export default function BiophysicalPanel(){
             <EVIPieChart />
             <br />
             <EVILineChart />
-            <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
-                <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>LAND COVER</Typography>
-                <InfoIcon onClick={handleOpenLCLayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
-            </Box>
+            <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>LAND COVER</Typography>
             <LandCoverInfoModal isOpen={isLCModalOpen} onClose={handleCloseLCModal} />
             <LandCoverChart />
         </Box>

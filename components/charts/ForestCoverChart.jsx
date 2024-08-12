@@ -143,6 +143,9 @@ const ForestCoverChart = () => {
         legend: {
             enabled: false
         },
+        credits: {
+            enabled: false
+        },
         exporting: {
             buttons: {
                 contextButton: {

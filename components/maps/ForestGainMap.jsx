@@ -1,6 +1,6 @@
 import React, {useEffect,useState} from "react";
 import { useAtom } from 'jotai';
-import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
+import { Tooltip, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { 
     areaTypeAtom, 
@@ -134,16 +134,20 @@ function ForestGainMap(){
         <Grid container spacing={0}>
             <Grid item xs={6} sx={{py: 0}}>
                 <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                    <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadForestGainMap()}>
-                        <DownloadIcon fontSize="small" />
-                    </IconButton>
-                    <Switch 
-                        size="small" 
-                        sx={{ mr: 0.1 }} 
-                        checked={isForestGainMapVisible}
-                        onChange={toggleForestGainMapVisibility}
-                    />
-                    <Typography variant="body2">Forest Gain</Typography>
+                    <Tooltip title="Click to Download Forest Gain Map" arrow>
+                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadForestGainMap()}>
+                            <DownloadIcon fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Switch to display or remove the layer from the map." arrow>
+                        <Switch 
+                            size="small" 
+                            sx={{ mr: 0.1, fontSize: '10px', transform: 'scale(0.8)' }} 
+                            checked={isForestGainMapVisible}
+                            onChange={toggleForestGainMapVisibility}
+                        />
+                    </Tooltip>
+                    <Typography variant="body2" sx={{ fontSize: '12px' }}>Forest Gain</Typography>
                 </ListItem>
             </Grid>
             <DownloadForm 

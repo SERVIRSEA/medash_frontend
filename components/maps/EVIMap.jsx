@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
-import { ListItem, IconButton } from '@mui/material';
+import { ListItem, IconButton, Tooltip } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -118,47 +118,22 @@ function EVIMap(){
         openForm();
     };
     
-    // const downloadEVIMap = async ()=> {
-    //     try {
-    //         setIsLoading(true);
-    //         const params = {
-    //             'area_type': area_type,
-    //             'area_id': area_id,
-    //             'refLow': refLow,
-    //             'refHigh': refHigh,
-    //             'studyLow': studyLow,
-    //             'studyHigh': studyHigh
-    //         }
-    //         const action = 'download-evi-map';
-    //         const data = await Fetcher(action, params);
-    //         if (data.success === 'success' && data.downloadURL) {
-    //             const downloadURL = data.downloadURL;
-    //             // Create a hidden <a> element to trigger the download
-    //             const a = document.createElement('a');
-    //             a.href = downloadURL;
-    //             document.body.appendChild(a);
-    //             a.click();
-    //             // Cleanup
-    //             a.remove();
-    //         } else {
-    //             setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-    //             setAlertOpen(true);
-    //             throw new Error('Failed to download map.');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error downloading map:', error);
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
-
     return(
         <>
             <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={downloadEVIMap}>
-                    <DownloadIcon />
-                </IconButton>
-                <FormControlLabel control={<Checkbox checked={visibleEVILayer} size="small" sx={{ mr: 0.1 }} />} label="Vegetation health" onChange={handleCheckboxChange} /> 
+                <Tooltip title="Click to Download EVI Map" arrow>
+                    <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={downloadEVIMap}>
+                        <DownloadIcon fontSize="small" />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Click to generate EVI map." arrow>
+                    <FormControlLabel 
+                        control={<Checkbox checked={visibleEVILayer} size="small" sx={{ mr: 0.1 }} />} 
+                        label="Vegetation health" 
+                        onChange={handleCheckboxChange} 
+                        sx={{ '& .MuiFormControlLabel-label': { fontSize: '12px' } }}
+                    /> 
+                </Tooltip>
             </ListItem>
             <DownloadForm 
                 isOpen={isFormOpen} 

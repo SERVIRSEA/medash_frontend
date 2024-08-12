@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import Button from '@mui/material/Button';
+import { Tooltip } from '@mui/material';
 import { 
     areaTypeAtom, 
     areaIdAtom, 
@@ -49,7 +50,11 @@ const UpdateMapButton = () => {
         setSelectedYear(studyHigh);
         setUpdateTrigger((prev) => prev + 1);
     };
-    return <Button variant="contained" mt={5} onClick={handleClick}>Update Map</Button>;
+    return (
+        <Tooltip title="Click to update map and statistics based on selected periods and area." arrow>
+            <Button variant="contained" mt={5} onClick={handleClick} size='small' sx={{fontSize: '12px'}}>Update Map</Button>
+        </Tooltip>
+    );
 };
 
 export default UpdateMapButton;

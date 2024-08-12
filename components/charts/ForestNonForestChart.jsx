@@ -228,13 +228,16 @@ const ForestNonForestChart = () => {
         {
             name: 'Forest',
             data: forestData,
-            color: '#138D75',
+            color: '#15803d',
         }],
         legend: {
             enabled: true,
             itemStyle: {
                 fontSize: '12px' 
             }
+        },
+        credits: {
+            enabled: false
         },
         exporting: {
             buttons: {

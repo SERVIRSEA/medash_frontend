@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { useAtom } from 'jotai';
-import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
+import { ListItem, IconButton, Switch, Grid, Typography, FormControl, Select, MenuItem, InputLabel, Tooltip } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 
 import { 
@@ -11,6 +11,7 @@ import {
     fireYearlyMapDataStoreAtom, 
     selectedYearFireAtom, 
     fireApiAtom,
+    fireVisibilityAtom,
     isLoadingAtom,
     updateTriggerAtom,
     alertOpenAtom, 
@@ -26,6 +27,7 @@ function FireMap(){
     const [max] = useAtom(measureMaxYearAtom);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
     const [selectedYear, setSelectedYear] = useAtom(selectedYearFireAtom);
+    const [visibility, setVisibility] = useAtom(fireVisibilityAtom);
     const [, setFireData] = useAtom(fireApiAtom);
     const [fireMapStore, setFireMapStore] = useAtom(fireYearlyMapDataStoreAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
@@ -93,15 +95,7 @@ function FireMap(){
     }, [area_type, area_id, max, updateTrigger, selectedYear, isInitialRender]);
 
     const showOnOffFireMap = async (year) => {
-        setSelectedYear((prevYear) => {
-            const newYear = prevYear === year ? null : year;
-
-            if (newYear !== null || updateTrigger > 0) {
-                fetchFireMap(newYear);
-            }
-
-            return newYear;
-        });
+        fetchFireMap(year);
     };
 
     const openForm = () => {
@@ -118,67 +112,107 @@ function FireMap(){
             'area_id': area_id,
             'year': year,
             'dataset': 'FireHotspot'
-        };
+        }
         setDownloadParams(params);
         openForm();
     };
 
-    // const downloadFireMap = async (year) =>{
-    //     try{
-    //         setIsLoading(true);
-    //         const action = 'download-burned-area-map';
-    //         const params = {
-    //             'area_type': area_type,
-    //             'area_id': area_id,
-    //             'year': year
-    //         }
-    //         const data = await Fetcher(action, params);
-            
-    //         if (data.success === 'success' && data.downloadURL) {
-    //             const downloadURL = data.downloadURL;
-    //             // Create a hidden <a> element to trigger the download
-    //             const a = document.createElement('a');
-    //             a.href = downloadURL;
-    //             document.body.appendChild(a);
-    //             a.click();
-    //             // Cleanup
-    //             a.remove();
-    //         } else {
-    //             setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-    //             setAlertOpen(true);
-    //             throw new Error('Failed to download drought map.');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error downloading drought map:', error);
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
+    const handleYearChange = async (event) => {
+        const newYear = event.target.value;
+        setSelectedYear(newYear);
+        await showOnOffFireMap(newYear);
+    }
+
+    const handleVisibility = (event)=>{
+        setVisibility(event.target.checked)
+    }
+
+    const handleDownloadFireMap = () => {
+        downloadFireMap(selectedYear);
+    };
 
     return (
-        <Grid container spacing={0}>
-            {years.map((year) => (
-                <Grid key={year} item xs={6} sx={{py: 0}}>
-                    <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadFireMap(year)}>
-                            <DownloadIcon fontSize="small"/>
+        <>
+            <Grid container alignItems="center" spacing={0}>
+                <Grid item>
+                    <Tooltip title="Click to Download Fire Map" arrow>
+                        <IconButton
+                            color="primary"
+                            aria-label="download"
+                            size="small"
+                            onClick={handleDownloadFireMap}
+                        >
+                            <DownloadIcon size="small" />
                         </IconButton>
-                        <Switch 
-                            size="small" 
-                            sx={{ mr: 0.1 }} 
-                            checked={year === selectedYear}
-                            onClick={()=>showOnOffFireMap(year)}
-                        />
-                        <Typography variant="body2">{year}</Typography>
-                    </ListItem>
+                    </Tooltip>
                 </Grid>
-            ))}
-            <DownloadForm 
-                isOpen={isFormOpen} 
-                onClose={closeForm} 
-                downloadParams={downloadParams} 
-            />  
-        </Grid>
+                <Grid item>
+                    <Tooltip title="Switch to display or remove the layer from the map." arrow>
+                        <Switch
+                            size="small"
+                            sx={{ marginRight: '10px' }}
+                            checked={visibility}
+                            onChange={handleVisibility}
+                        />
+                    </Tooltip>
+                </Grid>
+                <Grid item xs sx={{ marginTop: '10px', marginRight: '12px' }}>
+                    <FormControl fullWidth size="small" sx={{ marginBottom: 2 }}>
+                        <InputLabel id="select-year-label" sx={{ fontSize: '12px' }}>Selected Year</InputLabel>
+                        <Select
+                            labelId="select-year-label"
+                            value={selectedYear}
+                            onChange={handleYearChange}
+                            displayEmpty
+                            label="Selected Year"
+                            MenuProps={{
+                                PaperProps: {
+                                    style: {
+                                        maxHeight: 200,
+                                    },
+                                },
+                            }}
+                            inputProps={{ 'aria-label': 'Select year' }}
+                            sx={{ fontSize: '12px' }}
+                        >
+                            {years.map((option) => (
+                                <MenuItem key={option} value={option} sx={{ fontSize: '12px' }}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <DownloadForm
+                    isOpen={isFormOpen}
+                    onClose={closeForm}
+                    downloadParams={downloadParams}
+                />
+            </Grid>
+        </>
+        // <Grid container spacing={0}>
+        //     {years.map((year) => (
+        //         <Grid key={year} item xs={6} sx={{py: 0}}>
+        //             <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
+        //                 <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadFireMap(year)}>
+        //                     <DownloadIcon fontSize="small"/>
+        //                 </IconButton>
+        //                 <Switch 
+        //                     size="small" 
+        //                     sx={{ mr: 0.1 }} 
+        //                     checked={year === selectedYear}
+        //                     onClick={()=>showOnOffFireMap(year)}
+        //                 />
+        //                 <Typography variant="body2">{year}</Typography>
+        //             </ListItem>
+        //         </Grid>
+        //     ))}
+        //     <DownloadForm 
+        //         isOpen={isFormOpen} 
+        //         onClose={closeForm} 
+        //         downloadParams={downloadParams} 
+        //     />  
+        // </Grid>
     );
 }
 export default FireMap;

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { useAtom } from 'jotai';
-import { List, ListItem, IconButton, Switch, Grid, Typography } from '@mui/material';
+import { ListItem, IconButton, Switch, Grid, Typography, FormControl, Select, MenuItem, InputLabel, Tooltip } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 
 import { 
@@ -14,7 +14,8 @@ import {
     isLoadingAtom,
     updateTriggerAtom,
     alertOpenAtom, 
-    alertMessageAtom 
+    alertMessageAtom,
+    riceVisibilityAtom, 
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
@@ -36,6 +37,7 @@ function RiceMap(){
     const [, setAlertMessage] = useAtom(alertMessageAtom);
     const [isFormOpen, setIsFormOpen] = useState(false); 
     const [downloadParams, setDownloadParams] = useState(null);
+    const [visibility, setVisibility] = useAtom(riceVisibilityAtom);
 
     const fetchRiceMapData = async (year) => {
         if (isFetching) {
@@ -93,15 +95,7 @@ function RiceMap(){
     }, [area_type, area_id, max, updateTrigger, selectedYear, isInitialRender]);
 
     const showOnOffRiceMap = async (year) => {
-        setSelectedYear((prevYear) => {
-            const newYear = prevYear === year ? null : year;
-
-            if (newYear !== null || updateTrigger > 0) {
-                fetchRiceMapData(newYear);
-            }
-
-            return newYear;
-        });
+        fetchRiceMapData(year);
     };
 
     const openForm = () => {
@@ -111,6 +105,16 @@ function RiceMap(){
     const closeForm = () => {
         setIsFormOpen(false);
     };
+
+    const handleYearChange = async (event) => {
+        const newYear = event.target.value;
+        setSelectedYear(newYear);
+        await showOnOffRiceMap(newYear);
+    }
+
+    const handleVisibility = (event)=>{
+        setVisibility(event.target.checked)
+    }
 
     const downloadRiceMap = async (year) => {
         const params = {
@@ -122,6 +126,10 @@ function RiceMap(){
         setDownloadParams(params);
         openForm();
     };
+
+    const handleDownloadRiceMap = ()=> {
+        downloadRiceMap(selectedYear);
+    }
 
     // const downloadRiceMap = async (year) =>{
     //     try{
@@ -156,29 +164,87 @@ function RiceMap(){
     // }
 
     return (
-        <Grid container spacing={0}>
-            {years.map((year) => (
-                <Grid key={year} item xs={6} sx={{py: 0}}>
-                    <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadRiceMap(year)}>
-                            <DownloadIcon fontSize="small" />
+        <>
+            <Grid container alignItems="center" spacing={0}>
+                <Grid item>
+                    <Tooltip title="Click to Download Fire Map" arrow>
+                        <IconButton
+                            color="primary"
+                            aria-label="download"
+                            size="small"
+                            onClick={handleDownloadRiceMap}
+                        >
+                            <DownloadIcon size="small" />
                         </IconButton>
-                        <Switch 
-                            size="small" 
-                            sx={{ mr: 0.1 }} 
-                            checked={year === selectedYear}
-                            onClick={()=>showOnOffRiceMap(year)}
-                        />
-                        <Typography variant="body2">{year}</Typography>
-                    </ListItem>
+                    </Tooltip>
                 </Grid>
-            ))}
-            <DownloadForm 
-                isOpen={isFormOpen} 
-                onClose={closeForm} 
-                downloadParams={downloadParams} 
-            />  
-        </Grid>
+                <Grid item>
+                    <Tooltip title="Switch to display or remove the layer from the map." arrow>
+                        <Switch
+                            size="small"
+                            sx={{ marginRight: '10px' }}
+                            checked={visibility}
+                            onChange={handleVisibility}
+                        />
+                    </Tooltip>
+                </Grid>
+                <Grid item xs sx={{ marginTop: '10px', marginRight: '12px' }}>
+                    <FormControl fullWidth size="small" sx={{ marginBottom: 2 }}>
+                        <InputLabel id="select-year-label" sx={{ fontSize: '12px' }}>Selected Year</InputLabel>
+                        <Select
+                            labelId="select-year-label"
+                            value={selectedYear}
+                            onChange={handleYearChange}
+                            displayEmpty
+                            label="Selected Year"
+                            MenuProps={{
+                                PaperProps: {
+                                    style: {
+                                        maxHeight: 200,
+                                    },
+                                },
+                            }}
+                            inputProps={{ 'aria-label': 'Select year' }}
+                            sx={{ fontSize: '12px' }}
+                        >
+                            {years.map((option) => (
+                                <MenuItem key={option} value={option} sx={{ fontSize: '12px' }}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <DownloadForm
+                    isOpen={isFormOpen}
+                    onClose={closeForm}
+                    downloadParams={downloadParams}
+                />
+            </Grid>
+        </>
+        // <Grid container spacing={0}>
+        //     {years.map((year) => (
+        //         <Grid key={year} item xs={6} sx={{py: 0}}>
+        //             <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
+        //                 <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadRiceMap(year)}>
+        //                     <DownloadIcon fontSize="small" />
+        //                 </IconButton>
+        //                 <Switch 
+        //                     size="small" 
+        //                     sx={{ mr: 0.1 }} 
+        //                     checked={year === selectedYear}
+        //                     onClick={()=>showOnOffRiceMap(year)}
+        //                 />
+        //                 <Typography variant="body2">{year}</Typography>
+        //             </ListItem>
+        //         </Grid>
+        //     ))}
+        //     <DownloadForm 
+        //         isOpen={isFormOpen} 
+        //         onClose={closeForm} 
+        //         downloadParams={downloadParams} 
+        //     />  
+        // </Grid>
     );
 }
 export default RiceMap;

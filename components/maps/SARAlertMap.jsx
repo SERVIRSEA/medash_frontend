@@ -160,29 +160,45 @@ const SARAlertMap = () => {
     // }
 
     return (
-        <Grid container spacing={0}>
-            {years.map((year) => (
-                <Grid key={year} item xs={6} sx={{py: 0}}>
-                    <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                        <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadSARAlertMap(year)}>
-                            <DownloadIcon fontSize="small"/>
+        <>
+            <Grid container alignItems="center" spacing={0}>
+                <Grid item>
+                    <Tooltip title="Click to Download Fire Map" arrow>
+                        <IconButton
+                            color="primary"
+                            aria-label="download"
+                            size="small"
+                            onClick={handleDownloadFireMap}
+                        >
+                            <DownloadIcon size="small" />
                         </IconButton>
-                        <Switch 
-                            size="small" 
-                            sx={{ mr: 0.1 }} 
-                            checked={year === selectedYear}
-                            onClick={()=>showOnOffSARAlertMap(year)}
-                        />
-                        <Typography variant="body2">{year}</Typography>
-                    </ListItem>
+                    </Tooltip>
                 </Grid>
-            ))}
-            <DownloadForm 
-                isOpen={isFormOpen} 
-                onClose={closeForm} 
-                downloadParams={downloadParams} 
-            />  
-        </Grid>
+            </Grid>
+        </>
+        // <Grid container spacing={0}>
+        //     {years.map((year) => (
+        //         <Grid key={year} item xs={6} sx={{py: 0}}>
+        //             <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
+        //                 <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadSARAlertMap(year)}>
+        //                     <DownloadIcon fontSize="small"/>
+        //                 </IconButton>
+        //                 <Switch 
+        //                     size="small" 
+        //                     sx={{ mr: 0.1 }} 
+        //                     checked={year === selectedYear}
+        //                     onClick={()=>showOnOffSARAlertMap(year)}
+        //                 />
+        //                 <Typography variant="body2">{year}</Typography>
+        //             </ListItem>
+        //         </Grid>
+        //     ))}
+        //     <DownloadForm 
+        //         isOpen={isFormOpen} 
+        //         onClose={closeForm} 
+        //         downloadParams={downloadParams} 
+        //     />  
+        // </Grid>
     )
 }
 

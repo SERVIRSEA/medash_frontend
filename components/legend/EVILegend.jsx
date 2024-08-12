@@ -14,7 +14,7 @@ const EVILegend = () => {
 
     return (
         <Box pt={2} pl={1} pb={2} pr={2}>
-            <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold' }} pb={1}>EVI Legend</Typography>
+            <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold' }} pb={1}>EVI</Typography>
             <div style={{ ...gradientStyle, height: '20px', width: '100%' }}></div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2" sx={{ fontSize: '12px' }}>Decrease</Typography>
@@ -25,4 +25,4 @@ const EVILegend = () => {
     );
 };
 
-export default EVILegend
+export default EVILegend;

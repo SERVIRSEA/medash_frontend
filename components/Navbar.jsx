@@ -86,6 +86,21 @@ function Navbar(props) {
                         <Button sx={{ color: '#fff' }}>
                             <Link className="navbar-menu-item" href="/mapviewer" underline="none" sx={{ color: '#fff' }}>Mapviewer</Link>
                         </Button>
+                        <Button sx={{ color: '#fff' }}>
+                            <Link 
+                                className="navbar-menu-item" 
+                                href="https://docs.google.com/document/d/1pcKMdQWvLO9yHbMORgFlj2WvEmbYvnbsgH5y7UZIg1c/pub" 
+                                underline="none" 
+                                sx={{ color: '#fff', fontSize: '13px' }}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Technical Description
+                            </Link>
+                        </Button>
+                        <Button sx={{ color: '#fff' }}>
+                            <Link className="navbar-menu-item" href="https://docs.google.com/document/d/1e_AuA3kp-cFEYYGgR5su6ri5uq_Q88qu1cP5QBaCBB4/pub" underline="none" sx={{ color: '#fff', fontSize: '13px' }} target="_blank" rel="noopener noreferrer">User Manual</Link>
+                        </Button>
                     </Box>
                 </Toolbar>
             </AppBar>

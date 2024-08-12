@@ -15,16 +15,21 @@ export default function MeasureSlider() {
         setMaxYear(newValue[1]);
     };
     return(
-        <Box sx={{ paddingTop: '35px', paddingLeft: "15px", paddingRight: "15px"}}>
+        <Box sx={{ paddingTop: '25px', paddingLeft: "15px", paddingRight: "15px"}}>
             <Slider
                 value={[minYear, maxYear]}
                 onChange={handleSliderChange}
                 valueLabelDisplay="on"
-                valueLabelFormat={(value) => <span style={{ fontSize: 10 }}>{value}</span>}
+                sx={{
+                    '& .MuiSlider-valueLabel': {
+                      fontSize: '8px',
+                    },
+                }}
                 min={2000}
-                max={2030}
+                max={2023}
                 step={1}
                 marks
+                size='small'
             />
         </Box>
     )

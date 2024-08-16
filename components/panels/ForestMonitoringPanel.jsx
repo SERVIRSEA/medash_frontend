@@ -63,7 +63,7 @@ export default function ForestMonitoringPanel(){
                 </Typography>
                 <ForestGainMap />
                 <ForestLossMap />
-                <Typography variant="body2" pt={2} sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                <Typography variant="body2" pt={2} sx={{ fontSize: '12px', fontWeight: 'bold' }}>
                     Forest Cover Map
                 </Typography>
                 <ForestExtentMap />

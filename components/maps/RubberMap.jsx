@@ -133,38 +133,6 @@ function RubberMap(){
         downloadRubberMap(selectedYear);
     }
 
-    // const downloadRubberMap = async (year) =>{
-    //     try{
-    //         setIsLoading(true)
-    //         const action = 'download-landcover-rubber-map';
-    //         const params = {
-    //             'area_type': area_type,
-    //             'area_id': area_id,
-    //             'year': year
-    //         }
-    //         const data = await Fetcher(action, params);
-            
-    //         if (data.success === 'success' && data.downloadURL) {
-    //             const downloadURL = data.downloadURL;
-    //             // Create a hidden <a> element to trigger the download
-    //             const a = document.createElement('a');
-    //             a.href = downloadURL;
-    //             document.body.appendChild(a);
-    //             a.click();
-    //             // Cleanup
-    //             a.remove();
-    //         } else {
-    //             setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-    //             setAlertOpen(true);
-    //             throw new Error('Failed to download map.');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error downloading drought map:', error);
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
-
     return (
         <>
             <Grid container alignItems="center" spacing={0}>

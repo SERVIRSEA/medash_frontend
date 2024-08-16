@@ -5,6 +5,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { Tooltip } from '@mui/material';
 import ShortTermWeatherMap from '../maps/ShortTermWeatherMap';
 import SeasonalWeatherMap from '../maps/SeasonalWeatherMap';
 import DroughtMap from '../maps/DroughtMap';
@@ -45,7 +46,7 @@ function CustomTabPanel(props) {
         >
         {value === index && (
             <Box sx={{ pt: 1, pr: 1 }}>
-                <Typography>{children}</Typography>
+                <Typography sx={{fontSize: '12px'}}>{children}</Typography>
             </Box>
         )}
         </div>
@@ -68,11 +69,8 @@ function a11yProps(index) {
 export default function DroughtTab() {
     const [selectedArea] = useAtom(areaNameAtom);
     const [value, setValue] = useState(0);
-    const [isShortWeatherOpen, setIsShortWeatherOpen] = useAtom(shortTermWeatherLegendAtom);
     const [isShortModalOpen, setIsShortModalOpen] = useState(false);
-    const [isSeasonalOpen, setIsSeasonalOpen] = useAtom(longTermWeatherLegendAtom);
     const [isSeasonalModalOpen, setIsSeasonalModalOpen] = useState(false);
-    const [isDroughtOpen, setIsDroughtOpen] = useAtom(droughtLegendAtom);
     const [isDroughtModalOpen, setIsDroughtModalOpen] = useState(false);
     const [, setPastRainfallMapVis] = useAtom(pastRainfallVisAtom);
     const [, setPastTempMapVis] = useAtom(pastTempVisAtom);
@@ -81,10 +79,13 @@ export default function DroughtTab() {
     const [, setSeasonalRainfallMapVis] = useAtom(seasonalRainfallVisAtom);
     const [, setSeasonalTempMapVis] = useAtom(seasonalTempVisAtom);
     const [, setDroughtMapVis] = useAtom(droughtVisAtom);
-    
-    const handleShortClick = () => {
-        setIsShortWeatherOpen(!isShortWeatherOpen);
-    };
+    const [, setIsShortTermLegend] = useAtom(shortTermWeatherLegendAtom);
+    const [, setIsSeasonalLegend] = useAtom(longTermWeatherLegendAtom);
+    const [, setIsDroughtLegend] = useAtom(droughtLegendAtom);
+
+    // const handleShortClick = () => {
+    //     setIsShortWeatherOpen(!isShortWeatherOpen);
+    // };
 
     const handleOpenShortModal = () => {
         setIsShortModalOpen(true);
@@ -94,9 +95,9 @@ export default function DroughtTab() {
         setIsShortModalOpen(false);
     }
 
-    const handleSeasonalClick = () => {
-        setIsSeasonalOpen(!isSeasonalOpen);
-    };
+    // const handleSeasonalClick = () => {
+    //     setIsSeasonalOpen(!isSeasonalOpen);
+    // };
 
     const handleOpenSeasonalModal = () => {
         setIsSeasonalModalOpen(true);
@@ -106,9 +107,9 @@ export default function DroughtTab() {
         setIsSeasonalModalOpen(false);
     }
 
-    const handleDroughtClick = () => {
-        setIsDroughtOpen(!isDroughtOpen);
-    };
+    // const handleDroughtClick = () => {
+    //     setIsDroughtOpen(!isDroughtOpen);
+    // };
 
     const handleOpenDroughtModal = () => {
         setIsDroughtModalOpen(true);
@@ -130,6 +131,9 @@ export default function DroughtTab() {
                 setSeasonalRainfallMapVis(false);
                 setSeasonalTempMapVis(false);
                 setDroughtMapVis(false);
+                setIsShortTermLegend(true);
+                setIsSeasonalLegend(false);
+                setIsDroughtLegend(false);
                 break;
             case 1: // Seasonal tab
                 setPastRainfallMapVis(false);
@@ -139,6 +143,9 @@ export default function DroughtTab() {
                 setSeasonalRainfallMapVis(false);
                 setSeasonalTempMapVis(true);
                 setDroughtMapVis(false);
+                setIsShortTermLegend(false);
+                setIsSeasonalLegend(true);
+                setIsDroughtLegend(false);
                 break;
             case 2: // Drought tab
                 setPastRainfallMapVis(false);
@@ -148,6 +155,9 @@ export default function DroughtTab() {
                 setSeasonalRainfallMapVis(false);
                 setSeasonalTempMapVis(false);
                 setDroughtMapVis(true);
+                setIsShortTermLegend(false);
+                setIsSeasonalLegend(false);
+                setIsDroughtLegend(true);
                 break;
             default:
                 break;
@@ -173,61 +183,76 @@ export default function DroughtTab() {
             </Typography>
             <CustomTabPanel value={value} index={0} pt={0} mt={0}>
                 <Box pl={1} sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>MAP LAYERS</Typography>
-                    <InfoIcon onClick={handleOpenShortModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                    <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px', fontSize: '12px' }}>MAP LAYERS</Typography>
+                    <Tooltip title="Click to view layer info." arrow>
+                        <InfoIcon onClick={handleOpenShortModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                    </Tooltip>
                 </Box>
                 <ShortWeatherModal isOpen={isShortModalOpen} onClose={handleCloseShortModal} />
-                <Box pl={1} pt={0}>
-                    <LayerNameLegendControl
+                <Box pl={1} pt={1}>
+                    <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                        Short-Term Weather Map
+                    </Typography>
+                    {/* <LayerNameLegendControl
                         title="Short-Term Weather Map"
                         icon={<LegendToggleIcon />}
                         tooltipTitle="Click to show map legend"
                         onClick={handleShortClick}
-                    />
+                    /> */}
                 </Box>
                 <ShortTermWeatherMap />
-                <Box pl={2} pr={2} pb={1}>
+                {/* <Box pl={2} pr={2} pb={1}>
                     {isShortWeatherOpen  && ( <ShortTermWeatherLegend /> )}
-                </Box>
+                </Box> */}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <Box pl={1} sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>MAP LAYERS</Typography>
-                    <InfoIcon onClick={handleOpenSeasonalModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                    <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px', fontSize: '12px' }}>MAP LAYERS</Typography>
+                    <Tooltip title="Click to view layer info." arrow>
+                        <InfoIcon onClick={handleOpenSeasonalModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                    </Tooltip>
                 </Box>
                 <SeasonalWeatherModal isOpen={isSeasonalModalOpen} onClose={handleCloseSeasonalModal} />
-                <Box pl={1} pt={0}>
-                    <LayerNameLegendControl
+                <Box pl={1} pt={1}>
+                    <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                        Seasonal Weather Map
+                    </Typography>
+                    {/* <LayerNameLegendControl
                         title="Seasonal Weather Map"
                         icon={<LegendToggleIcon />}
                         tooltipTitle="Click to show map legend"
                         onClick={handleSeasonalClick}
-                    />
+                    /> */}
                 </Box>
                 <SeasonalWeatherMap />
-                <Box pl={2} pr={2} pb={1}>
+                {/* <Box pl={2} pr={2} pb={1}>
                     {isSeasonalOpen  && ( <SeasonalWeatherLegend /> )}
-                </Box>
+                </Box> */}
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
                 <Box pl={2} sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
-                    <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>MAP LAYERS</Typography>
-                    <InfoIcon onClick={handleOpenDroughtModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                    <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px', fontSize: '12px' }}>MAP LAYERS</Typography>
+                    <Tooltip title="Click to view layer info." arrow>
+                        <InfoIcon onClick={handleOpenDroughtModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                    </Tooltip>
                 </Box>
                 <DroughtModal isOpen={isDroughtModalOpen} onClose={handleCloseDroughtModal} />
-                <Box pl={2} pr={2} pb={1}>
-                    <LayerNameLegendControl
+                <Box pl={2} pr={2} pb={1} pt={1}>
+                    <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                        Drought Index Map
+                    </Typography>
+                    {/* <LayerNameLegendControl
                         title="Drought Index Map"
                         icon={<LegendToggleIcon />}
                         tooltipTitle="Click to show drought legend"
                         onClick={handleDroughtClick}
-                    />
+                    /> */}
                 </Box>
                 <DroughtCalender />
                 <DroughtMap />
-                <Box pl={2} pr={2} pb={1}>
+                {/* <Box pl={2} pr={2} pb={1}>
                     {isDroughtOpen  && ( <DroughtLegend /> )}
-                </Box>
+                </Box> */}
             </CustomTabPanel>
         </Box>
     );

@@ -3,35 +3,52 @@ import { useAtom } from 'jotai';
 import { Box, IconButton, Paper, Typography, List, ListItem, Tooltip } from '@mui/material';
 import LegendToggleIcon from '@mui/icons-material/LegendToggle';
 import CloseIcon from '@mui/icons-material/Close'; 
-import LandCoverLegend from './legend/LandCoverLegend';
-import EVILegend from './legend/EVILegend';
-import ForestCoverLegend from './legend/ForestCoverLegend';
-import ForestGainLossLegend from './legend/ForestGainLossLegend';
-import FireLegend from './legend/FireLegend';
-import RiceLegend from './legend/RiceLegend';
-import ForestGainLegend from './legend/ForestGainLegend';
-import ForestLossLegend from './legend/ForestLossLegend';
 import { 
     legendPanelAtom,
     eviLegendAtom,
-    riceLegendAtom,
     lcLegendAtom,
-    fireLegendAtom,
     forestGainLegendAtom,
-    forestLossLegendAtom,
-    forestCoverLegendAtom
+    forestLossLegendAtom, 
+    forestCoverLegendAtom,
+    riceLegendAtom,
+    rubberLegendAtom,
+    gladAlertLegendAtom,
+    combineAlertLegendAtom,
+    fireLegendAtom,
+    shortTermWeatherLegendAtom,
+    longTermWeatherLegendAtom,
+    droughtLegendAtom
 } from '@/state/atoms';
+import EVILegend from './legend/EVILegend';
+import LandCoverLegend from './legend/LandCoverLegend';
+import ForestGainLegend from './legend/ForestGainLegend';
+import ForestLossLegend from './legend/ForestLossLegend';
+import ForestCoverLegend from './legend/ForestCoverLegend';
+import RiceLegend from './legend/RiceLegend';
+import RubberLegend from './legend/RubberLegend';
+import FireLegend from './legend/FireLegend';
+import GLADAlertLegend from './legend/GLADAlertLegend';
+import SARFDASAlertLegend from './legend/SARFDASAlertLegend';
+import ShortTermWeatherLegend from './legend/ShortTermWeatherLegend';
+import SeasonalWeatherLegend from './legend/SeasonalWeatherLegend';
+import DroughtLegend from './legend/DroughtLegend';
 
 const MapLegend = () => {
     const [isExpanded, setIsExpanded] = useAtom(legendPanelAtom);
     const [IsVisibleLCLegend] = useAtom(lcLegendAtom);
-    const [IsVisibleFireLegend] = useAtom(fireLegendAtom);
+    const [IsVisibleEVILegend] = useAtom(eviLegendAtom);
     const [IsVisibleForestGainLegend] = useAtom(forestGainLegendAtom);
     const [IsVisibleForestLossLegend] = useAtom(forestLossLegendAtom);
-    const [IsVisibleEVILegend] = useAtom(eviLegendAtom);
-    const [IsVisibleRiceLegend] = useAtom(riceLegendAtom);
     const [IsVisibleForestCover] = useAtom(forestCoverLegendAtom);
-
+    const [IsVisibleRiceLegend] = useAtom(riceLegendAtom);
+    const [IsVisibleRubberLegend] = useAtom(rubberLegendAtom);
+    const [IsVisibleGladAlertLegend] = useAtom(gladAlertLegendAtom);
+    const [IsVisibleCombineAlertLegend] = useAtom(combineAlertLegendAtom);
+    const [IsVisibleFireLegend] = useAtom(fireLegendAtom);
+    const [IsVisibleShortTermLegend] = useAtom(shortTermWeatherLegendAtom);
+    const [IsVisibleLongTermLegend] = useAtom(longTermWeatherLegendAtom);
+    const [IsVisibleDroughtLegend] = useAtom(droughtLegendAtom);
+    
     const handleToggle = () => {
         setIsExpanded(!isExpanded);
     };
@@ -50,7 +67,7 @@ const MapLegend = () => {
                     position: 'absolute',
                     bottom: 0,
                     right: 0,
-                    minWidth: IsVisibleLCLegend ? '300px' : '180px',
+                    minWidth: IsVisibleLCLegend ? '300px' : IsVisibleShortTermLegend ? '250px' : IsVisibleLongTermLegend ? '250px' : IsVisibleDroughtLegend ? '250px' : '180px',
                     maxWidth: isExpanded ? '350px' : '0',
                     maxHeight: isExpanded ? '400px' : '0',
                     overflow: 'hidden',
@@ -71,12 +88,20 @@ const MapLegend = () => {
                 <Box pr={1}>
                     {IsVisibleEVILegend && <EVILegend />}
                     {IsVisibleLCLegend && <LandCoverLegend />}
-                    {IsVisibleRiceLegend && <RiceLegend />}
-                    {IsVisibleFireLegend && <FireLegend />}
                     {IsVisibleForestCover && <ForestCoverLegend/>}
                     {IsVisibleForestGainLegend && <ForestGainLegend/>}
                     {IsVisibleForestLossLegend && <ForestLossLegend/>}
                     
+                    {IsVisibleRiceLegend && <RiceLegend />}
+                    {IsVisibleRubberLegend && <RubberLegend />}
+                    
+                    {IsVisibleCombineAlertLegend && <SARFDASAlertLegend />}
+                    {IsVisibleGladAlertLegend && <GLADAlertLegend />}
+                    
+                    {IsVisibleFireLegend && <FireLegend />}
+                    {IsVisibleShortTermLegend && <ShortTermWeatherLegend />}
+                    {IsVisibleLongTermLegend && <SeasonalWeatherLegend />}
+                    {IsVisibleDroughtLegend && <DroughtLegend />}
                 </Box>
             </Paper>
             {!isExpanded && (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
-import { ListItem, IconButton, Switch } from '@mui/material';
+import { ListItem, IconButton, Switch, Tooltip } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Fetcher } from '@/fetchers/Fetcher';
 import DownloadForm from "../modals/DownloadForm";
@@ -180,59 +180,75 @@ function ShortTermWeatherMap() {
 
     return (
         <>
-            <ListItem disableGutters sx={{ py: 1, display: 'flex', alignItems: 'center' }}>
-                <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadShortTermWeatherMap("precipitation", "past")}>
-                    <DownloadIcon />
-                </IconButton>
-                <Switch
-                    size="small"
-                    sx={{ mr: 0.1 }}
-                    checked={isVisiblePastRainfall}
-                    onChange={() => setIsVisiblePastRainfall(!isVisiblePastRainfall)}
-                />
-                <Typography variant="body2">Accumulated Rainfall (past 7 days) (mm)</Typography>
+            <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
+                <Tooltip title="Click to download layer." arrow>
+                    <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadShortTermWeatherMap("precipitation", "past")}>
+                        <DownloadIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Switch to show/hide layer on Map" arrow>
+                    <Switch
+                        size="small"
+                        sx={{ mr: 0.1 }}
+                        checked={isVisiblePastRainfall}
+                        onChange={() => setIsVisiblePastRainfall(!isVisiblePastRainfall)}
+                    />
+                </Tooltip>
+                <Typography variant="body2" sx={{fontSize: '12px'}}>Accumulated Rainfall (past 7 days) (mm)</Typography>
+            </ListItem>
+            <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
+                <Tooltip title="Click to download layer." arrow>
+                    <IconButton 
+                        color="primary" 
+                        aria-label="download" 
+                        size="small" 
+                        sx={{ mr: 0.1 }} 
+                        onClick={()=>downloadShortTermWeatherMap("temperature", "past")}
+                    >
+                        <DownloadIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Switch to show/hide layer on Map" arrow>
+                    <Switch
+                        size="small"
+                        sx={{ mr: 0.1 }}
+                        checked={isVisiblePastTemperature}
+                        onChange={() => setIsVisiblePastTemperature(!isVisiblePastTemperature)}
+                    />
+                </Tooltip>
+                <Typography variant="body2" sx={{fontSize: '12px'}}>Average temperature (past 7 days) (C)</Typography>
+            </ListItem>
+            <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
+                <Tooltip title="Click to download layer." arrow>
+                    <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadShortTermWeatherMap("precipitation", "forecast")}>
+                        <DownloadIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Switch to show/hide layer on Map" arrow>
+                    <Switch
+                        size="small"
+                        sx={{ mr: 0.1 }}
+                        checked={isVisibleForecastRainfall}
+                        onChange={() => setIsVisibleForecastRainfall(!isVisibleForecastRainfall)}
+                    />
+                </Tooltip>
+                <Typography variant="body2" sx={{fontSize: '12px'}}>Accumulated Rainfall (next 7 days): Forecasted (mm)</Typography>
             </ListItem>
             <ListItem disableGutters sx={{ py: 1, display: 'flex', alignItems: 'center' }}>
-                <IconButton 
-                    color="primary" 
-                    aria-label="download" 
-                    size="small" 
-                    sx={{ mr: 0.1 }} 
-                    onClick={()=>downloadShortTermWeatherMap("temperature", "past")}
-                >
-                    <DownloadIcon />
-                </IconButton>
-                <Switch
-                    size="small"
-                    sx={{ mr: 0.1 }}
-                    checked={isVisiblePastTemperature}
-                    onChange={() => setIsVisiblePastTemperature(!isVisiblePastTemperature)}
-                />
-                <Typography variant="body2">Average temperature (past 7 days) (C)</Typography>
-            </ListItem>
-            <ListItem disableGutters sx={{ py: 1, display: 'flex', alignItems: 'center' }}>
-                <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadShortTermWeatherMap("precipitation", "forecast")}>
-                    <DownloadIcon />
-                </IconButton>
-                <Switch
-                    size="small"
-                    sx={{ mr: 0.1 }}
-                    checked={isVisibleForecastRainfall}
-                    onChange={() => setIsVisibleForecastRainfall(!isVisibleForecastRainfall)}
-                />
-                <Typography variant="body2">Accumulated Rainfall (next 7 days): Forecasted (mm)</Typography>
-            </ListItem>
-            <ListItem disableGutters sx={{ py: 1, display: 'flex', alignItems: 'center' }}>
-                <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadShortTermWeatherMap("temperature", "forecast")}>
-                    <DownloadIcon />
-                </IconButton>
-                <Switch
-                    size="small"
-                    sx={{ mr: 0.1 }}
-                    checked={isVisibleForecastTemperature}
-                    onChange={() => setIsVisibleForecastTemperature(!isVisibleForecastTemperature)}
-                />
-                <Typography variant="body2">Average temperature (next 7 days): Forecasted (C)</Typography>
+                <Tooltip title="Click to download layer." arrow>
+                    <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadShortTermWeatherMap("temperature", "forecast")}>
+                        <DownloadIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Switch to show/hide layer on Map" arrow>
+                    <Switch
+                        size="small"
+                        sx={{ mr: 0.1 }}
+                        checked={isVisibleForecastTemperature}
+                        onChange={() => setIsVisibleForecastTemperature(!isVisibleForecastTemperature)}
+                    />
+                </Tooltip>
+                <Typography variant="body2" sx={{fontSize: '12px'}}>Average temperature (next 7 days): Forecasted (°C)</Typography>
             </ListItem>
             <DownloadForm 
                 isOpen={isFormOpen} 

@@ -41,8 +41,8 @@ const DroughtCalendar = () => {
 
     // Render CustomDatePicker only when data is loaded
     return (
-        <Box pl={2} pr={2}>
-            <Typography variant="body2" pl={1}>
+        <Box pl={1} pr={2}>
+            <Typography variant="body2" sx={{fontSize: '12px'}} pl={1}>
                 Select Date 
             </Typography>
             {loading ? (

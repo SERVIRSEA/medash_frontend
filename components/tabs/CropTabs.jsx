@@ -17,7 +17,9 @@ import {
     selectedYearRiceAtom,
     selectedYearRubberAtom,
     measureMaxYearAtom,
-    areaNameAtom
+    areaNameAtom,
+    riceLegendAtom,
+    rubberLegendAtom
 } from '@/state/atoms';
 import RiceAreaBMChart from '../charts/RiceAreaBMChart';
 import RubberAreaBMChart from '../charts/RubberAreaBMChart';
@@ -25,12 +27,13 @@ import RubberAreaBMChart from '../charts/RubberAreaBMChart';
 export default function CropTabs() {
     const [value, setValue] = useState(0);
     const [max] = useAtom(measureMaxYearAtom);
-    const [, setSelectedYearRice] = useAtom(selectedYearRiceAtom);
-    const [, setSelectedYearRubber] = useAtom(selectedYearRubberAtom);
     const [selectedArea] = useAtom(areaNameAtom);
-
     const [isRiceOpen, setIsRiceOpen] = useState(false);
     const [isRubberOpen, setIsRubberOpen] = useState(false);
+    const [, setSelectedYearRice] = useAtom(selectedYearRiceAtom);
+    const [, setSelectedYearRubber] = useAtom(selectedYearRubberAtom);
+    const [, setRiceLegend] = useAtom(riceLegendAtom);
+    const [, setRubberLegend] = useAtom(rubberLegendAtom);
 
     const handleRiceClick = () => {
         setIsRiceOpen(!isRiceOpen);
@@ -45,9 +48,13 @@ export default function CropTabs() {
         if (newValue == 0){
             setSelectedYearRice(max)
             setSelectedYearRubber(null);
+            setRiceLegend(true);
+            setRubberLegend(false);
         } else {
             setSelectedYearRice(null)
             setSelectedYearRubber(max);
+            setRiceLegend(false);
+            setRubberLegend(true);
         }
     };
 
@@ -63,7 +70,10 @@ export default function CropTabs() {
                 Selected Area: {selectedArea}
             </Typography>
             <CustomTabPanel value={value} index={0} pt={0}>
-                <Box pl={1} pt={0}>
+                <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1} pl={1}>
+                    Rice Map
+                </Typography>
+                {/* <Box pl={1} pt={0}>
                     <LayerNameLegendControl
                         title="Rice Map"
                         icon={<LegendToggleIcon />}
@@ -71,14 +81,17 @@ export default function CropTabs() {
                         onClick={handleRiceClick}
                     />
                 </Box>
-                {isRiceOpen  && ( <RiceLegend /> )}
+                {isRiceOpen  && ( <RiceLegend /> )} */}
                 <RiceMap />
                 <br />
                 <RiceLineChart />
                 <RiceAreaBMChart />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                <Box pl={1}>
+                <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1} pl={1}>
+                    Rubber Map
+                </Typography>
+                {/* <Box pl={1}>
                     <LayerNameLegendControl
                         title="Rubber Map"
                         icon={<LegendToggleIcon />}
@@ -86,7 +99,7 @@ export default function CropTabs() {
                         onClick={handleRubberClick}
                     />
                 </Box>
-                {isRubberOpen  && ( <RubberLegend /> )}
+                {isRubberOpen  && ( <RubberLegend /> )} */}
                 <RubberMap />
                 <br />
                 <RubberLineChart />

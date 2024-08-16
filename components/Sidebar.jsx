@@ -36,14 +36,21 @@ import {
     seasonalRainfallVisAtom,
     seasonalTempVisAtom,
     droughtVisAtom,
+
     legendPanelAtom,
     eviLegendAtom,
-    riceLegendAtom,
     lcLegendAtom,
-    fireLegendAtom,
     forestGainLegendAtom,
     forestLossLegendAtom, 
     forestCoverLegendAtom,
+    riceLegendAtom,
+    rubberLegendAtom,
+    gladAlertLegendAtom,
+    combineAlertLegendAtom,
+    fireLegendAtom,
+    shortTermWeatherLegendAtom,
+    longTermWeatherLegendAtom,
+    droughtLegendAtom
 } from '@/state/atoms';
 
 function Sidebar(){
@@ -69,13 +76,20 @@ function Sidebar(){
     const [, setForecastTempMapVis] = useAtom(forecastTempVisAtom);
     const [, setSeasonalRainfallMapVis] = useAtom(seasonalRainfallVisAtom);
     const [, setSeasonalTempMapVis] = useAtom(seasonalTempVisAtom);
+    
+    const [, setIsVisibleEVILegend] = useAtom(eviLegendAtom);
     const [, setIsVisibleLCLegend] = useAtom(lcLegendAtom);
-    const [, setIsVisibleFireLegend] = useAtom(fireLegendAtom);
     const [, setIsVisibleForestGainLegend] = useAtom(forestGainLegendAtom);
     const [, setIsVisibleForestLossLegend] = useAtom(forestLossLegendAtom);
     const [, setIsVisibleForestCoverLegend] = useAtom(forestCoverLegendAtom);
-    const [, setIsVisibleEVILegend] = useAtom(eviLegendAtom);
     const [, setIsVisibleRiceLegend] = useAtom(riceLegendAtom);
+    const [, setIsVisibleRubberLegend] = useAtom(rubberLegendAtom);
+    const [, setIsGladAlertLegend] = useAtom(gladAlertLegendAtom);
+    const [, setIsCombineAlertLegend] = useAtom(combineAlertLegendAtom);
+    const [, setIsVisibleFireLegend] = useAtom(fireLegendAtom);
+    const [, setIsShortTermLegend] = useAtom(shortTermWeatherLegendAtom);
+    const [, setIsLongTermLegend] = useAtom(longTermWeatherLegendAtom);
+    const [, setIsDroughtLegend] = useAtom(droughtLegendAtom);
     const [, setLegendPanel] = useAtom(legendPanelAtom);
   
     const sidebarStyle = {
@@ -116,7 +130,7 @@ function Sidebar(){
         background: "#fff",
         color: "#000",
         // width: "350px",
-        width: selectedIndex === 5 ? "700px" : "300px",
+        width: selectedIndex === 7 ? "700px" : "350px",
         height: "calc(100% - 15px)",
         position: "fixed",
         marginLeft: "80px",
@@ -188,22 +202,58 @@ function Sidebar(){
         return null;
     }
 
-    const mapVisibilityMappings = {
-        0: { eviMap: false, lcMap: true, riceMap: false, rubberMap: false },
-        1: { riceMap: false, rubberMap: false, lcMap: false, forestExtentMap: false, forestGainMap: true, forestLossMap: true },
-        2: { riceMap: true, rubberMap: true, lcMap: false },
-        3: { riceMap: false, rubberMap: false, lcMap: false, gladMap: true, sarMap: true, sarfdasMap: true },
-        4: { riceMap: false, rubberMap: false, lcMap: false,  fireMap: true},
-        5: { pastRainMap: false, frcstRainMap: false, pastTempMap: false, frcstTempMap: true, sesRainMap: false, sesTempMap: false, droughtMap: false }
+    // const mapVisibilityMappings = {
+    //     0: { eviMap: false, lcMap: true, forestGainMap: false, forestLossMap: false, forestExtentMap: false, riceMap: false, rubberMap: false, gladMap: false, sarfdasMap: false, fireMap: false, pastRainMap: false, frcstRainMap: false, pastTempMap: false, frcstTempMap: false, sesRainMap: false, sesTempMap: false, droughtMap: false},
+    //     1: { riceMap: false, rubberMap: false, lcMap: false, forestExtentMap: false, forestGainMap: true, forestLossMap: true },
+    //     2: { riceMap: true, rubberMap: true, lcMap: false },
+    //     3: { riceMap: false, rubberMap: false, lcMap: false, gladMap: true, sarMap: false, sarfdasMap: false },
+    //     4: { riceMap: false, rubberMap: false, lcMap: false,  fireMap: true},
+    //     5: { pastRainMap: false, frcstRainMap: false, pastTempMap: false, frcstTempMap: true, sesRainMap: false, sesTempMap: false, droughtMap: false }
+    // };
+    const allMap = {
+        eviMap: false, lcMap: false, forestGainMap: false, forestLossMap: false, forestExtentMap: false,
+        riceMap: false, rubberMap: false, gladMap: false, sarMap: false, sarfdasMap: false,
+        fireMap: false, pastRainMap: false, frcstRainMap: false, pastTempMap: false,
+        frcstTempMap: false, sesRainMap: false, sesTempMap: false, droughtMap: false
     };
 
-    const legendMappings = {
-        0: { eviLegend: false, lcLegend: true, fireLegend: false, forestGainLegend: false, forestLossLegend: false, riceLegend: false },
-        1: { eviLegend: false, lcLegend: false, fireLegend: false, forestGainLegend: true, forestLossLegend: true, riceLegend: false },
-        2: { eviLegend: false, lcLegend: false, fireLegend: false, forestGainLegend: false, forestLossLegend: false, riceLegend: true },
-        3: { eviLegend: false, lcLegend: false, fireLegend: true, forestGainLegend: false, forestLossLegend: false, riceLegend: false, forestCoverLegend: false },
-        5: { eviLegend: false, lcLegend: true, fireLegend: false, forestGainLegend: false, forestLossLegend: false, riceLegend: false },
+    const mapVisibilityMappings = {
+        0: { ...allMap, eviMap: false, lcMap: true },
+        1: { ...allMap, forestGainMap: true, forestLossMap: true },
+        2: { ...allMap, riceMap: true, rubberMap: true },
+        3: { ...allMap, gladMap: true },
+        4: { ...allMap, fireMap: true },
+        5: { ...allMap, frcstTempMap: true },
+        7: { ...allMap, lcMap: true }
     };
+
+    const baseLegend = {
+        eviLegend: false, lcLegend: false, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false,
+        riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false,
+        shortTermLegend: false, longTermLegend: false, droughtLegend: false
+    };
+    
+    const legendMappings = {
+        0: { ...baseLegend, lcLegend: true },
+        1: { ...baseLegend, forestGainLegend: true, forestLossLegend: true },
+        2: { ...baseLegend, riceLegend: true },
+        3: { ...baseLegend, gladAlertLegend: true },
+        4: { ...baseLegend, fireLegend: true },
+        5: { ...baseLegend, shortTermLegend: true },
+        // 6: { ...baseLegend },
+        7: { ...baseLegend, lcLegend: true }
+    };
+
+    // const legendMappings = {
+    //     0: { eviLegend: false, lcLegend: true, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
+    //     1: { eviLegend: false, lcLegend: false, forestGainLegend: true, forestLossLegend: true, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
+    //     2: { eviLegend: false, lcLegend: false, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: true, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
+    //     3: { eviLegend: false, lcLegend: false, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: true, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
+    //     4: { eviLegend: false, lcLegend: false, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: true, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
+    //     5: { eviLegend: false, lcLegend: false, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: true, longTermLegend: false, droughtLegend: false},
+    //     6: { eviLegend: false, lcLegend: false, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
+    //     7: { eviLegend: false, lcLegend: true, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false}
+    // };
       
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);
@@ -236,11 +286,17 @@ function Sidebar(){
     
         setIsVisibleEVILegend(legendVisibility.eviLegend || false);
         setIsVisibleLCLegend(legendVisibility.lcLegend || false);
-        setIsVisibleFireLegend(legendVisibility.fireLegend || false);
         setIsVisibleForestGainLegend(legendVisibility.forestGainLegend || false);
         setIsVisibleForestLossLegend(legendVisibility.forestLossLegend || false);
         setIsVisibleForestCoverLegend(legendVisibility.forestCoverLegend || false);
         setIsVisibleRiceLegend(legendVisibility.riceLegend || false);
+        setIsVisibleRubberLegend(legendVisibility.rubberLegend || false);
+        setIsGladAlertLegend(legendVisibility.gladAlertLegend || false);
+        setIsCombineAlertLegend(legendVisibility.combineAlertLegend || false);
+        setIsVisibleFireLegend(legendVisibility.fireLegend || false);
+        setIsShortTermLegend(legendVisibility.shortTermLegend || false);
+        setIsLongTermLegend(legendVisibility.longTermLegend || false);
+        setIsDroughtLegend(legendVisibility.droughtLegend || false);
     };
 
     const handleCloseClick = () => {

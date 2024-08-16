@@ -94,6 +94,12 @@ function ProvinceLayer(){
     }
 
     const onEachFeatureProvince = (feature, layer) => {
+        layer.bindTooltip(feature.properties.name, {
+            permanent: false, 
+            direction: 'auto', 
+            opacity: 1
+        });
+
         layer.on({
             click: handleProvinceFeatureClick,
             mouseover: handleMouseover,

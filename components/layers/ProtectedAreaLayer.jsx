@@ -90,6 +90,12 @@ function ProtectedAreaLayer(){
         }
     }
     const onEachFeatureProtectedArea = (feature, layer) => {
+        layer.bindTooltip(feature.properties.PA_NAME, {
+            permanent: false, 
+            direction: 'auto', 
+            opacity: 1
+        });
+
         layer.on({
             mouseover: handleMouseover,
             mouseout: handleMouseout,

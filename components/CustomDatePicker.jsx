@@ -72,7 +72,7 @@ const CustomDatePicker = ({ availableDates }) => {
     };
   
     return (
-        <div id="customCalendar">
+        <div id="customCalendar" style={{marginLeft: '8px'}}>
             <input 
                 type="text" 
                 value={activeDate} 

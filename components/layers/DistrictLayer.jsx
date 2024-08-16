@@ -91,6 +91,12 @@ function DistrictLayer(){
     }
 
     const onEachFeatureDistrict = (feature, layer) => {
+        layer.bindTooltip(feature.properties.dist_name, {
+            permanent: false, 
+            direction: 'auto', 
+            opacity: 1
+        });
+
         layer.on({
             mouseover: handleMouseover,
             mouseout: handleMouseout,

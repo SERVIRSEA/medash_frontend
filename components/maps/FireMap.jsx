@@ -161,7 +161,7 @@ function FireMap(){
                         <InputLabel id="select-year-label" sx={{ fontSize: '12px' }}>Selected Year</InputLabel>
                         <Select
                             labelId="select-year-label"
-                            value={selectedYear}
+                            value={selectedYear || ''}
                             onChange={handleYearChange}
                             displayEmpty
                             label="Selected Year"

@@ -4,8 +4,8 @@ import ColorLegend from './ColorLegend'
 
 const SARFDASAlertLegend = () => {
     return (
-        <Box pt={2} pl={2} pb={4}>
-            <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}}>SARFDAS Alert Legend</Typography>
+        <Box pt={0} pl={2} pb={0}>
+            {/* <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}}>SARFDAS Alert Legend</Typography> */}
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <ColorLegend color={"red"} text={"SARFDAS Alert"} />
             </Box>

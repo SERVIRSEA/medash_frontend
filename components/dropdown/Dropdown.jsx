@@ -81,7 +81,7 @@ const Dropdown = () => {
     return (
         <Grid container spacing={2} p={2}>
             <Grid item xs={6}>
-                <FormControl fullWidth>
+                <FormControl fullWidth size='small'>
                     <InputLabel id="areaTypeLabel">Selected Area Type</InputLabel>
                     <Select
                         labelId="areaTypeLabel"
@@ -89,18 +89,26 @@ const Dropdown = () => {
                         value={selectedCategory}
                         label="Selected Area Type"
                         onChange={handleCategoryChange}
-                        fullWidth
-                        size='small'
+                        displayEmpty
+                        MenuProps={{
+                            PaperProps: {
+                                style: {
+                                    maxHeight: 200,
+                                },
+                            },
+                        }}
+                        inputProps={{ 'aria-label': 'Selected Area Type' }}
+                        sx={{ fontSize: '12px' }}
                     >
-                        <MenuItem value="country">Country</MenuItem>
-                        <MenuItem value="province">Provinces</MenuItem>
-                        <MenuItem value="district">Districts</MenuItem>
-                        <MenuItem value="protected_area">Protected Area</MenuItem>
+                        <MenuItem value="country" sx={{ fontSize: '12px'}}>Country</MenuItem>
+                        <MenuItem value="province" sx={{ fontSize: '12px'}}>Provinces</MenuItem>
+                        <MenuItem value="district" sx={{ fontSize: '12px'}}>Districts</MenuItem>
+                        <MenuItem value="protected_area" sx={{ fontSize: '12px'}}>Protected Area</MenuItem>
                     </Select>
                 </FormControl>
             </Grid>
             <Grid item xs={6}>
-                <FormControl fullWidth>
+                <FormControl fullWidth size='small'>
                     <InputLabel id="areaIdLabel">Selected Area</InputLabel>
                     <Select
                         labelId="areaIdLabel"
@@ -108,11 +116,19 @@ const Dropdown = () => {
                         value={selectedItem}
                         label="Selected Area"
                         onChange={handleItemChange}
-                        fullWidth
-                        size='small'
+                        displayEmpty
+                        MenuProps={{
+                            PaperProps: {
+                                style: {
+                                    maxHeight: 200,
+                                },
+                            },
+                        }}
+                        inputProps={{ 'aria-label': 'Selected Area Type' }}
+                        sx={{ fontSize: '12px' }}
                     >
                         {options.map(option => (
-                            <MenuItem key={option.id} value={option.name}>{option.name}</MenuItem>
+                            <MenuItem key={option.id} value={option.name} sx={{fontSize: '12px'}}>{option.name}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>

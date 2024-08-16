@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
-import { ListItem, IconButton, Switch, Box, ListSubheader } from '@mui/material';
+import { ListItem, IconButton, Switch, Box, ListSubheader, Tooltip } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Fetcher } from '@/fetchers/Fetcher';
 import { 
@@ -142,15 +142,15 @@ export default function DroughtMap() {
 
     return (
         <Box p={1}> 
-            <Typography variant="body2" pl={1}>
+            <Typography variant="body2" sx={{fontSize: '12px'}} pl={1}>
                 Select Index <span style={{ fontSize: '10px' }}>(*Include Forecast)</span>
             </Typography>
-            <FormControl sx={{ p: 1, minWidth: 120 }} size="small" fullWidth>
+            <FormControl sx={{ py: 1, minWidth: 120 }} size="small" fullWidth>
                 <Select
                     id="select-index"
                     value={index}
                     onChange={handleChange}
-                    style={{ fontSize: '12px' }}
+                    style={{ fontSize: '12px', marginLeft: '8px' }}
                 >
                     <ListSubheader>
                         <Typography variant="h6" sx={{fontWeight: "bold", fontSize: "14px"}}>Satellite Based</Typography>
@@ -165,21 +165,25 @@ export default function DroughtMap() {
                     <MenuItem value="spi3" style={{ fontSize: '12px' }}>Standardized Precipitation Index (SPI) – 3months*</MenuItem>
                     <MenuItem value="soil_moist" style={{ fontSize: '12px' }}>Soil Moisture*</MenuItem>
                     <MenuItem value="rainfall" style={{ fontSize: '12px' }}>Rainfall (mm)*</MenuItem>
-                    <MenuItem value="surf_temp" style={{ fontSize: '12px' }}>Surface Temperature (C)*</MenuItem>
+                    <MenuItem value="surf_temp" style={{ fontSize: '12px' }}>Surface Temperature (°C)*</MenuItem>
                     <MenuItem value="rel_humid" style={{ fontSize: '12px' }}>Relative Humidity (%)*</MenuItem>
                 </Select>
             </FormControl>
             <ListItem disableGutters sx={{ py: 1, display: 'flex', alignItems: 'center' }}>
-                <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={downloadDroughtMap}>
-                    <DownloadIcon />
-                </IconButton>
-                <Switch
-                    size="small"
-                    sx={{ mr: 0.1 }}
-                    checked={isVisible}
-                    onChange={() => setIsVisible(!isVisible)} 
-                />
-                <Typography variant="body2">Drought Index Map</Typography>
+                <Tooltip title="Click to Download Drought Map" arrow>
+                    <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={downloadDroughtMap}>
+                        <DownloadIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Switch to show/hide layer on Map" arrow>
+                    <Switch
+                        size="small"
+                        sx={{ mr: 0.1 }}
+                        checked={isVisible}
+                        onChange={() => setIsVisible(!isVisible)} 
+                    />
+                </Tooltip>
+                <Typography variant="body2" sx={{fontSize: '12px'}} pl={1}>Drought Index Map</Typography>
             </ListItem>
             <DownloadForm 
                 isOpen={isFormOpen} 

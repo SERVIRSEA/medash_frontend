@@ -17,15 +17,18 @@ import {
     updateTriggerAtom,
     alertOpenAtom, 
     alertMessageAtom,
-     lcVisibilityAtom,
-     lcLegendAtom
+    lcVisibilityAtom,
+    lcLegendAtom,
+    lcTypeAtom
 } from '@/state/atoms';
 import { Fetcher } from '@/fetchers/Fetcher';
 import DownloadForm from '../modals/DownloadForm';
+import LCTypesDropdown from '../dropdown/LCTypesDropdown';
 
 function LandCoverMap(){
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [selectedClass] = useAtom(lcTypeAtom);
     const [min] = useAtom(minYearLandCover);
     const [max] = useAtom(maxYearLandCover);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
@@ -42,25 +45,38 @@ function LandCoverMap(){
     const [lcLayerVisibility, setLCLayerVisibility] = useAtom(lcVisibilityAtom);
     const [, setIsVisibleLC] = useAtom(lcLegendAtom);
     
-    const fetchLatestLandCoverMap = async (year) => {
+    const fetchLandCoverMap = async ({year, lcType, areaType, areaId}) => {
         try {
             // Check if a request is already in progress
             if (isFetching) {
                 return;
             }
-
+    
             setIsFetching(true); 
             setIsLoading(true);
+    
             const params = {
-                'area_type': area_type,
-                'area_id': area_id,
-                'year': year
+                'area_type': areaType,
+                'area_id': areaId,
+                'year': year,
+                'class': lcType
             };
+    
             const key = JSON.stringify(params);
-            const action = 'get-landcover-map'
+            const action = 'get-landcover-map';
+    
+            // Optionally, check if data already exists in the cache
+            if (mapDataStore[key]) {
+                setLandCoverData(mapDataStore[key]);
+                return mapDataStore[key];
+            }
+    
             const data = await Fetcher(action, params);
             setLandCoverData(data);
             setMapDataStore(prev => ({ ...prev, [key]: data }));
+    
+            return data; // Optionally return the fetched data for further use
+    
         } catch (error) {
             console.error('Error fetching data:', error);
             throw error; 
@@ -69,11 +85,19 @@ function LandCoverMap(){
             setIsFetching(false); 
         }
     }
-
+    
     useEffect(() => { 
-        fetchLatestLandCoverMap(selectedYear);
+        const fetchMap = async () => {
+            await fetchLandCoverMap({
+                year: selectedYear, 
+                lcType: selectedClass, 
+                areaType: area_type, 
+                areaId: area_id
+            });
+        };
+        fetchMap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [area_type, area_id, selectedYear]);
+    }, [area_type, area_id, selectedYear, selectedClass]);
 
     const openForm = () => {
         setIsFormOpen(true);
@@ -128,13 +152,13 @@ function LandCoverMap(){
                 </Grid>
                 <Grid item xs sx={{ marginTop: '10px', marginRight: '12px' }}>
                     <FormControl fullWidth size="small" sx={{ marginBottom: 2 }}>
-                        <InputLabel id="select-year-label" sx={{ fontSize: '12px' }}>Selected Year</InputLabel>
+                        <InputLabel id="select-year-label" sx={{ fontSize: '12px' }}>Year</InputLabel>
                         <Select
                             labelId="select-year-label"
                             value={selectedYear}
                             onChange={handleYearChange}
                             displayEmpty
-                            label="Selected Year"
+                            label="Year"
                             MenuProps={{
                                 PaperProps: {
                                     style: {
@@ -152,6 +176,9 @@ function LandCoverMap(){
                             ))}
                         </Select>
                     </FormControl>
+                </Grid>
+                <Grid item xs sx={{ marginTop: '10px', marginRight: '12px' }}>
+                    <LCTypesDropdown />
                 </Grid>
             </Grid>
             <DownloadForm 

@@ -16,6 +16,7 @@ import {
     alertOpenAtom, 
     alertMessageAtom,
     sarfdasAlertVisibilityAtom,
+    combineAlertLegendAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
@@ -38,7 +39,8 @@ function SARFDASMap(){
     const [isFormOpen, setIsFormOpen] = useState(false); 
     const [downloadParams, setDownloadParams] = useState(null);
     const [visibility, setVisibility] = useAtom(sarfdasAlertVisibilityAtom);
-
+    const [, setIsVisibleLegend] = useAtom(combineAlertLegendAtom);
+    
     const fetchSARFDASMap = async (year) => {
         if (isFetching) {
             return;
@@ -124,7 +126,9 @@ function SARFDASMap(){
     }
 
     const handleVisibility = (event)=>{
-        setVisibility(event.target.checked)
+        const newVisibility = event.target.checked;
+        setVisibility(newVisibility);
+        setIsVisibleLegend(newVisibility);
     }
 
     const handleDownloadSARFDASMap = () => {

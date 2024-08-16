@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
-import { Box } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import LayerNameLegendControl from '../LayerNameLegendControl';
 import LegendToggleIcon from '@mui/icons-material/LegendToggle';
 import InfoIcon from '@mui/icons-material/Info';
@@ -17,6 +17,7 @@ import GLADAlertLegend from '../legend/GLADAlertLegend';
 import SARAlertLegend from '../legend/SARAlertLegend';
 import SARFDASMap from '../maps/SARFDASMap';
 import SARFDASAlertLegend from '../legend/SARFDASAlertLegend';
+import SARFDASAlertChart from '../charts/SARFDASAlertChart';
 
 export default function ForestAlertPanel(){
     const [selectedArea] = useAtom(areaNameAtom);
@@ -48,22 +49,27 @@ export default function ForestAlertPanel(){
     return (
         <Box sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}} pl={1} pt={1}>
             <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
-                <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>MAP LAYERS</Typography>
-                <InfoIcon onClick={handleOpenFALayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px', fontSize: '13px' }}>MAP LAYERS</Typography>
+                <Tooltip title="Click to view layer info." arrow>
+                    <InfoIcon onClick={handleOpenFALayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                </Tooltip>
             </Box>
             <ForestAlertModal isOpen={isForestAlertOpen} onClose={handleCloseFAModal} />
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>
                 Selected Area: {selectedArea}
             </Typography>
-            <LayerNameLegendControl
+            <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                Deforestation Area from GLAD Alert System
+            </Typography>
+            {/* <LayerNameLegendControl
                 title="Deforestation Area from GLAD Alert System"
                 icon={<LegendToggleIcon />}
                 tooltipTitle="Click to show GLAD alert legend"
                 onClick={handleGLADClick}
-            />
+            /> */}
             <GLADAlertMap />
-            {isGLADOpen  && ( <GLADAlertLegend /> )}
-            <br />
+            {/* {isGLADOpen  && ( <GLADAlertLegend /> )} */}
+            
             {/* <LayerNameLegendControl
                 title="Deforestation Area from SAR Alert System"
                 icon={<LegendToggleIcon />}
@@ -74,16 +80,19 @@ export default function ForestAlertPanel(){
             <SARAlertMap />
             {isSAROpen  && ( <SARAlertLegend /> )} */}
             {/* <br /> */}
-            <LayerNameLegendControl
+            <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                Consolidated of GLAD and SAR Alert
+            </Typography>
+            {/* <LayerNameLegendControl
                 title="Consolidated of GLAD and SAR Alert"
                 icon={<LegendToggleIcon />}
                 tooltipTitle="Click to show SARFDAS alert legend"
                 onClick={handleSARFDASClick}
-            />
+            /> */}
             <SARFDASMap />
-            {isSARFDASOpen  && ( <SARFDASAlertLegend /> )}
-            <br />
-            <Typography variant="body2">
+            {/* {isSARFDASOpen  && ( <SARFDASAlertLegend /> )} */}
+            
+            <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
                 TOTAL AREA OF GLAD ALERT SYSTEM 
             </Typography>
             <br />
@@ -94,6 +103,11 @@ export default function ForestAlertPanel(){
             </Typography>
             <br />
             <SARAlertChart /> */}
+            <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                TOTAL AREA OF CONSOLIDATED GLAD & SAR ALERT SYSTEM 
+            </Typography>
+            <br />
+            <SARFDASAlertChart />
         </Box>
     )
 }

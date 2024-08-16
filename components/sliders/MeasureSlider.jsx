@@ -25,7 +25,7 @@ export default function MeasureSlider() {
                       fontSize: '8px',
                     },
                 }}
-                min={2000}
+                min={2003}
                 max={2023}
                 step={1}
                 marks

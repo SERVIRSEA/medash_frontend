@@ -14,7 +14,8 @@ import {
     updateTriggerAtom,
     alertOpenAtom, 
     alertMessageAtom,
-    gladAlertVisibilityAtom
+    gladAlertVisibilityAtom,
+    gladAlertLegendAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
@@ -37,7 +38,8 @@ const GLADAlertMap = () => {
     const [isFormOpen, setIsFormOpen] = useState(false); 
     const [downloadParams, setDownloadParams] = useState(null);
     const [visibility, setVisibility] = useAtom(gladAlertVisibilityAtom);
-
+    const [, setIsVisibleLegend] = useAtom(gladAlertLegendAtom);
+    
     const fetchGLADAlertMap = async (year) => {
         if (isFetching) {
             return;
@@ -126,7 +128,9 @@ const GLADAlertMap = () => {
     }
 
     const handleVisibility = (event)=>{
-        setVisibility(event.target.checked)
+        const newVisibility = event.target.checked;
+        setVisibility(newVisibility);
+        setIsVisibleLegend(newVisibility);
     }
 
     const handleDownloadGladAlertMap = () => {
@@ -195,7 +199,7 @@ const GLADAlertMap = () => {
                         <InputLabel id="select-year-label" sx={{ fontSize: '12px' }}>Selected Year</InputLabel>
                         <Select
                             labelId="select-year-label"
-                            value={selectedYear}
+                            value={selectedYear || ''}
                             onChange={handleYearChange}
                             displayEmpty
                             label="Selected Year"

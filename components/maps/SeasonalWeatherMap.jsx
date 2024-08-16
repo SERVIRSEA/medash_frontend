@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
-import { ListItem, IconButton, Switch } from '@mui/material';
+import {Tooltip, ListItem, IconButton, Switch } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Fetcher } from '@/fetchers/Fetcher';
 import DownloadForm from "../modals/DownloadForm";
@@ -134,28 +134,36 @@ function SeasonalWeatherMap() {
     return (
         <>
             <ListItem disableGutters sx={{ py: 1, display: 'flex', alignItems: 'center' }}>
-                <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadSeasonalWeatherMap("precipitation", "seasonal")}>
-                    <DownloadIcon />
-                </IconButton>
-                <Switch
-                    size="small"
-                    sx={{ mr: 0.1 }}
-                    checked={isVisibleRainfall}
-                    onChange={() => setIsVisibleRainfall(!isVisibleRainfall)} 
-                />
-                <Typography variant="body2">Rainfall Anomaly (next 3 months): Forecasted (mm)</Typography>
+                <Tooltip title="Click to download layer." arrow>
+                    <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadSeasonalWeatherMap("precipitation", "seasonal")}>
+                        <DownloadIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Switch to show/hide layer on Map" arrow>
+                    <Switch
+                        size="small"
+                        sx={{ mr: 0.1 }}
+                        checked={isVisibleRainfall}
+                        onChange={() => setIsVisibleRainfall(!isVisibleRainfall)} 
+                    />
+                </Tooltip>
+                <Typography variant="body2" sx={{fontSize: '12px'}}>Rainfall Anomaly (next 3 months): Forecasted (mm)</Typography>
             </ListItem>
             <ListItem disableGutters sx={{ py: 1, display: 'flex', alignItems: 'center' }}>
-                <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadSeasonalWeatherMap("temperature", "seasonal")}>
-                    <DownloadIcon />
-                </IconButton>
-                <Switch
-                    size="small"
-                    sx={{ mr: 0.1 }}
-                    checked={isVisibleTemperature}
-                    onChange={() => setIsVisibleTemperature(!isVisibleTemperature)} 
-                />
-                <Typography variant="body2">Temperature Anomaly (next 3 months): Forecasted (C)</Typography>
+                <Tooltip title="Click to download layer." arrow>
+                    <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadSeasonalWeatherMap("temperature", "seasonal")}>
+                        <DownloadIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Switch to show/hide layer on Map" arrow>
+                    <Switch
+                        size="small"
+                        sx={{ mr: 0.1 }}
+                        checked={isVisibleTemperature}
+                        onChange={() => setIsVisibleTemperature(!isVisibleTemperature)} 
+                    />
+                </Tooltip>
+                <Typography variant="body2" sx={{fontSize: '12px'}}>Temperature Anomaly (next 3 months): Forecasted (C)</Typography>
             </ListItem>
             <DownloadForm 
                 isOpen={isFormOpen} 

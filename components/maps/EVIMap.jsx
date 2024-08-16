@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
-import { ListItem, IconButton, Tooltip } from '@mui/material';
+import { Grid, Switch, ListItem, IconButton, Tooltip } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -24,7 +24,6 @@ import {
     eviLegendAtom
 } from '@/state/atoms';
 import DownloadForm from '../modals/DownloadForm';
-
 
 function EVIMap(){
     const [visibleEVILayer, setEVILayerVisibility] = useAtom(eviVisibilityAtom);
@@ -104,7 +103,7 @@ function EVIMap(){
         setIsFormOpen(false);
     };
 
-    const downloadEVIMap = async () => {
+    const handleDownload = async () => {
         const params = {
             'area_type': area_type,
             'area_id': area_id,
@@ -120,21 +119,28 @@ function EVIMap(){
     
     return(
         <>
-            <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-                <Tooltip title="Click to Download EVI Map" arrow>
-                    <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={downloadEVIMap}>
-                        <DownloadIcon fontSize="small" />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="Click to generate EVI map." arrow>
-                    <FormControlLabel 
-                        control={<Checkbox checked={visibleEVILayer} size="small" sx={{ mr: 0.1 }} />} 
-                        label="Vegetation health" 
-                        onChange={handleCheckboxChange} 
-                        sx={{ '& .MuiFormControlLabel-label': { fontSize: '12px' } }}
-                    /> 
-                </Tooltip>
-            </ListItem>
+            <Grid container alignItems="center" spacing={0}>
+                <Grid item>
+                    <Tooltip title="Click to Download EVI Map" arrow>
+                        <IconButton color="primary" aria-label="download" size="small" onClick={handleDownload}>
+                            <DownloadIcon size="small" />
+                        </IconButton>
+                    </Tooltip>
+                </Grid>
+                <Grid item>
+                    <Tooltip title="Switch on/off to show EVI map" arrow>
+                        <Switch 
+                            size="small" 
+                            sx={{ marginRight: "10px" }} 
+                            checked={visibleEVILayer}
+                            onChange={handleCheckboxChange}
+                        />
+                    </Tooltip>
+                </Grid>
+                <Grid item>
+                    <Typography variant='body2' sx={{ fontSize: '12px'}}>Vegetation health</Typography>
+                </Grid>
+            </Grid>
             <DownloadForm 
                 isOpen={isFormOpen} 
                 onClose={closeForm} 

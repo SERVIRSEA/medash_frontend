@@ -135,7 +135,7 @@ const ShortTermWeatherLegend = () => {
 
     return (
         <>
-            <Typography variant="body1" fontWeight="bold" sx={{ fontSize: '14px' }} pt={2}>Legend</Typography>
+            {/* <Typography variant="body1" fontWeight="bold" sx={{ fontSize: '14px' }} pt={2}>Legend</Typography> */}
             {legends.map((legend, index) => {
                 const { title, palette, text } = legend;
 
@@ -148,7 +148,7 @@ const ShortTermWeatherLegend = () => {
                 };
 
                 return (
-                    <Box key={index} pt={2} pl={1} pb={2} pr={2}>
+                    <Box key={index} pt={1} pl={1} pb={1} pr={2}>
                         <Typography variant="body2" fontWeight="bold" sx={{ fontSize: '12px' }} pb={1}>{title}</Typography>
                         <div style={{ ...gradientStyle, height: '20px', width: '100%' }}></div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>

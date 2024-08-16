@@ -44,11 +44,11 @@ export const provinceVisibilityAtom = atom(true);
 export const districtVisibilityAtom = atom(false);
 
 // State for time period selection
-export const baselineMinYearAtom = atom(2000);
+export const baselineMinYearAtom = atom(2003);
 export const baselineMaxYearAtom = atom(2008);
 export const measureMinYearAtom = atom(2010);
 export const measureMaxYearAtom = atom(2023);
-export const tempBaselineMinYearAtom = atom(2000);
+export const tempBaselineMinYearAtom = atom(2003);
 export const tempBaselineMaxYearAtom = atom(2008);
 export const tempMeasureMinYearAtom = atom(2010);
 export const tempMeasureMaxYearAtom = atom(2023);
@@ -68,6 +68,7 @@ export const selectedYearAtom = atom(2023); // For year switches
 export const landCoverApiAtom = atom(''); // Store land cover gee data url for map visualization
 export const lcVisibilityAtom = atom(true);
 export const lcYearlyGEEDataAtom = atom({}); // Store yearly gee fetched url for next time use without refetching
+export const lcTypeAtom = atom('all');
 
 // State for land cover rice map
 export const selectedYearRiceAtom = atom(null); 
@@ -148,6 +149,9 @@ export const sarAlertYearlyMapDataStoreAtom = atom({});
 // SAR chart data state
 export const sarAlertChartAtom = atom([]);
 export const sarAlertChartDataLoadingAtom = atom(true);
+
+export const sarfdasAlertChartAtom = atom([]);
+export const sarfdasAlertChartDataLoadingAtom = atom(true);
 
 // State for fire map
 export const selectedYearFireAtom = atom(null); 
@@ -247,22 +251,16 @@ export const sarfdasApiAtom = atom('');
 
 // Legend Panel
 export const legendPanelAtom = atom(true);
-export const lcLegendAtom = atom(true);
 export const eviLegendAtom = atom(false);
+export const lcLegendAtom = atom(true);
 export const forestGainLegendAtom = atom(false);
 export const forestLossLegendAtom = atom(false);
-export const riceLegendAtom = atom(false);
-export const fireLegendAtom = atom(false);
 export const forestCoverLegendAtom = atom(false);
-export const landcoverLegendAtom = atom(true);
+export const riceLegendAtom = atom(false);
 export const rubberLegendAtom = atom(false);
-export const forestExtentLegendAtom = atom(false);
-export const forestNonForestLegendAtom = atom(false);
-export const forestChangeLegendAtom = atom(false);
 export const gladAlertLegendAtom = atom(false);
-export const sarAlertLegendAtom = atom(false);
-export const fireHotspotLegendAtom = atom(false);
-export const droughtLegendAtom = atom(true);
-export const shortTermWeatherLegendAtom = atom(true);
-export const longTermWeatherLegendAtom = atom(true);
-export const cropMonitoringLegendAtom = atom(false);
+export const combineAlertLegendAtom = atom(false);
+export const fireLegendAtom = atom(false);
+export const shortTermWeatherLegendAtom = atom(false);
+export const longTermWeatherLegendAtom = atom(false);
+export const droughtLegendAtom = atom(false);

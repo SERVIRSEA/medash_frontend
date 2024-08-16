@@ -51,7 +51,7 @@ export default function LayerSelection(){
                         <StreetviewIcon fontSize='12px' />
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
-                        <Typography variant="caption" lineHeight={1} pt={1} sx={{ fontSize: '12px' }}>Protected Area</Typography>
+                        <Typography variant="caption" lineHeight={1} pt={1} sx={{ fontSize: '10px' }}>Protected Area</Typography>
                     </div>
                 </Grid>
                 <Grid item xs sx={{cursor: 'pointer'}} onClick={handleProvinceLayerOnOff}>
@@ -59,7 +59,7 @@ export default function LayerSelection(){
                         <StreetviewIcon fontSize='12px' />
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
-                        <Typography variant="caption" lineHeight={1} pt={1} sx={{ fontSize: '12px' }}>Province Boundary</Typography>
+                        <Typography variant="caption" lineHeight={1} pt={1} sx={{ fontSize: '10px' }}>Province Boundary</Typography>
                     </div>
                 </Grid>
                 <Grid item xs sx={{cursor: 'pointer'}} onClick={handleDistrictLayerOnOff}>
@@ -67,7 +67,7 @@ export default function LayerSelection(){
                         <StreetviewIcon fontSize='12px' />
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
-                        <Typography variant="caption" lineHeight={1} pt={1} sx={{ fontSize: '12px' }}>District Boundary</Typography>
+                        <Typography variant="caption" lineHeight={1} pt={1} sx={{ fontSize: '10px' }}>District Boundary</Typography>
                     </div>
                 </Grid>
                 <Grid item xs sx={{color: 'text.dark', cursor: 'pointer'}} onClick={handleOpenModal}>
@@ -75,7 +75,7 @@ export default function LayerSelection(){
                         <StreetviewIcon fontSize='12px' />
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
-                        <Typography variant="caption" lineHeight={1} pt={1} sx={{ fontSize: '12px' }}>Draw / Upload</Typography>
+                        <Typography variant="caption" lineHeight={1} pt={1} sx={{ fontSize: '10px' }}>Draw / Upload</Typography>
                     </div>
                 </Grid>
             </Grid>

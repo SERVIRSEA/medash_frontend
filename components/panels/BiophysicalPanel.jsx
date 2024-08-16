@@ -13,7 +13,7 @@ import EVILegend from '../legend/EVILegend';
 import LandCoverLegend from '../legend/LandCoverLegend';
 import BioInfoModal from '../modals/BioInfoModal';
 import LandCoverInfoModal from '../modals/LandCoverInfoModal';
-import { measureMinYearAtom, measureMaxYearAtom, areaNameAtom, minYearLandCover, maxYearLandCover, landcoverLegendAtom, eviLegendAtom} from '@/state/atoms';
+import { measureMinYearAtom, measureMaxYearAtom, areaNameAtom, minYearLandCover, maxYearLandCover, lcLegendAtom, eviLegendAtom} from '@/state/atoms';
 
 export default function BiophysicalPanel(){
     const [studyLow] = useAtom(measureMinYearAtom);
@@ -23,7 +23,7 @@ export default function BiophysicalPanel(){
     const [maxYLC] = useAtom(maxYearLandCover);
     const [isBioModalOpen, setIsBioLayerInfoOpen] = useState(false);
     const [isLCModalOpen, setIsLCLayerInfoOpen] = useState(false);
-    const [isLandCoverOpen, setIsLandCoverOpen] = useAtom(landcoverLegendAtom);
+    const [isLandCoverOpen, setIsLandCoverOpen] = useAtom(lcLegendAtom);
     const [isEviOpen, setIsEviOpen] = useAtom(eviLegendAtom);
 
     const handleLandCoverClick = () => {
@@ -62,14 +62,18 @@ export default function BiophysicalPanel(){
                 <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
                     Enhanced Vegetation Index (EVI)
                 </Typography>
-                <InfoIcon onClick={handleOpenBioLayerInfoModal} sx={{ pt: '8px', cursor: 'pointer' }} /> 
+                <Tooltip title="Click to view layer info." arrow>
+                    <InfoIcon onClick={handleOpenBioLayerInfoModal} sx={{ pt: '8px', cursor: 'pointer' }} /> 
+                </Tooltip>
             </Box>
             <EVIMap />
             <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
                 <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
                     Land Cover
                 </Typography>
-                <InfoIcon onClick={handleOpenLCLayerInfoModal} sx={{ pt: '8px', cursor: 'pointer' }} /> 
+                <Tooltip title="Click to view layer info." arrow>
+                    <InfoIcon onClick={handleOpenLCLayerInfoModal} sx={{ pt: '8px', cursor: 'pointer' }} /> 
+                </Tooltip>
             </Box>
             <LandCoverMap />
             <br />

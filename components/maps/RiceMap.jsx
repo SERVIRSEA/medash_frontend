@@ -131,38 +131,6 @@ function RiceMap(){
         downloadRiceMap(selectedYear);
     }
 
-    // const downloadRiceMap = async (year) =>{
-    //     try{
-    //         setIsLoading(true)
-    //         const action = 'download-landcover-rice-map';
-    //         const params = {
-    //             'area_type': area_type,
-    //             'area_id': area_id,
-    //             'year': year
-    //         }
-    //         const data = await Fetcher(action, params);
-            
-    //         if (data.success === 'success' && data.downloadURL) {
-    //             const downloadURL = data.downloadURL;
-    //             // Create a hidden <a> element to trigger the download
-    //             const a = document.createElement('a');
-    //             a.href = downloadURL;
-    //             document.body.appendChild(a);
-    //             a.click();
-    //             // Cleanup
-    //             a.remove();
-    //         } else {
-    //             setAlertMessage('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process.')
-    //             setAlertOpen(true);
-    //             throw new Error('Failed to download map.');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error downloading drought map:', error);
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
-
     return (
         <>
             <Grid container alignItems="center" spacing={0}>
@@ -190,10 +158,10 @@ function RiceMap(){
                 </Grid>
                 <Grid item xs sx={{ marginTop: '10px', marginRight: '12px' }}>
                     <FormControl fullWidth size="small" sx={{ marginBottom: 2 }}>
-                        <InputLabel id="select-year-label" sx={{ fontSize: '12px' }}>Selected Year</InputLabel>
+                        <InputLabel id="select-year-label-simple" sx={{ fontSize: '12px' }}>Selected Year</InputLabel>
                         <Select
-                            labelId="select-year-label"
-                            value={selectedYear}
+                            labelId="select-year-label-simple"
+                            value={selectedYear || ''}
                             onChange={handleYearChange}
                             displayEmpty
                             label="Selected Year"
@@ -222,29 +190,6 @@ function RiceMap(){
                 />
             </Grid>
         </>
-        // <Grid container spacing={0}>
-        //     {years.map((year) => (
-        //         <Grid key={year} item xs={6} sx={{py: 0}}>
-        //             <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
-        //                 <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadRiceMap(year)}>
-        //                     <DownloadIcon fontSize="small" />
-        //                 </IconButton>
-        //                 <Switch 
-        //                     size="small" 
-        //                     sx={{ mr: 0.1 }} 
-        //                     checked={year === selectedYear}
-        //                     onClick={()=>showOnOffRiceMap(year)}
-        //                 />
-        //                 <Typography variant="body2">{year}</Typography>
-        //             </ListItem>
-        //         </Grid>
-        //     ))}
-        //     <DownloadForm 
-        //         isOpen={isFormOpen} 
-        //         onClose={closeForm} 
-        //         downloadParams={downloadParams} 
-        //     />  
-        // </Grid>
     );
 }
 export default RiceMap;

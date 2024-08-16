@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import Typography from '@mui/material/Typography';
-import { Box } from '@mui/material';
+import { Box, Tooltip } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import LegendToggleIcon from '@mui/icons-material/LegendToggle';
 import ForestGainMap from '../maps/ForestGainMap';
@@ -50,7 +50,9 @@ export default function ForestMonitoringPanel(){
             <Box p={1} sx={{overflowY: "scroll", height: "calc(100vh - 175px)"}}>
                 <Box sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
                     <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px', fontSize: '13px'}}>MAP LAYERS</Typography>
-                    <InfoIcon onClick={handleOpenFMLayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                    <Tooltip title="Click to view layer info." arrow>
+                        <InfoIcon onClick={handleOpenFMLayerInfoModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
+                    </Tooltip>
                 </Box>
                 <ForestMonitoringModal isOpen={isForestMonOpen} onClose={handleCloseFMModal} />
                 <Typography variant="body2" sx={{fontSize: '12px'}} pb={1}>

@@ -264,3 +264,4 @@ export const fireLegendAtom = atom(false);
 export const shortTermWeatherLegendAtom = atom(false);
 export const longTermWeatherLegendAtom = atom(false);
 export const droughtLegendAtom = atom(false);
+export const drawModalAtom = atom(false);

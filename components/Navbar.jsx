@@ -8,16 +8,11 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Link from '@mui/material/Link';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
-import '../styles/NavBarStyle.css';
+import { Typography, Link } from '@mui/material';
+import MobileDrawer from './menu/MobileDrawer';
+import DesktopNav from './menu/DesktopNav';
 
 const drawerWidth = 240;
-const fixedWidth = 250; // Set your desired fixed width here
 
 function Navbar(props) {
     const { window } = props;
@@ -27,33 +22,13 @@ function Navbar(props) {
         setMobileOpen((prevState) => !prevState);
     };
 
-    const drawer = (
-        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            <Typography variant="h6" sx={{ my: 2 }}>
-                BIOPHYSICAL M&E DASHBOARD
-            </Typography>
-            <Divider />
-            <List>
-                <ListItem>
-                    <Link className="navbar-menu-item" href="/" underline="none" sx={{ color: '#000' }}>Home</Link>
-                </ListItem>
-                {/* <ListItem>
-                    <Link className="navbar-menu-item" href="/about" underline="none" sx={{ color: '#000' }}>About</Link>
-                </ListItem> */}
-                <ListItem>
-                    <Link className="navbar-menu-item" href="/mapviewer" underline="none" sx={{ color: '#000' }}>Mapviewer</Link>
-                </ListItem>
-            </List>
-        </Box>
-    );
-
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar component="nav" position="static" sx={{ width: '100%' }}>
-                <Toolbar sx={{ p: 0, m: 0, display: 'flex', justifyContent: 'space-between' }}>
+            <AppBar component="nav" position="static" size='small' sx={{ width: '100%', background: '#2563eb' }}>
+                <Toolbar variant="dense" sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <IconButton
                             color="inherit"
@@ -61,9 +36,9 @@ function Navbar(props) {
                             edge="start"
                             onClick={handleDrawerToggle}
                             sx={{
-                                mr: { sm: 2, xs: 0 }, // Adjust margin based on screen size
+                                mr: { sm: 2, xs: 0 },
                                 ml: 1,
-                                display: { sm: 'none', xs: 'block' }, // Show only on small screens (xs)
+                                display: { sm: 'none', xs: 'block' },
                             }}
                         >
                             <MenuIcon />
@@ -71,37 +46,12 @@ function Navbar(props) {
                         <Typography
                             variant="h6"
                             component="div"
-                            sx={{ display: { xs: 'none', sm: 'block' } }}
+                            sx={{ display: { xs: 'none', sm: 'block' }, fontSize: '16px' }}
                         >
-                            BIOPHYSICAL M&E DASHBOARD
+                            <Link href="/" underline="none" sx={{ color: '#fff' }}>Biophysical M&E Dashboard</Link>
                         </Typography>
                     </Box>
-                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        <Button sx={{ color: '#fff' }}>
-                            <Link className="navbar-menu-item" href="/" underline="none" sx={{ color: '#fff' }}>Home</Link>
-                        </Button>
-                        {/* <Button sx={{ color: '#fff' }}>
-                            <Link className="navbar-menu-item" href="/about" underline="none" sx={{ color: '#fff' }}>About</Link>
-                        </Button> */}
-                        <Button sx={{ color: '#fff' }}>
-                            <Link className="navbar-menu-item" href="/mapviewer" underline="none" sx={{ color: '#fff' }}>Mapviewer</Link>
-                        </Button>
-                        <Button sx={{ color: '#fff' }}>
-                            <Link 
-                                className="navbar-menu-item" 
-                                href="https://docs.google.com/document/d/1pcKMdQWvLO9yHbMORgFlj2WvEmbYvnbsgH5y7UZIg1c/pub" 
-                                underline="none" 
-                                sx={{ color: '#fff', fontSize: '13px' }}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Technical Description
-                            </Link>
-                        </Button>
-                        <Button sx={{ color: '#fff' }}>
-                            <Link className="navbar-menu-item" href="https://docs.google.com/document/d/1e_AuA3kp-cFEYYGgR5su6ri5uq_Q88qu1cP5QBaCBB4/pub" underline="none" sx={{ color: '#fff', fontSize: '13px' }} target="_blank" rel="noopener noreferrer">User Manual</Link>
-                        </Button>
-                    </Box>
+                    <DesktopNav />
                 </Toolbar>
             </AppBar>
             <Box component="nav">
@@ -111,14 +61,14 @@ function Navbar(props) {
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
                     ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
+                        keepMounted: true,
                     }}
                     sx={{
                         display: { xs: 'block', sm: 'none' },
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
                     }}
                 >
-                    {drawer}
+                    <MobileDrawer handleDrawerToggle={handleDrawerToggle} mobileOpen={mobileOpen} />
                 </Drawer>
             </Box>
         </Box>
@@ -126,10 +76,6 @@ function Navbar(props) {
 }
 
 Navbar.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
     window: PropTypes.func,
 };
 

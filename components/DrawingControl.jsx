@@ -1,58 +1,50 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { Typography } from '@mui/material';
+import 'leaflet-draw';
 
-const DrawingControl = () => {
+export default function DrawingControl() {
     const map = useMap();
-    const drawControlRef = useRef(null);
+    const [drawControl, setDrawControl] = useState(null);
 
     useEffect(() => {
-        const drawnItems = new L.FeatureGroup();
-        map.addLayer(drawnItems);
+        if (!map) return;
 
-        const drawOptions = {
-        draw: {
-            polygon: true,
-            polyline: false,
-            rectangle: false,
-            circle: false,
-            marker: false
-        },
-        edit: {
-            featureGroup: drawnItems,
-            edit: false
+        // Check if the control is already added to avoid duplication
+        if (drawControl) {
+            map.removeControl(drawControl);
         }
-        };
 
-        const drawControl = new L.Control.Draw(drawOptions);
-        drawControlRef.current = drawControl;
+        // Create a new draw control
+        const newDrawControl = new L.Control.Draw({
+            draw: {
+                polyline: false,
+                polygon: true,
+                rectangle: true,
+                circle: true,
+                marker: false,
+            },
+            edit: {
+                featureGroup: new L.FeatureGroup().addTo(map),
+                remove: true,
+            },
+        }).addTo(map);
 
-        map.addControl(drawControl);
+        setDrawControl(newDrawControl);
 
+        // Handle drawing events
+        map.on(L.Draw.Event.CREATED, (e) => {
+            const layer = e.layer;
+            newDrawControl.options.edit.featureGroup.addLayer(layer);
+        });
+
+        // Cleanup on unmount
         return () => {
-        map.removeLayer(drawnItems);
-        map.removeControl(drawControl);
+            if (drawControl) {
+                map.removeControl(drawControl);
+            }
         };
-    }, [map]);
+    }, [map, drawControl]);
 
-    const activateDrawingMode = () => {
-        if (drawControlRef.current) {
-        drawControlRef.current._toolbars.draw._modes.polygon.handler.enable();
-        }
-    };
-
-    return (
-        <Typography 
-            variant="caption" 
-            lineHeight={1} 
-            pt={1} 
-            sx={{ cursor: 'pointer' }} 
-            onClick={activateDrawingMode}
-        >
-            DRAW / UPLOAD
-        </Typography>
-    );
-};
-
-export default DrawingControl;
+    return null;
+}

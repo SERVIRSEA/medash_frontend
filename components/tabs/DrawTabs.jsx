@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useAtom } from 'jotai';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -11,6 +12,7 @@ import HexagonIcon from '@mui/icons-material/Hexagon';
 import Grid from '@mui/material/Grid';
 import StreetviewIcon from '@mui/icons-material/Streetview';
 import { Rectangle } from 'react-leaflet';
+import { drawModalAtom } from '@/state/atoms';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -46,6 +48,7 @@ function a11yProps(index) {
 }
 
 export default function DrawTabs() {
+    const [openModal, setOpenModal] = useAtom(drawModalAtom);
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -63,7 +66,7 @@ export default function DrawTabs() {
             <CustomTabPanel value={value} index={0}>
                 <div>
                     <Grid container spacing={2}>
-                        <Grid item xs={3} style={{ cursor: 'pointer' }} onClick={() => { handleCloseModal(); activateDraw(); }}>
+                        <Grid item xs={3} style={{ cursor: 'pointer' }} onClick={() => { setOpenModal(false); activateDraw(); }}>
                             <div style={{ textAlign: 'center' }}>
                                 <HexagonIcon />
                             </div>

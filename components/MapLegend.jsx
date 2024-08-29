@@ -74,7 +74,7 @@ const MapLegend = () => {
                     transition: 'width 0.3s ease, max-height 0.3s ease',
                     visibility: isExpanded ? 'visible' : 'hidden',
                     opacity: isExpanded ? 1 : 0,
-                    zIndex: 1, // Ensure the panel is below the close icon
+                    zIndex: 1, 
                 }}
             >
                 <Box sx={{ display: 'flex', alignItems: 'center', padding: 0, background: '#2563eb' }}>

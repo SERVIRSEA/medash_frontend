@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { MapContainer, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import './MapviewerStyle.css'
+import 'leaflet-draw/dist/leaflet.draw.css';
 import BasemapLayer from '@/components/layers/BasemapLayer';
 import LandCoverLayer from '@/components/layers/LandCoverLayer';
 import ProvinceLayer from '@/components/layers/ProvinceLayer';
@@ -24,11 +25,17 @@ import ForecastTemperatureLayer from '@/components/layers/ForecastTemperatureLay
 import SeasonalRainfallLayer from '@/components/layers/SeasonalRainfallLayer';
 import SeasonalTemperatureLayer from '@/components/layers/SeasonalTemperatureLayer';
 import SARFDASAlertLayer from '@/components/layers/SARFDASAlertLayer';
+import DrawButton from '@/components/DrawButton';
+import DrawManager from '@/components/DrawManager';
+import DrawingControl from '@/components/DrawingControl';
 
 export default function MapView() {
+    const [drawMode, setDrawMode] = useState(null);
     return (
         <MapContainer center={[12.562108, 100.888535]} zoom={7} zoomControl={false} className="map-container"> 
             <ZoomControl position="topright" />
+            {/* <DrawButton setDrawMode={setDrawMode} />
+            <DrawManager drawMode={drawMode} setDrawMode={setDrawMode} /> */}
             <BasemapLayer />
             <ProvinceLayer />
             <DistrictLayer />
@@ -51,6 +58,7 @@ export default function MapView() {
             <ForecastTemperatureLayer />
             <SeasonalTemperatureLayer />
             <SARFDASAlertLayer />
+            
         </MapContainer>
     )
 }

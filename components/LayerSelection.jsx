@@ -6,14 +6,19 @@ import Typography from '@mui/material/Typography';
 import { Modal } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { protectedAreaVisibilityAtom, provinceVisibilityAtom, districtVisibilityAtom} from '@/state/atoms';
+import { 
+    protectedAreaVisibilityAtom, 
+    provinceVisibilityAtom, 
+    districtVisibilityAtom,
+    drawModalAtom
+} from '@/state/atoms';
 import DrawTabs from './tabs/DrawTabs';
 
 export default function LayerSelection(){
     const [visiblePALayer, setVisiblePALayer] = useAtom(protectedAreaVisibilityAtom);
     const [visibleProvinceLayer, setVisibleProvinceLayer] = useAtom(provinceVisibilityAtom);
     const [visibleDistrictLayer, setVisibleDistrictLayer] = useAtom(districtVisibilityAtom);
-    const [openModal, setOpenModal] = useState(false);
+    const [openModal, setOpenModal] = useAtom(drawModalAtom);
 
     const handlePALayerOnOff = ()=> {
         setVisiblePALayer(true);
@@ -96,9 +101,6 @@ export default function LayerSelection(){
                 }}>
                     <div>
                         <Typography variant="body1" sx={{ fontWeight: 'bold', textAlign: 'center' }}>Define Area (Under Development)</Typography>
-                        {/* <IconButton onClick={handleCloseModal}>
-                            <CloseIcon />
-                        </IconButton> */}
                         <DrawTabs />
                     </div>
                     

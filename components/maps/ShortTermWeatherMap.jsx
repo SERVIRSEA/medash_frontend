@@ -180,7 +180,7 @@ function ShortTermWeatherMap() {
 
     return (
         <>
-            <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
+            <ListItem disableGutters sx={{  display: 'flex', alignItems: 'center' }}>
                 <Tooltip title="Click to download layer." arrow>
                     <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadShortTermWeatherMap("precipitation", "past")}>
                         <DownloadIcon />
@@ -196,7 +196,7 @@ function ShortTermWeatherMap() {
                 </Tooltip>
                 <Typography variant="body2" sx={{fontSize: '12px'}}>Accumulated Rainfall (past 7 days) (mm)</Typography>
             </ListItem>
-            <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
+            <ListItem disableGutters sx={{  display: 'flex', alignItems: 'center' }}>
                 <Tooltip title="Click to download layer." arrow>
                     <IconButton 
                         color="primary" 
@@ -216,9 +216,9 @@ function ShortTermWeatherMap() {
                         onChange={() => setIsVisiblePastTemperature(!isVisiblePastTemperature)}
                     />
                 </Tooltip>
-                <Typography variant="body2" sx={{fontSize: '12px'}}>Average temperature (past 7 days) (C)</Typography>
+                <Typography variant="body2" sx={{fontSize: '12px'}}>Average temperature (past 7 days) (°C)</Typography>
             </ListItem>
-            <ListItem disableGutters sx={{ py: 0, display: 'flex', alignItems: 'center' }}>
+            <ListItem disableGutters sx={{ display: 'flex', alignItems: 'center' }}>
                 <Tooltip title="Click to download layer." arrow>
                     <IconButton color="primary" aria-label="download" size="small" sx={{ mr: 0.1 }} onClick={()=>downloadShortTermWeatherMap("precipitation", "forecast")}>
                         <DownloadIcon />

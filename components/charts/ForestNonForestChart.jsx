@@ -206,8 +206,11 @@ const ForestNonForestChart = () => {
             // },
         },
         tooltip: {
-            headerFormat: '<b>{point.x}</b><br/>',
-            pointFormat: '{series.name}: {point.y} Ha'
+            formatter: function () {
+                const formattedNumber = Math.round(this.point.y).toLocaleString();
+                
+                return '<b>' + this.x + '</b><br/>' + this.series.name + ": " + formattedNumber + " Ha";
+            }
         },
         plotOptions: {
             bar: {
@@ -244,9 +247,8 @@ const ForestNonForestChart = () => {
                 contextButton: {
                     align: 'right',      
                     verticalAlign: 'top', 
-                    marginTop: '100px',
                     x: 10, 
-                    y: -12, 
+                    y: -15, 
                     menuItems: [
                         'viewFullscreen',
                         'separator',

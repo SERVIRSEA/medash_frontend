@@ -13,8 +13,10 @@ import {
     isLoadingAtom,
     updateTriggerAtom,
     forestExtentVisibilityAtom,
-    forestCoverLegendAtom
+    forestCoverLegendAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
+import { getForestCoverMap } from "@/services/forestService";
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
 
@@ -23,6 +25,7 @@ function ForestExtentMap(){
     const [area_id] = useAtom(areaIdAtom);
     const [min] = useAtom(minYearForestExtent);
     const [max] = useAtom(maxYearForestExtent);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
     const [selectedYear, setSelectedYear] = useAtom(selectedYearForestExtentAtom);
     const [, setForestExtentData] = useAtom(forestExtentApiAtom);
@@ -46,23 +49,25 @@ function ForestExtentMap(){
         const params = {
             'area_type': area_type,
             'area_id': area_id,
-            'studyLow': min,
-            'studyHigh': max,
+            'year': year
         };
+        if (geojsonData) {
+            const geojsonString = JSON.stringify(geojsonData);
+            params.geom = geojsonString;
+        }
         const key = JSON.stringify(params);
 
         if (forestExtentMapStore[key]) {
             const data = forestExtentMapStore[key];
-            const filteredData = data[year];
-            setForestExtentData(filteredData);
+            setForestExtentData(data);
             setIsFetching(false);
             setIsLoading(false);
         } else {
             try {
-                const data = await Fetcher(action, params);
+                const fetchData = await getForestCoverMap(params);
+                const data = fetchData.data;
                 setForestExtentMapStore(prev => ({ ...prev, [key]: data }));
-                const filteredData = data[year];
-                setForestExtentData(filteredData);
+                setForestExtentData(data);
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error; 

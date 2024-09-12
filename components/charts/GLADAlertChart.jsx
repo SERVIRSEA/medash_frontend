@@ -105,12 +105,14 @@ const GLADAlertChart = () => {
         chart: {
             type: 'column',
             height: 250,
+            marginRight: 20,
         },
         title: false,
 		subtitle: false,
         tooltip: {
             formatter: function () {
-                return 'Area in Hectare: ' +  this.point.y.toFixed(0) ;
+                const formattedNumber = Math.round(this.point.y).toLocaleString();
+                return 'Area in Hectare: ' +  formattedNumber ;
             }
         },
         xAxis: {
@@ -144,7 +146,8 @@ const GLADAlertChart = () => {
                 contextButton: {
                     align: 'right',      
                     verticalAlign: 'top', 
-                    marginBottom: '10px',
+                    x: 0,
+                    y: -15,
                     menuItems: [
                         'viewFullscreen',
                         'separator',

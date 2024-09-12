@@ -64,7 +64,7 @@ export default function DashboardControl() {
                     </Typography>
                     <BaselineSlider />
                     <Typography sx={{fontSize: "12px" }}>
-                        2. Select a time period to measure
+                        2. Select a time period to evaluate
                     </Typography>
                     <MeasureSlider />
                     <Typography sx={{fontSize: "12px" }}>

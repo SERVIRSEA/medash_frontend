@@ -146,19 +146,20 @@ const RubberLineChart = () => {
 
     const data = chartData;
 
-    const chartTitle = "LAND COVER IN";
+    const chartTitle = "RUBBER IN";
 
     // Configuring the Highcharts
     const options = {
         chart: {
             type: 'spline',
-            // marginRight: 40  
+            marginRight: 30  
         },
         title: false,
 		subtitle: false,
         tooltip: {
             formatter: function () {
-                return 'Estimated Area: ' +  this.point.y.toFixed(2) ;
+                const formattedNumber = Math.round(this.point.y).toLocaleString();
+                return 'Estimated Area: ' + formattedNumber + ' Ha';
             }
         },
         xAxis: {
@@ -195,7 +196,9 @@ const RubberLineChart = () => {
                 contextButton: {
                     align: 'right',      
                     verticalAlign: 'top', 
-                    marginBottom: '10px',
+                    // marginRight: '20px',
+                    x: 10,
+                    y: -15,
                     menuItems: [
                         'viewFullscreen',
                         'separator',

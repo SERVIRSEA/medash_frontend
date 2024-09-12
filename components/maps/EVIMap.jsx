@@ -6,6 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { getEviMap } from '@/services/eviService';
 
 import { 
     baselineMinYearAtom,
@@ -21,7 +22,8 @@ import {
     updateTriggerAtom,
     alertOpenAtom, 
     alertMessageAtom,
-    eviLegendAtom
+    eviLegendAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import DownloadForm from '../modals/DownloadForm';
 
@@ -33,6 +35,7 @@ function EVIMap(){
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [, setEviData] = useAtom(eviApiAtom);
     const [eviMapDataStore, setEVIMapDataStore] = useAtom(eviMapStoreAtom);
     const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
@@ -59,23 +62,29 @@ function EVIMap(){
         const params = {
             'area_type': area_type,
             'area_id': area_id,
-            'refLow': refLow,
-            'refHigh': refHigh,
-            'studyLow': studyLow,
-            'studyHigh': studyHigh
+            'ref_low': refLow,
+            'ref_high': refHigh,
+            'study_low': studyLow,
+            'study_high': studyHigh
         };
+        if (geojsonData) {
+            const geojsonString = JSON.stringify(geojsonData);
+            params.geom = geojsonString;
+        }
 
         const key = JSON.stringify(params);
-        const action = 'get-evi-map';
+        // const action = 'get-evi-map';
 
         if (eviMapDataStore[key]) {
             setEviData(eviMapDataStore[key]);
         } else {
             try {
                 setIsLoading(true);
-                const data = await Fetcher(action, params);
-                setEviData(data);
-                setEVIMapDataStore((prev) => ({ ...prev, [key]: data }));
+                const fetchData = await getEviMap(params);
+                
+                // const data = await Fetcher(action, params);
+                setEviData(fetchData.data);
+                setEVIMapDataStore((prev) => ({ ...prev, [key]: fetchData.data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error;
@@ -107,11 +116,15 @@ function EVIMap(){
         const params = {
             'area_type': area_type,
             'area_id': area_id,
-            'refLow': refLow,
-            'refHigh': refHigh,
-            'studyLow': studyLow,
-            'studyHigh': studyHigh,
-            'dataset': 'EVI'
+            'ref_low': refLow,
+            'ref_high': refHigh,
+            'study_low': studyLow,
+            'study_high': studyHigh,
+            'dataset': 'evi'
+        }
+        if (geojsonData) {
+            const geojsonString = JSON.stringify(geojsonData);
+            params.geom = geojsonString;
         }
         setDownloadParams(params);
         openForm();

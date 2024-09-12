@@ -9,7 +9,7 @@ if (typeof Highcharts === 'object') {
     Exporting(Highcharts);
     ExportData(Highcharts);
 }
-
+import { getEviLine } from '@/services/eviService';
 import { Fetcher } from '@/fetchers/Fetcher';
 import { 
     baselineMinYearAtom,
@@ -21,11 +21,13 @@ import {
     eviLineChartAtom,
     eviLineChartDataLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 
 const EVILineChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [eviLineChartData, setEviLineChartData] = useAtom(eviLineChartAtom);
     const [loading, setLoading] = useAtom(eviLineChartDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -48,15 +50,20 @@ const EVILineChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'refLow': refLow,
-                        'refHigh': refHigh,
-                        'studyLow': studyLow,
-                        'studyHigh': studyHigh
+                        'ref_low': refLow,
+                        'ref_high': refHigh,
+                        'study_low': studyLow,
+                        'study_high': studyHigh
+                    }
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
                     }
                     const key = JSON.stringify(params);
-                    const action = 'get-evi-line';
-
-                    const data = await Fetcher(action, params);
+                    // const action = 'get-evi-line';
+                    // const data = await Fetcher(action, params);
+                    const fetchedData = await getEviLine(params);
+                    const data = fetchedData.data;
                     setEviLineChartData(data);
                     setLoading(false);
                     setAttempts(0);
@@ -131,10 +138,10 @@ const EVILineChart = () => {
         legend: {
             align: 'center',
             verticalAlign: 'bottom',
-            y: -25
+            // y: -25
         },
         series: [{
-            data: eviLineChartData.timeSeries,
+            data: eviLineChartData.time_series,
             name: 'Biophysical Health',
             color: "#2b5154",
             marker: {
@@ -149,6 +156,10 @@ const EVILineChart = () => {
             enabled: true,  // this will enable the exporting functionality
             buttons: {
                 contextButton: {
+                    align: 'right',      
+                    verticalAlign: 'top', 
+                    x: 0,
+                    y: -15,
                     menuItems: [
                         'viewFullscreen',
                         'separator',

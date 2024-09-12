@@ -120,6 +120,7 @@ const FireHotspotChart = () => {
         chart: {
             type: 'column',
             height: 250,
+            marginRight: 20
         },
         title: false,
 		subtitle: false,
@@ -143,7 +144,7 @@ const FireHotspotChart = () => {
         }],
         plotOptions: {
             column: {
-                pointPadding: 0.0, 
+                pointPadding: 0.2, 
                 groupPadding: 0.0, 
                 color: '#d95252'
             }
@@ -159,7 +160,8 @@ const FireHotspotChart = () => {
                 contextButton: {
                     align: 'right',      
                     verticalAlign: 'top', 
-                    marginBottom: '10px',
+                    x: 0,
+                    y: -15,
                     menuItems: [
                         'viewFullscreen',
                         'separator',

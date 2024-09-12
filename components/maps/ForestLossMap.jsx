@@ -13,14 +13,17 @@ import {
     forestLossVisibilityAtom,
     updateTriggerAtom,
     alertOpenAtom, 
-    alertMessageAtom 
+    alertMessageAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
+import { getForestLossMap } from "@/services/forestService";
 
 function ForestLossMap(){
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [min] = useAtom(minYearForestLoss);
     const [max] = useAtom(maxYearForestLoss);
     const [, setForestLossData] = useAtom(forestLossApiAtom);
@@ -46,9 +49,13 @@ function ForestLossMap(){
             const params = {
                 'area_type': area_type,
                 'area_id': area_id,
-                'studyLow': min,
-                'studyHigh': max,
+                'start_year': min,
+                'end_year': max,
             };
+            if (geojsonData) {
+                const geojsonString = JSON.stringify(geojsonData);
+                params.geom = geojsonString;
+            }
 
             const key = JSON.stringify(params);
             const action = 'get-forest-loss-map';
@@ -59,8 +66,9 @@ function ForestLossMap(){
                 setIsLoading(false);
             } else {
                 try {
-                    const data = await Fetcher(action, params);
-                    
+                    // const data = await Fetcher(action, params);
+                    const fetchData = await fetchForestLossMap(params);
+                    const data = fetchData.data;
                     setForestLossData(data);
                     setForestLossMapStore(prev => ({ ...prev, [key]: data }));
                 } catch (error) {

@@ -178,9 +178,7 @@ export default function DroughtTab() {
                     <Tab label="Drought" {...a11yProps(2)} sx={{ whiteSpace: 'normal', minWidth: 'auto', fontSize: '12px' }} />
                 </Tabs>
             </Box>
-            <Typography variant="body2" sx={{fontSize: '12px'}} pl={1} pt={2} pb={0} mb={0}>
-                Selected Area: {selectedArea}
-            </Typography>
+            
             <CustomTabPanel value={value} index={0} pt={0} mt={0}>
                 <Box pl={1} sx={{ flex: '1', display: 'flex', alignItems: 'center' }}>
                     <Typography variant="body2" sx={{ fontWeight: 'bold', display: 'inline', marginRight: '4px', fontSize: '12px' }}>MAP LAYERS</Typography>
@@ -188,6 +186,9 @@ export default function DroughtTab() {
                         <InfoIcon onClick={handleOpenShortModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
                     </Tooltip>
                 </Box>
+                <Typography variant="body2" sx={{fontSize: '12px'}} pl={1} pt={0} pb={0} mb={0}>
+                    Selected Area: {selectedArea}
+                </Typography>
                 <ShortWeatherModal isOpen={isShortModalOpen} onClose={handleCloseShortModal} />
                 <Box pl={1} pt={1}>
                     <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
@@ -212,6 +213,9 @@ export default function DroughtTab() {
                         <InfoIcon onClick={handleOpenSeasonalModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
                     </Tooltip>
                 </Box>
+                <Typography variant="body2" sx={{fontSize: '12px'}} pl={1} pt={0} pb={0} mb={0}>
+                    Selected Area: {selectedArea}
+                </Typography>
                 <SeasonalWeatherModal isOpen={isSeasonalModalOpen} onClose={handleCloseSeasonalModal} />
                 <Box pl={1} pt={1}>
                     <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
@@ -236,11 +240,14 @@ export default function DroughtTab() {
                         <InfoIcon onClick={handleOpenDroughtModal} sx={{ p: '2px', cursor: 'pointer' }} /> 
                     </Tooltip>
                 </Box>
+                <Typography variant="body2" sx={{fontSize: '12px'}} pl={1} pt={0} pb={0} mb={0}>
+                    Selected Area: {selectedArea}
+                </Typography>
                 <DroughtModal isOpen={isDroughtModalOpen} onClose={handleCloseDroughtModal} />
                 <Box pl={2} pr={2} pb={1} pt={1}>
-                    <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
+                    {/* <Typography variant="body1" sx={{ fontSize: '12px', fontWeight: 'bold' }} pt={1}>
                         Drought Index Map
-                    </Typography>
+                    </Typography> */}
                     {/* <LayerNameLegendControl
                         title="Drought Index Map"
                         icon={<LegendToggleIcon />}

@@ -5,6 +5,9 @@ import DownloadIcon from '@mui/icons-material/Download';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Button, Modal, TextField, Box, Typography, IconButton, CircularProgress } from '@mui/material';
 import { postFetcher } from '@/fetchers/Fetcher';
+import { downloadLandcoverMap } from '@/services/landcoverService';
+import { downloadEviMap } from '@/services/eviService';
+
 import { 
     nameAtom, 
     emailAtom, 
@@ -66,12 +69,36 @@ const DownloadForm = ({ isOpen, onClose, downloadParams }) => {
         setIsFormSubmitted(true);
         setError('');
         try {
-            const formSubmissionData = { name, email, institution, jobTitle, purposeOfDownload, ...downloadParams };
-            const action = 'post-download-form-data'; 
-            const response = await postFetcher(action, formSubmissionData);
+            const formSubmissionData = {
+                name,
+                email,
+                institution,
+                job_title: jobTitle,
+                purpose_of_download: purposeOfDownload,
+                ...downloadParams
+            };
+
+            // const action = 'post-download-form-data'; 
+            // const response = await postFetcher(action, formSubmissionData);
             
-            if (response.success === 'success' && response.downloadURL) {
-                setDownloadURL(response.downloadURL);
+            // if (response.success === 'success' && response.downloadURL) {
+            //     setDownloadURL(response.downloadURL);
+            // } else {
+            //     setError(response.error || 'Failed to get download link');
+            // }
+            // Determine the appropriate API function to call based on dataset
+            let response;
+            if (formSubmissionData.dataset === 'landcover') {
+                response = await downloadLandcoverMap(formSubmissionData);
+            } else if (formSubmissionData.dataset === 'evi') {
+                response = await downloadEviMap(formSubmissionData);
+            } else {
+                throw new Error('Unsupported dataset');
+            }
+
+            // Handle the response
+            if (response.success === true && response.data) {
+                setDownloadURL(response.data);
             } else {
                 setError(response.error || 'Failed to get download link');
             }
@@ -87,18 +114,34 @@ const DownloadForm = ({ isOpen, onClose, downloadParams }) => {
         setIsLoading(true); 
         setError('');
         try {
-            const formSubmissionData = { name, email, institution, jobTitle, purposeOfDownload, ...downloadParams };
-            const action = 'post-download-form-data'; 
-            const response = await postFetcher(action, formSubmissionData);
-            
-            if (response.success === 'success' && response.downloadURL) {
-                setDownloadURL(response.downloadURL);
+            const formSubmissionData = {
+                name,
+                email,
+                institution,
+                job_title: jobTitle,
+                purpose_of_download: purposeOfDownload,
+                ...downloadParams
+            };
+            // const action = 'post-download-form-data'; 
+            // const response = await postFetcher(action, formSubmissionData);
+            let response;
+            if (formSubmissionData.dataset === 'landcover') {
+                response = await downloadLandcoverMap(formSubmissionData);
+            } else if (formSubmissionData.dataset === 'evi') {
+                response = await downloadEviMap(formSubmissionData);
+            } else {
+                throw new Error('Unsupported dataset');
+            }
+
+            // Handle the response
+            if (response.success === true && response.data) {
+                setDownloadURL(response.data);
             } else {
                 setError(response.error || 'Failed to get download link');
             }
         } catch (error) {
             setError('Your selected area is too large to download. Please choose a specific province, district, or protected area, or draw a smaller area on the map. Once you have updated the map accordingly, click the download icon again to initiate the download process. Otherwise contact with the support team');
-            // console.error('Error submitting form:', error);
+            console.error('Error submitting form:', error);
         } finally {
             setIsLoading(false); 
         }

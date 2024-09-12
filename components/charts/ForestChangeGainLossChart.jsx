@@ -183,7 +183,7 @@ const ForestChangeGainLossChart = () => {
         xAxis: {
             categories: [
                 'Baseline Period',
-                'Measuring Period'
+                'Evaluation Period'
             ],
             crosshair: true
         },
@@ -195,7 +195,8 @@ const ForestChangeGainLossChart = () => {
         },
         tooltip: {
             formatter: function () {
-                return this.series.name + " (" + (this.point.y).toFixed(2) + ")";
+                const formattedNumber = Math.round(this.point.y).toLocaleString();
+                return this.series.name + " (" + formattedNumber + ") Ha";
             }
         },
         plotOptions: {
@@ -226,6 +227,27 @@ const ForestChangeGainLossChart = () => {
         credits: {
             enabled: false
         },
+        exporting: {
+            buttons: {
+                contextButton: {
+                    align: 'right',      
+                    verticalAlign: 'top', 
+                    x: 10, 
+                    y: -15, 
+                    menuItems: [
+                        'viewFullscreen',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG',
+                        'separator',  
+                        'downloadCSV',
+                        'downloadXLS'
+                    ]
+                }
+            }
+        }
     };
 
 

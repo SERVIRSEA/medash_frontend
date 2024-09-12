@@ -24,11 +24,16 @@ import {
     // maxYearLandCover,
     updateTriggerAtom,
     maxRetryAttemptsAtom,
-    landcoverTextAtom
+    landcoverTextAtom,
+    activeMenuAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
+import { getLandcoverChart } from '@/services/landcoverService';
 
 const LandCoverChart = () => {
+    const [menuId] = useAtom(activeMenuAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [lcChartData, setLCChartData] = useAtom(landCoverChartAtom);
     const [loading, setLoading] = useAtom(lcChartDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -52,25 +57,35 @@ const LandCoverChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'studyLow': refLow,
-                        'studyHigh': studyHigh
+                        'start_year': refLow,
+                        'end_year': studyHigh
                     };
-                    const key = JSON.stringify(params);
-                    const action = 'get-landcover-chart';
-                    const data = await Fetcher(action, params);
-                    // console.log(data)
-                    if (['country', 'province', 'district', 'protected_area'].includes(area_type)) {
-                        const parsedData = JSON.parse(data);
-                        // setLCChartData(parsedData);
-                        const period1Data = filterData(parsedData, refLow, refHigh);
-                        const period2Data = filterData(parsedData, studyLow, studyHigh);
-                        setLCChartData({ period1: period1Data, period2: period2Data });
-                    } else {
-                        // setLCChartData(data);
-                        const period1Data = filterData(data, refLow, refHigh);
-                        const period2Data = filterData(data, studyLow, studyHigh);
-                        setLCChartData({ period1: period1Data, period2: period2Data });
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
                     }
+                    const key = JSON.stringify(params);
+                    // const action = 'get-landcover-chart';
+                    // const data = await Fetcher(action, params);
+                    
+                    const fetchData = await getLandcoverChart(params);
+                    
+                    const period1Data = filterData(fetchData.data, refLow, refHigh);
+                    const period2Data = filterData(fetchData.data, studyLow, studyHigh);
+                    setLCChartData({ period1: period1Data, period2: period2Data });
+                    
+                    // console.log(fetchData);
+                    // if (['country', 'province', 'district', 'protected_area'].includes(area_type)) {
+                    //     const parsedData = fetchData.data; 
+                    //     const period1Data = filterData(parsedData, refLow, refHigh);
+                    //     const period2Data = filterData(parsedData, studyLow, studyHigh);
+                    //     setLCChartData({ period1: period1Data, period2: period2Data });
+                    // } else {
+                    //     // setLCChartData(data);
+                    //     const period1Data = filterData(data, refLow, refHigh);
+                    //     const period2Data = filterData(data, studyLow, studyHigh);
+                    //     setLCChartData({ period1: period1Data, period2: period2Data });
+                    // }
 
                     setLoading(false);
                     setAttempts(0);
@@ -258,14 +273,15 @@ const LandCoverChart = () => {
                             return char.toUpperCase();
                         });
                     }
-                    return capitalizeFirstLetter(this.series.name) + " (" + this.point.y + " Ha)";
+                    const formattedNumber = Math.round(this.point.y).toLocaleString();
+                    return capitalizeFirstLetter(this.series.name) + " (" + formattedNumber + " Ha)";
                 }
             },
             plotOptions: {
                 column: {
                     stacking: 'normal',
-                    pointPadding: 0.2,
-                    pointWidth: 6,
+                    // pointPadding: 10,
+                    pointWidth: menuId === 7 ? 35 : 15,
                     borderWidth: 0
                 }
             },
@@ -287,15 +303,19 @@ const LandCoverChart = () => {
                     return name.split(' ').map(capitalizeFirstLetter).join(' ');
                 },
                 itemStyle: {
-                    fontSize: '8px' 
+                    fontSize: menuId === 7 ? '12px' : '8px', 
                 }
+            },
+            credits: {
+                enabled: false
             },
             exporting: {
                 buttons: {
                     contextButton: {
                         align: 'right',      
                         verticalAlign: 'top', 
-                        marginBottom: '10px',
+                        x: 0,
+                        y: -15,
                         menuItems: [
                             'viewFullscreen',
                             'separator',
@@ -332,7 +352,8 @@ const LandCoverChart = () => {
         const optionsPeriod2 = {
             chart: {
                 type: 'column',
-                marginRight: 40  
+                marginRight: 40,
+                // width: 500  
             },
             title: false,
             subtitle: false,
@@ -367,14 +388,15 @@ const LandCoverChart = () => {
                             return char.toUpperCase();
                         });
                     }
-                    return capitalizeFirstLetter(this.series.name) + " (" + this.point.y + " Ha)";
+                    const formattedNumber = Math.round(this.point.y).toLocaleString();
+                    return capitalizeFirstLetter(this.series.name) + " (" + formattedNumber + " Ha)";
                 }
             },
             plotOptions: {
                 column: {
                     stacking: 'normal',
-                    pointPadding: 0.2,
-                    pointWidth: 6,
+                    // pointPadding: 1,
+                    pointWidth: menuId === 7 ? 15 : 7,
                     borderWidth: 0
                 }
             },
@@ -397,7 +419,7 @@ const LandCoverChart = () => {
                     return name.split(' ').map(capitalizeFirstLetter).join(' ');
                 },
                 itemStyle: {
-                    fontSize: '8px' 
+                    fontSize: menuId === 7 ? '12px' : '8px', 
                 }
             },
             credits: {
@@ -408,7 +430,8 @@ const LandCoverChart = () => {
                     contextButton: {
                         align: 'right',      
                         verticalAlign: 'top', 
-                        marginBottom: '10px',
+                        x: 0,
+                        y: -15,
                         menuItems: [
                             'viewFullscreen',
                             'separator',
@@ -445,7 +468,7 @@ const LandCoverChart = () => {
             <div>
                 <Typography variant='body2' p={1} sx={{ fontWeight: 500, fontSize: '12px' }}>Land cover for baseline period ({refLow} - {refHigh})</Typography>
                 <HighchartsReact highcharts={Highcharts} options={optionsPeriod1} />
-                <Typography variant='body2' p={1} sx={{ fontWeight: 500, fontSize: '12px' }}>Land cover for measure period ({studyLow} - {studyHigh})</Typography>
+                <Typography variant='body2' p={1} sx={{ fontWeight: 500, fontSize: '12px' }}>Land cover for evaluation period ({studyLow} - {studyHigh})</Typography>
                 <HighchartsReact highcharts={Highcharts} options={optionsPeriod2} />
             </div>
         );

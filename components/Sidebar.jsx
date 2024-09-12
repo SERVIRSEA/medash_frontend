@@ -93,7 +93,7 @@ function Sidebar(){
     const [, setLegendPanel] = useAtom(legendPanelAtom);
   
     const sidebarStyle = {
-        background: "#eee",
+        background: "#eff6ff",
         color: "#000",
         width: '80px',
         height: "calc(100% - 125px)",
@@ -202,14 +202,6 @@ function Sidebar(){
         return null;
     }
 
-    // const mapVisibilityMappings = {
-    //     0: { eviMap: false, lcMap: true, forestGainMap: false, forestLossMap: false, forestExtentMap: false, riceMap: false, rubberMap: false, gladMap: false, sarfdasMap: false, fireMap: false, pastRainMap: false, frcstRainMap: false, pastTempMap: false, frcstTempMap: false, sesRainMap: false, sesTempMap: false, droughtMap: false},
-    //     1: { riceMap: false, rubberMap: false, lcMap: false, forestExtentMap: false, forestGainMap: true, forestLossMap: true },
-    //     2: { riceMap: true, rubberMap: true, lcMap: false },
-    //     3: { riceMap: false, rubberMap: false, lcMap: false, gladMap: true, sarMap: false, sarfdasMap: false },
-    //     4: { riceMap: false, rubberMap: false, lcMap: false,  fireMap: true},
-    //     5: { pastRainMap: false, frcstRainMap: false, pastTempMap: false, frcstTempMap: true, sesRainMap: false, sesTempMap: false, droughtMap: false }
-    // };
     const allMap = {
         eviMap: false, lcMap: false, forestGainMap: false, forestLossMap: false, forestExtentMap: false,
         riceMap: false, rubberMap: false, gladMap: false, sarMap: false, sarfdasMap: false,
@@ -243,17 +235,6 @@ function Sidebar(){
         // 6: { ...baseLegend },
         7: { ...baseLegend, lcLegend: true }
     };
-
-    // const legendMappings = {
-    //     0: { eviLegend: false, lcLegend: true, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
-    //     1: { eviLegend: false, lcLegend: false, forestGainLegend: true, forestLossLegend: true, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
-    //     2: { eviLegend: false, lcLegend: false, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: true, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
-    //     3: { eviLegend: false, lcLegend: false, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: true, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
-    //     4: { eviLegend: false, lcLegend: false, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: true, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
-    //     5: { eviLegend: false, lcLegend: false, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: true, longTermLegend: false, droughtLegend: false},
-    //     6: { eviLegend: false, lcLegend: false, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false},
-    //     7: { eviLegend: false, lcLegend: true, forestGainLegend: false, forestLossLegend: false, forestCoverLegend: false, riceLegend: false, rubberLegend: false, gladAlertLegend: false, combineAlertLegend: false, fireLegend: false, shortTermLegend: false, longTermLegend: false, droughtLegend: false}
-    // };
       
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);
@@ -317,9 +298,11 @@ function Sidebar(){
                             backgroundColor: selectedIndex === index ? '#bfdbfe' : 'initial',
                                 '&.Mui-selected': {
                                     backgroundColor: '#bfdbfe !important',
+                                    borderRight: '3px solid #1e40af'
                                 },
                                 '&:hover': {
-                                    backgroundColor: selectedIndex === index ? '#bfdbfe' : '#dbeafe'
+                                    backgroundColor: selectedIndex === index ? '#bfdbfe' : '#bfdbfe',
+                                    borderRight: '3px solid #1e40af'
                                 }
                             }}
                             selected={selectedIndex === index}

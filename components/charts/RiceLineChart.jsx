@@ -142,7 +142,7 @@ const RiceLineChart = () => {
 
     const data = chartData;
 
-    const chartTitle = "LAND COVER IN";
+    const chartTitle = "RICE IN";
 
     // Configuring the Highcharts
     const options = {
@@ -154,7 +154,8 @@ const RiceLineChart = () => {
         subtitle: false,
         tooltip: {
             formatter: function () {
-                return 'Estimated Area: ' + this.point.y.toFixed(2);
+                const formattedNumber = Math.round(this.point.y).toLocaleString();
+                return 'Estimated Area: ' + formattedNumber + ' Ha';
             }
         },
         xAxis: {
@@ -193,7 +194,8 @@ const RiceLineChart = () => {
                 contextButton: {
                     align: 'right',
                     verticalAlign: 'top',
-                    marginBottom: '10px',
+                    x: 10,
+                    y: -15,
                     menuItems: [
                         'viewFullscreen',
                         'separator',

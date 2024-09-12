@@ -19,8 +19,10 @@ import {
     alertMessageAtom,
     lcVisibilityAtom,
     lcLegendAtom,
-    lcTypeAtom
+    lcTypeAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
+import { getLandcoverMap } from '@/services/landcoverService';
 import { Fetcher } from '@/fetchers/Fetcher';
 import DownloadForm from '../modals/DownloadForm';
 import LCTypesDropdown from '../dropdown/LCTypesDropdown';
@@ -31,6 +33,7 @@ function LandCoverMap(){
     const [selectedClass] = useAtom(lcTypeAtom);
     const [min] = useAtom(minYearLandCover);
     const [max] = useAtom(maxYearLandCover);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
     const [selectedYear, setSelectedYear] = useAtom(selectedYearAtom);
     const [, setLandCoverData] = useAtom(landCoverApiAtom);
@@ -45,7 +48,7 @@ function LandCoverMap(){
     const [lcLayerVisibility, setLCLayerVisibility] = useAtom(lcVisibilityAtom);
     const [, setIsVisibleLC] = useAtom(lcLegendAtom);
     
-    const fetchLandCoverMap = async ({year, lcType, areaType, areaId}) => {
+    const fetchLandCoverMap = async ({year, lcType, areaType, areaId, geojsonData}) => {
         try {
             // Check if a request is already in progress
             if (isFetching) {
@@ -59,8 +62,15 @@ function LandCoverMap(){
                 'area_type': areaType,
                 'area_id': areaId,
                 'year': year,
-                'class': lcType
+                'class': lcType,
+                'lc_type': lcType
             };
+            // console.log(geojsonData);
+            // Conditionally add `geom` to the params only if geojsonData is available
+            if (geojsonData) {
+                const geojsonString = JSON.stringify(geojsonData);
+                params.geom = geojsonString;
+            }
     
             const key = JSON.stringify(params);
             const action = 'get-landcover-map';
@@ -70,12 +80,14 @@ function LandCoverMap(){
                 setLandCoverData(mapDataStore[key]);
                 return mapDataStore[key];
             }
+            
+            const mapData = await getLandcoverMap(params);
+            
+            // const data = await Fetcher(action, params);
+            setLandCoverData(mapData.data);
+            setMapDataStore(prev => ({ ...prev, [key]: mapData.data }));
     
-            const data = await Fetcher(action, params);
-            setLandCoverData(data);
-            setMapDataStore(prev => ({ ...prev, [key]: data }));
-    
-            return data; // Optionally return the fetched data for further use
+            return mapData; // Optionally return the fetched data for further use
     
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -92,12 +104,13 @@ function LandCoverMap(){
                 year: selectedYear, 
                 lcType: selectedClass, 
                 areaType: area_type, 
-                areaId: area_id
+                areaId: area_id,
+                geojsonData: geojsonData
             });
         };
         fetchMap();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [area_type, area_id, selectedYear, selectedClass]);
+    }, [area_type, area_id, selectedYear, selectedClass, geojsonData]);
 
     const openForm = () => {
         setIsFormOpen(true);
@@ -117,8 +130,12 @@ function LandCoverMap(){
             'area_type': area_type,
             'area_id': area_id,
             'year': selectedYear,
-            'dataset': 'Landcover'
+            'dataset': 'landcover'
         };
+        if (geojsonData) {
+            const geojsonString = JSON.stringify(geojsonData);
+            params.geom = geojsonString;
+        }
         setDownloadParams(params);
         openForm();
     };  

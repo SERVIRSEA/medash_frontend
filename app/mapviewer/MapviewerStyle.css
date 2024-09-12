@@ -19,7 +19,7 @@
 } 
 .map-container {
     position: fixed;
-    height: calc(100% - 125px); 
+    height: calc(100% - 100px); 
     /* width: 100%; */
     width: calc(100% - 60px);
     margin-left: 60px;

@@ -43,7 +43,13 @@ import {
     landcoverTextAtom,
     areaTypeAtom,
     areaIdAtom,
-    forestChangesTextAtom
+    forestChangesTextAtom,
+    riceLegendAtom,
+    rubberLegendAtom,
+    fireLegendAtom,
+    lcLegendAtom,
+    forestGainLegendAtom,
+    forestLossLegendAtom, 
 } from '@/state/atoms';
 import EVIPieChart from '../charts/EVIPieChart';
 import EVILineChart from '../charts/EVILineChart';
@@ -99,15 +105,13 @@ export default function ReportTabs() {
     const [, setForestGainData] = useAtom(forestGainApiAtom);
     const [, setForestLossData] = useAtom(forestLossApiAtom);
     const [, setLandCoverData] = useAtom(landCoverApiAtom);
-
-
-    useEffect(() => {
-        // Set LC Map visibility to true when component mounts
-        setLCMapVisibility(true);
-        setSelectedYearLC(studyHigh);
-
-    }, []);
-
+    const [, setIsVisibleLCLegend] = useAtom(lcLegendAtom);
+    const [, setIsVisibleForestGainLegend] = useAtom(forestGainLegendAtom);
+    const [, setIsVisibleForestLossLegend] = useAtom(forestLossLegendAtom);
+    const [, setIsVisibleRiceLegend] = useAtom(riceLegendAtom);
+    const [, setIsVisibleRubberLegend] = useAtom(rubberLegendAtom);
+    const [, setIsVisibleFireLegend] = useAtom(fireLegendAtom);
+    
     useEffect(() => {
         if(selectedAreaId) {
             if (value === 1) {
@@ -120,6 +124,8 @@ export default function ReportTabs() {
                 fetchFireMap();
             } else {
                 fetchLandcoverMap();
+                setLCMapVisibility(true);
+                setSelectedYearLC(studyHigh);
             }
           }
     }, [value, selectedAreaId]);
@@ -132,6 +138,13 @@ export default function ReportTabs() {
             1: { forestGainMap: true, forestLossMap: true },
             2: { riceMap: true, rubberMap: true },
             3: { fireMap: true }
+        };
+
+        const legendMappings = {
+            0: { lcLegend: true },
+            1: { forestGainLegend: true, forestLossLegend: true },
+            2: { riceLegend: true, rubberLegend: true },
+            3: { fireLegend: true }
         };
 
         if (newValue == 0){
@@ -151,6 +164,16 @@ export default function ReportTabs() {
         setRubberMapVisibility(mapVisibility.rubberMap || false)
         setLCMapVisibility(mapVisibility.lcMap || false);
         setFireMapVisibility(mapVisibility.fireMap || false);
+
+        const legendVisibility = legendMappings[newValue] || {};
+
+        setIsVisibleLCLegend(legendVisibility.lcLegend || false);
+        setIsVisibleForestGainLegend(legendVisibility.forestGainLegend || false);
+        setIsVisibleForestLossLegend(legendVisibility.forestLossLegend || false);
+        setIsVisibleRiceLegend(legendVisibility.riceLegend || false);
+        setIsVisibleRubberLegend(legendVisibility.rubberLegend || false);
+        setIsVisibleFireLegend(legendVisibility.fireLegend || false);
+        
     };
 
     const fetchForestGainMap = async () => {
@@ -179,7 +202,8 @@ export default function ReportTabs() {
         const params = {
             'area_type': selectedAreaType,
             'area_id': selectedAreaId,
-            'year': max
+            'year': max,
+            'class': 'all'
         };
         try {
             const data = await Fetcher(action, params);
@@ -324,9 +348,9 @@ export default function ReportTabs() {
                 </Typography>
 
                 <EVIPieChart />
-                <br />
+                
                 <EVILineChart />
-                <br />
+                
 
                 <Typography variant="body2" sx={{fontSize: '14px', fontWeight: 'bold'}} p={1}>
                     LAND COVER

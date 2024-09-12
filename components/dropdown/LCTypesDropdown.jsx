@@ -15,6 +15,14 @@ const LCTypesDropdown = () => {
     const [selectedClass, setSelectedClass] = useAtom(lcTypeAtom);
 
     const handleClassChange = (event) => {
+        // const selectedValue = event.target.value;
+        // if (selectedValue === 'other Plantation') {
+        //     setSelectedClass('otherPlantation');
+        // } else if (selectedValue === 'flooded Forest') {
+        //     setSelectedClass('floodedForest');
+        // } else {
+        //     setSelectedClass(selectedValue);
+        // }
         setSelectedClass(event.target.value);
     };
 
@@ -23,7 +31,8 @@ const LCTypesDropdown = () => {
             <InputLabel id="select-lc-class" sx={{ fontSize: '12px' }}>LC Type</InputLabel>
             <Select
                 labelId="select-lc-class"
-                value={selectedClass}
+                // value={selectedClass}
+                value={selectedClass === 'otherPlantation' ? 'Other Plantation' : (selectedClass === 'floodedForest' ? 'Flooded Forest' : selectedClass)}
                 onChange={handleClassChange}
                 displayEmpty
                 label="LC Type"
@@ -60,7 +69,8 @@ const LCTypesDropdown = () => {
                 {classNames.map((className, index) => (
                     <MenuItem
                         key={className}
-                        value={className}
+                        // value={className}
+                        value={className === 'other Plantation' ? 'otherPlantation' : (className === 'flooded Forest' ? 'floodedForest' : className)}
                         sx={{ fontSize: '12px', display: 'flex', alignItems: 'center' }}
                     >
                         <Box

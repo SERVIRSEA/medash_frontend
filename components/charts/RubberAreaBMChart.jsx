@@ -98,36 +98,6 @@ const RubberAreaBMChart = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, setChartData, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
 
-    // useEffect(() => { 
-    //     const fetchData = async () => {
-    //         try {
-    //             setError(null);
-    //             setLoading(true);
-    //             const action = 'get-landcover-baselinemeasure-area';
-    //             const params = {
-    //                 'area_type': area_type,
-    //                 'area_id': area_id,
-    //                 'refLow': refLow,
-    //                 'refHigh': refHigh,
-    //                 'studyLow': studyLow,
-    //                 'studyHigh': studyHigh,
-    //                 'type': 'rubber'
-    //             }
-    //             const key = JSON.stringify(params);
-    //             const data = await Fetcher(action, params);
-    //             // console.log(data)
-    //             setChartData(data);
-    //         } catch (error) {
-    //             setError(error.message);
-    //             console.error('Error fetching data:', error);
-    //             throw error; 
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     }
-    //     fetchData();
-    // }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, updateTrigger]);
-
     if (loading) return <><LoadingCard /></>;
     if (error) return <div>Error: {error}</div>;
 
@@ -137,7 +107,7 @@ const RubberAreaBMChart = () => {
         },
         title: false,
         xAxis: {
-            categories: ['Baseline Area', 'Measure Area']
+            categories: ['Baseline Area', 'Evaluation Area']
         },
         yAxis: {
             min: 0,
@@ -147,7 +117,8 @@ const RubberAreaBMChart = () => {
         },
         tooltip: {
             formatter: function () {
-                return this.x + ": " + this.y.toFixed(2) + " Ha";
+                const formattedNumber = Math.round(this.point.y).toLocaleString();
+                return this.x + ': ' + formattedNumber + ' Ha';
             }
         },
         plotOptions: {
@@ -168,6 +139,27 @@ const RubberAreaBMChart = () => {
         credits: {
             enabled: false
         },
+        exporting: {
+            buttons: {
+                contextButton: {
+                    align: 'right',      
+                    verticalAlign: 'top', 
+                    x: 10,
+                    y: -15,
+                    menuItems: [
+                        'viewFullscreen',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG',
+                        'separator',  // A separator line between images and data export
+                        'downloadCSV',
+                        'downloadXLS'
+                    ]
+                }
+            }
+        }
     };
 
     return <HighchartsReact highcharts={Highcharts} options={options} />;

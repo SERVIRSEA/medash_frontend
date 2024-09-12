@@ -4,7 +4,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
-
+import { getEviPie } from '@/services/eviService';
 if (typeof Highcharts === 'object') {
     Exporting(Highcharts);
     ExportData(Highcharts);
@@ -23,11 +23,13 @@ import {
     eviPieChartAtom,
     updateTriggerAtom,
     maxRetryAttemptsAtom,
-    bioTextAtom
+    bioTextAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 
 const EVIPieChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [eviPieChartData, setEviPieChartData] = useAtom(eviPieChartAtom);
     const [loading, setLoading] = useAtom(eviPieChartDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -52,15 +54,21 @@ const EVIPieChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'refLow': refLow,
-                        'refHigh': refHigh,
-                        'studyLow': studyLow,
-                        'studyHigh': studyHigh
+                        'ref_low': refLow,
+                        'ref_high': refHigh,
+                        'study_low': studyLow,
+                        'study_high': studyHigh
                     };
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
                     const key = JSON.stringify(params);
-                    const action = 'get-evi-pie';
-                    const data = await Fetcher(action, params);
-
+                    // const action = 'get-evi-pie';
+                    // const data = await Fetcher(action, params);
+                    const fetchedData = await getEviPie(params);
+                    const data = fetchedData.data;
+                    // console.log(data);
                     const graphDataEVI = [];
                     let className = ['Large improvement', 'improvement', 'No Change', 'Under Stress', 'Severe stress'];
                     let classColor = ['#264653','#2A9D8F','#E9C46A','#F4A261','#E76F51'];
@@ -92,10 +100,10 @@ const EVIPieChart = () => {
                     const severeStressNumber = severeStress;
                     const severeStressPct = (severeStress/total_area_evi) * 100;
       
-                    let largeImprovementText = largeImproveNumber > 0 ? `<li> <b style="color:#264653">large improvement</b> of ${largeImproveNumber.toLocaleString()} ha equal to  ${largeImprovePct.toFixed(2)}%; </li>` : ``;
-                    let improvementText = improvementNumber > 0 ?  `<li> <b style="color:#2A9D8F">improvement</b> of ${improvementNumber.toLocaleString()} ha equal to ${improvementPct.toFixed(2)}%; </li>` : ``;
-                    let underStressText = underStressNumber > 0 ?  `<li> <b style="color:#F4A261">under stress</b> of ${underStressNumber.toLocaleString()} ha, equal to ${underStressPct.toFixed(2)}%; </li>` : ``;
-                    let severeStressText = severeStressNumber > 0 ?  `<li> <b style="color:#E76F51">severe stress</b> of ${severeStressNumber.toLocaleString()} ha, equal to ${severeStressPct.toFixed(2)}%; </li>` : ``;
+                    let largeImprovementText = largeImproveNumber > 0 ? `<li> <b style="color:#264653">large improvement</b> of ${Math.round(largeImproveNumber).toLocaleString()} ha equal to  ${largeImprovePct.toFixed(2)}%; </li>` : ``;
+                    let improvementText = improvementNumber > 0 ?  `<li> <b style="color:#2A9D8F">improvement</b> of ${Math.round(improvementNumber).toLocaleString()} ha equal to ${improvementPct.toFixed(2)}%; </li>` : ``;
+                    let underStressText = underStressNumber > 0 ?  `<li> <b style="color:#F4A261">under stress</b> of ${Math.round(underStressNumber).toLocaleString()} ha, equal to ${underStressPct.toFixed(2)}%; </li>` : ``;
+                    let severeStressText = severeStressNumber > 0 ?  `<li> <b style="color:#E76F51">severe stress</b> of ${Math.round(severeStressNumber).toLocaleString()} ha, equal to ${severeStressPct.toFixed(2)}%; </li>` : ``;
                     
                     const paragraph = `The biophysical health of ${selectedArea} compare between baseline period (${refLow}-${refHigh}) and evaluation period (${studyLow}-${studyHigh}).
                     <ul>

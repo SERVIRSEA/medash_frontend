@@ -107,7 +107,7 @@ const RiceAreaBMChart = () => {
         },
         title: false,
         xAxis: {
-            categories: ['Baseline Area', 'Measure Area']
+            categories: ['Baseline Area', 'Evaluation Area']
         },
         yAxis: {
             min: 0,
@@ -117,7 +117,8 @@ const RiceAreaBMChart = () => {
         },
         tooltip: {
             formatter: function () {
-                return this.x + ": " + this.y.toFixed(2) + " Ha";
+                const formattedNumber = Math.round(this.point.y).toLocaleString();
+                return this.x + ': ' + formattedNumber + ' Ha';
             }
         },
         plotOptions: {
@@ -138,6 +139,27 @@ const RiceAreaBMChart = () => {
         credits: {
             enabled: false
         },
+        exporting: {
+            buttons: {
+                contextButton: {
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: 10,
+                    y: -15,
+                    menuItems: [
+                        'viewFullscreen',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG',
+                        'separator',  // A separator line between images and data export
+                        'downloadCSV',
+                        'downloadXLS'
+                    ]
+                }
+            }
+        }
     };
 
     return <HighchartsReact highcharts={Highcharts} options={options} />;

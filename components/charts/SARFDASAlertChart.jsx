@@ -106,13 +106,14 @@ const SARFDASAlertChart = () => {
         chart: {
             type: 'column',
             height: 250,
-            // width: 250,
+            marginRight: 20
         },
         title: false,
 		subtitle: false,
         tooltip: {
             formatter: function () {
-                return 'Area in Hectare: ' +  this.point.y.toFixed(0) ;
+                const formattedNumber = Math.round(this.point.y).toLocaleString();
+                return 'Area in Hectare: ' +  formattedNumber ;
             }
         },
         xAxis: {
@@ -130,7 +131,7 @@ const SARFDASAlertChart = () => {
         }],
         plotOptions: {
             column: {
-                pointPadding: 0.1, 
+                pointPadding: 0.2, 
                 groupPadding: 0.1, 
                 color: 'red'
             }
@@ -146,7 +147,8 @@ const SARFDASAlertChart = () => {
                 contextButton: {
                     align: 'right',      
                     verticalAlign: 'top', 
-                    marginBottom: '10px',
+                    x: 0,
+                    y: -15,
                     menuItems: [
                         'viewFullscreen',
                         'separator',

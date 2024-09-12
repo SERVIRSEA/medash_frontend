@@ -163,7 +163,7 @@ function SeasonalWeatherMap() {
                         onChange={() => setIsVisibleTemperature(!isVisibleTemperature)} 
                     />
                 </Tooltip>
-                <Typography variant="body2" sx={{fontSize: '12px'}}>Temperature Anomaly (next 3 months): Forecasted (C)</Typography>
+                <Typography variant="body2" sx={{fontSize: '12px'}}>Temperature Anomaly (next 3 months): Forecasted (°C)</Typography>
             </ListItem>
             <DownloadForm 
                 isOpen={isFormOpen} 

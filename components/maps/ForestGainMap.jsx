@@ -13,14 +13,17 @@ import {
     forestGainVisibilityAtom,
     updateTriggerAtom,
     alertOpenAtom, 
-    alertMessageAtom 
+    alertMessageAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
+import { getForestGainMap } from "@/services/forestService";
 
 function ForestGainMap(){
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [min] = useAtom(minYearForestGain);
     const [max] = useAtom(maxYearForestGain);
     const [, setForestGainData] = useAtom(forestGainApiAtom);
@@ -47,9 +50,13 @@ function ForestGainMap(){
             const params = {
                 'area_type': area_type,
                 'area_id': area_id,
-                'studyLow': min,
-                'studyHigh': max,
+                'start_year': min,
+                'end_year': max,
             };
+            if (geojsonData) {
+                const geojsonString = JSON.stringify(geojsonData);
+                params.geom = geojsonString;
+            }
             const key = JSON.stringify(params);
 
             if (forestGainMapStore[key]) {
@@ -58,7 +65,9 @@ function ForestGainMap(){
                 setIsLoading(false);
             } else {
                 try {
-                    const data = await Fetcher(action, params);
+                    const fetchData = await getForestGainMap(params);
+                    const data = fetchData.data;
+                    // const data = await Fetcher(action, params);
                     setForestGainData(data);
                     setForestGainMapStore(prev => ({ ...prev, [key]: data }));
                 } catch (error) {

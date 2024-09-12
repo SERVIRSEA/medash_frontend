@@ -48,7 +48,7 @@ const GuidingPanel = ({ isOpen, onClose }) => {
           <Typography variant="h5" align="center" sx={{ mb: 2, fontWeight: 'bold', color: '#333' }}>
             Welcome to the Biophysical M&E Dashboard
           </Typography>
-          <Typography variant="body1" sx={{ mb: 2, color: 'info.main' }}>
+          <Typography variant="body1" sx={{ mb: 2, color: '#1d4ed8' }}>
             GET STARTED WITH FOUR EASY STEPS
           </Typography>
           <Grid container spacing={2}>
@@ -73,12 +73,18 @@ const GuidingPanel = ({ isOpen, onClose }) => {
               borderRadius: '20px',
               paddingLeft: '50px',
               paddingRight: '50px',
+              backgroundColor: '#2563eb',
+              color: '#fff', 
+              '&:hover': {
+                  backgroundColor: '#1e40af', 
+                  color: '#fff', 
+              }
             }}
           >
             WATCH A DEMO VIDEO
           </Button>
-          <Typography variant="body1" sx={{ mt: 2 }}>
-            <Link href="https://docs.google.com/document/d/e/2PACX-1vTGOYwxTtm_RARo78PDBVTSw3xIqPEfZCG_4LOntU1VjBqQlz3UoTLMYFpBhbDDp53i1zGMqEx_GxfQ/pub" target="_blank" rel="noopener noreferrer">
+          <Typography variant="body1" sx={{ mt: 2, color: '#2563eb' }}>
+            <Link href="https://docs.google.com/document/d/e/2PACX-1vTGOYwxTtm_RARo78PDBVTSw3xIqPEfZCG_4LOntU1VjBqQlz3UoTLMYFpBhbDDp53i1zGMqEx_GxfQ/pub" sx={{ color: '#2563eb' }} target="_blank" rel="noopener noreferrer">
               READ OUR TOOL GUIDELINES TO DISCOVER MORE…
             </Link>
           </Typography>

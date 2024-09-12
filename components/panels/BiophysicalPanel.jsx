@@ -83,9 +83,9 @@ export default function BiophysicalPanel(){
                 From {studyLow} To {studyHigh}
             </Typography>
             <EVIPieChart />
-            <br />
+            
             <EVILineChart />
-            <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>LAND COVER</Typography>
+            <Typography variant="body2"  sx={{ fontSize: '12px', fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>LAND COVER</Typography>
             <LandCoverInfoModal isOpen={isLCModalOpen} onClose={handleCloseLCModal} />
             <LandCoverChart />
         </Box>

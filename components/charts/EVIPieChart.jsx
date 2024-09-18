@@ -4,7 +4,7 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Exporting from 'highcharts/modules/exporting';
 import ExportData from 'highcharts/modules/export-data';
-import { getEviPie } from '@/services/eviService';
+import { eviService } from '@/services';
 if (typeof Highcharts === 'object') {
     Exporting(Highcharts);
     ExportData(Highcharts);
@@ -66,9 +66,11 @@ const EVIPieChart = () => {
                     const key = JSON.stringify(params);
                     // const action = 'get-evi-pie';
                     // const data = await Fetcher(action, params);
-                    const fetchedData = await getEviPie(params);
-                    const data = fetchedData.data;
+                    // const fetchedData = await getEviPie(params);
+                    // const data = fetchedData.data;
                     // console.log(data);
+                    const chartData = await eviService.getChart(params, 'PIE');
+                    const data = chartData.data;
                     const graphDataEVI = [];
                     let className = ['Large improvement', 'improvement', 'No Change', 'Under Stress', 'Severe stress'];
                     let classColor = ['#264653','#2A9D8F','#E9C46A','#F4A261','#E76F51'];

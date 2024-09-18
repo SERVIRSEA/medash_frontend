@@ -67,7 +67,7 @@ function ForestLossMap(){
             } else {
                 try {
                     // const data = await Fetcher(action, params);
-                    const fetchData = await fetchForestLossMap(params);
+                    const fetchData = await getForestLossMap(params);
                     const data = fetchData.data;
                     setForestLossData(data);
                     setForestLossMapStore(prev => ({ ...prev, [key]: data }));

@@ -29,7 +29,7 @@ import {
     geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
-import { getLandcoverChart } from '@/services/landcoverService';
+import { landcoverService } from '@/services';
 
 const LandCoverChart = () => {
     const [menuId] = useAtom(activeMenuAtom);
@@ -58,7 +58,8 @@ const LandCoverChart = () => {
                         'area_type': area_type,
                         'area_id': area_id,
                         'start_year': refLow,
-                        'end_year': studyHigh
+                        'end_year': studyHigh,
+                        'lc_type': 'all'
                     };
                     if (geojsonData) {
                         const geojsonString = JSON.stringify(geojsonData);
@@ -68,7 +69,9 @@ const LandCoverChart = () => {
                     // const action = 'get-landcover-chart';
                     // const data = await Fetcher(action, params);
                     
-                    const fetchData = await getLandcoverChart(params);
+                    const fetchData = await landcoverService.getChart(params);
+                    console.log(fetchData);
+                    // const fetchData = await getLandcoverChart(params);
                     
                     const period1Data = filterData(fetchData.data, refLow, refHigh);
                     const period2Data = filterData(fetchData.data, studyLow, studyHigh);

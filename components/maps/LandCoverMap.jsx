@@ -22,7 +22,7 @@ import {
     lcTypeAtom,
     geojsonDataAtom
 } from '@/state/atoms';
-import { getLandcoverMap } from '@/services/landcoverService';
+import { landcoverService } from '@/services';
 import { Fetcher } from '@/fetchers/Fetcher';
 import DownloadForm from '../modals/DownloadForm';
 import LCTypesDropdown from '../dropdown/LCTypesDropdown';
@@ -81,7 +81,8 @@ function LandCoverMap(){
                 return mapDataStore[key];
             }
             
-            const mapData = await getLandcoverMap(params);
+            // const mapData = await getLandcoverMap(params);
+            const mapData = await landcoverService.getMap(params);
             
             // const data = await Fetcher(action, params);
             setLandCoverData(mapData.data);

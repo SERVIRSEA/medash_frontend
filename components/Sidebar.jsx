@@ -96,7 +96,7 @@ function Sidebar(){
         background: "#eff6ff",
         color: "#000",
         width: '80px',
-        height: "calc(100% - 125px)",
+        height: "calc(100% - 100px)",
         position: 'fixed',
         overflowY: 'scroll'
     }

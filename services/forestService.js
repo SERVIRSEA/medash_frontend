@@ -1,5 +1,5 @@
 // Import utility functions and API endpoints
-import { fetchData, postData } from "@/utils/fetcher";
+import { fetchData, postData } from "@/lib/fetcher";
 import { API_ENDPOINTS } from "@/config/apiConfig";
 
 // Fetch the forest cover map data

@@ -75,14 +75,14 @@ export default function ForestMonitoringPanel(){
                 <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>
                     From {studyLow} To {studyHigh}
                 </Typography>
-                {/* <ForestNonForestChart /> */}
+                <ForestNonForestChart />
                 <br />
                 <Typography variant="body2" sx={{fontWeight: 'bold', fontSize: '12px'}} pb={1}>
                     THE CHANGE OF FOREST GAIN AND LOSS
                 </Typography>
-                {/* <ForestGainLoss /> */}
+                <ForestGainLoss />
                  <br />
-                {/* <ForestChangeGainLossChart /> */}
+                <ForestChangeGainLossChart />
             </Box>
         </>
     )

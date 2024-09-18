@@ -9,7 +9,7 @@ if (typeof Highcharts === 'object') {
     Exporting(Highcharts);
     ExportData(Highcharts);
 }
-import { getEviLine } from '@/services/eviService';
+import { eviService } from '@/services';
 import { Fetcher } from '@/fetchers/Fetcher';
 import { 
     baselineMinYearAtom,
@@ -62,9 +62,10 @@ const EVILineChart = () => {
                     const key = JSON.stringify(params);
                     // const action = 'get-evi-line';
                     // const data = await Fetcher(action, params);
-                    const fetchedData = await getEviLine(params);
-                    const data = fetchedData.data;
-                    setEviLineChartData(data);
+                    // const fetchedData = await getEviLine(params);
+                    // const data = fetchedData.data;
+                    const chartData = await eviService.getChart(params, 'LINE');
+                    setEviLineChartData(chartData.data);
                     setLoading(false);
                     setAttempts(0);
                     return; // Break out of the loop if successful

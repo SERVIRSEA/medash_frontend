@@ -60,7 +60,7 @@ const ForestNonForestChart = () => {
                         'studyHigh': studyHigh
                     };
                     const data = await Fetcher(action, params);
-
+                    
                     const forestData = data;
                     //  generate text reporting
                     const startYear = studyLow.toString();

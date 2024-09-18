@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Fetcher } from '@/fetchers/Fetcher';
-import { getEviMap } from '@/services/eviService';
+import { eviService } from '@/services';
 
 import { 
     baselineMinYearAtom,
@@ -80,11 +80,11 @@ function EVIMap(){
         } else {
             try {
                 setIsLoading(true);
-                const fetchData = await getEviMap(params);
+                const mapData = await eviService.getMap(params);
                 
                 // const data = await Fetcher(action, params);
-                setEviData(fetchData.data);
-                setEVIMapDataStore((prev) => ({ ...prev, [key]: fetchData.data }));
+                setEviData(mapData.data);
+                setEVIMapDataStore((prev) => ({ ...prev, [key]: mapData.data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error;

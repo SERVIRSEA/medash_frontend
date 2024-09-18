@@ -82,7 +82,7 @@ export default function BiophysicalPanel(){
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>
                 From {studyLow} To {studyHigh}
             </Typography>
-            <EVIPieChart />
+            <EVIPieChart /> 
             
             <EVILineChart />
             <Typography variant="body2"  sx={{ fontSize: '12px', fontWeight: 'bold', display: 'inline', marginRight: '4px' }}>LAND COVER</Typography>

@@ -18,12 +18,15 @@ import {
     sarfdasAlertChartAtom,
     sarfdasAlertChartDataLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { sarfdasService } from '@/services';
 
 const SARFDASAlertChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [chartData, setChartData] = useAtom(sarfdasAlertChartAtom);
     const [loading, setLoading] = useAtom(sarfdasAlertChartDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -45,12 +48,19 @@ const SARFDASAlertChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'studyLow': studyLow,
-                        'studyHigh': 2024,
+                        'start_year': studyLow,
+                        'end_year': 2024
+                        // 'studyLow': studyLow,
+                        // 'studyHigh': 2024,
                     };
-                    const data = await Fetcher(action, params);
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
+                    const chartData = await sarfdasService.getChart(params);
+                    // const data = await Fetcher(action, params);
                     // console.log(data)
-                    setChartData(data);
+                    setChartData(chartData.data);
                     setLoading(false);
                     setAttempts(0);
                     return; // Break out of the loop if successful

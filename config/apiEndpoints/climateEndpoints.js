@@ -1,5 +1,8 @@
 export const CLIMATE_ENDPOINTS = {
     MAP: '/api/v1/climate/map/',
     DOWNLOAD: '/api/v1/climate/map/download/',
-    CHART: '/api/v1/climate/chart/',
+    CHART: {
+        DEFAULT: '/api/v1/climate/chart/',
+    },
+    DATE: '/api/v1/climate/dates/',
 };

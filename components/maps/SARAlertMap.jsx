@@ -13,7 +13,8 @@ import {
     isLoadingAtom,
     updateTriggerAtom,
     alertOpenAtom, 
-    alertMessageAtom 
+    alertMessageAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
@@ -21,6 +22,7 @@ import DownloadForm from "../modals/DownloadForm";
 const SARAlertMap = () => {
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [min] = useAtom(minYearSARAlert);
     const [max] = useAtom(maxYearSARAlert);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
@@ -53,6 +55,10 @@ const SARAlertMap = () => {
             'area_id': area_id,
             'year': year
         };
+        if (geojsonData) {
+            const geojsonString = JSON.stringify(geojsonData);
+            params.geom = geojsonString;
+        }
         const key = JSON.stringify(params);
 
         if (sarAlertMapStore[key]) {

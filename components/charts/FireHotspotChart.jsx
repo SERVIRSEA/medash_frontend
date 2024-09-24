@@ -19,12 +19,15 @@ import {
     updateTriggerAtom,
     maxRetryAttemptsAtom,
     areaNameAtom,
-    fireHotspotTextAtom
+    fireHotspotTextAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { fireService } from '@/services';
 
 const FireHotspotChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [chartData, setChartData] = useAtom(fireChartAtom);
     const [loading, setLoading] = useAtom(fireChartDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -49,11 +52,19 @@ const FireHotspotChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'studyLow': studyLow,
-                        'studyHigh': studyHigh
+                        'start_year': studyLow,
+                        'end_year': studyHigh
+                        // 'studyLow': studyLow,
+                        // 'studyHigh': studyHigh
                     };
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
 
-                    const data = await Fetcher(action, params);
+                    const mapData = await fireService.getChart(params)
+                    const data = mapData.data;
+                    // const data = await Fetcher(action, params);
   
                     const startOfMeasurement = Object.keys(data)[0];
                     const endOfMeasurement = Object.keys(data).pop();

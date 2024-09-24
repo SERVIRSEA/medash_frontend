@@ -19,12 +19,15 @@ import {
     updateTriggerAtom,
     maxRetryAttemptsAtom,
     riceAreaTextAtom,
-    areaNameAtom
+    areaNameAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { riceService } from '@/services';
 
 const RiceLineChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [chartData, setChartData] = useAtom(riceChartAtom);
     const [loading, setLoading] = useAtom(riceChartDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -48,23 +51,39 @@ const RiceLineChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'studyLow': studyLow,
-                        'studyHigh': studyHigh
+                        'start_year': studyLow,
+                        'end_year': studyHigh,
+                        'lc_type': 'rice'
                     };
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
                     const key = JSON.stringify(params);
-                    const data = await Fetcher(action, params);
-
+                    // const data = await Fetcher(action, params);
+                    const chartData = await riceService.getChart(params, 'LINE')
+                    // console.log(chartData)
+                    // let riceData = chartData.data;
+                    // setChartData(riceData);
                     let riceData = {};
                     // console.log(data)
                     if (['country', 'province', 'district', 'protected_area'].includes(area_type)) {
                         //  'district', 'protected_area'
-                        const parsedData = JSON.parse(data);
-                        riceData = parsedData;
-                        setChartData(parsedData);
+                        // const parsedData = JSON.parse(chartData.data);
+                        // riceData = parsedData;
+                        riceData = chartData.data;
                     } else {
-                        riceData = data;
-                        setChartData(data);
+                        const formatRiceData = (data) => {
+                            return Object.keys(data).reduce((acc, year) => {
+                                acc[year] = data[year].rice;
+                            return acc;
+                            }, {});
+                        };
+                        
+                        riceData = formatRiceData(chartData.data);
                     }
+                    setChartData(riceData);
+
                     if (Object.keys(riceData).length > 0) {
                         const startYear = Object.keys(riceData)[0]; // Automatically get the first year
                         const endYear = Object.keys(riceData).pop(); // Automatically get the last year

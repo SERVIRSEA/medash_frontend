@@ -18,12 +18,15 @@ import {
     gladAlertChartAtom,
     gladAlertChartDataLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { gladService } from '@/services';
 
 const GLADAlertChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [chartData, setChartData] = useAtom(gladAlertChartAtom);
     const [loading, setLoading] = useAtom(gladAlertChartDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -45,11 +48,18 @@ const GLADAlertChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'studyLow': studyLow,
-                        'studyHigh': studyHigh
+                        'start_year': studyLow,
+                        'end_year': studyHigh
+                        // 'studyLow': studyLow,
+                        // 'studyHigh': studyHigh
                     };
-                    const data = await Fetcher(action, params);
-                    setChartData(data);
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
+                    const chartData = await gladService.getChart(params);
+                    // const data = await Fetcher(action, params);
+                    setChartData(chartData.data);
                     setLoading(false);
                     setAttempts(0);
                     return; // Break out of the loop if successful

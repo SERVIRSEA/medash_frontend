@@ -16,13 +16,16 @@ import {
     alertOpenAtom, 
     alertMessageAtom,
     riceVisibilityAtom, 
+    geojsonDataAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
+import { riceService } from "@/services";
 
 function RiceMap(){
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [min] = useAtom(measureMinYearAtom);
     const [max] = useAtom(measureMaxYearAtom);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
@@ -52,7 +55,12 @@ function RiceMap(){
             'area_type': area_type,
             'area_id': area_id,
             'year': year,
+            'lc_type': 'rice'
         };
+        if (geojsonData) {
+            const geojsonString = JSON.stringify(geojsonData);
+            params.geom = geojsonString;
+        }
         const key = JSON.stringify(params);
 
         if (riceMapStore[key]) {
@@ -61,9 +69,10 @@ function RiceMap(){
             setIsLoading(false);
         } else {
             try {
-                const data = await Fetcher(action, params);
-                setRiceData(data);
-                setRiceMapStore((prev) => ({ ...prev, [key]: data }));
+                // const data = await Fetcher(action, params);
+                const mapData = await riceService.getMap(params)
+                setRiceData(mapData.data);
+                setRiceMapStore((prev) => ({ ...prev, [key]: mapData.data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error;

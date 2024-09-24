@@ -18,7 +18,7 @@ import {
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
-import { getForestLossMap } from "@/services/forestService";
+import { forestLossService } from "@/services";
 
 function ForestLossMap(){
     const [area_type] = useAtom(areaTypeAtom);
@@ -67,7 +67,7 @@ function ForestLossMap(){
             } else {
                 try {
                     // const data = await Fetcher(action, params);
-                    const fetchData = await getForestLossMap(params);
+                    const fetchData = await forestLossService.getMap(params);
                     const data = fetchData.data;
                     setForestLossData(data);
                     setForestLossMapStore(prev => ({ ...prev, [key]: data }));

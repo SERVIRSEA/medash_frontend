@@ -18,11 +18,14 @@ import {
     pastTemperatureDataAtom,
     forecastTemperatureDataAtom,
     isLoadingAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
+import { climateService } from '@/services';
 
 function ShortTermWeatherMap() {
     const [areaType] = useAtom(areaTypeAtom);
     const [areaId] = useAtom(areaIdAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
     const [isVisiblePastRainfall, setIsVisiblePastRainfall] = useAtom(pastRainfallVisAtom);
     const [isVisiblePastTemperature, setIsVisiblePastTemperature] = useAtom(pastTempVisAtom);
@@ -45,30 +48,35 @@ function ShortTermWeatherMap() {
                 'weather_param': weatherParam,
                 'weather_type': weatherType,
             };
+            if (geojsonData) {
+                const geojsonString = JSON.stringify(geojsonData);
+                params.geom = geojsonString;
+            }
             const key = JSON.stringify(params);
 
             if (!dataStore[key]) {
-                const action = 'get-weather-map';
-                const data = await Fetcher(action, params);
-
+                // const action = 'get-weather-map';
+                // const data = await Fetcher(action, params);
+                const mapData = await climateService.getMap(params);
+                const data = mapData.data;
                 setDataStore((prev) => ({ ...prev, [key]: data }));
 
                 switch (weatherType) {
                     case 'past':
                         if (weatherParam === 'precipitation') {
-                            setPastRainfallData(data["geeURL"]);
+                            setPastRainfallData(data["tile_url"]);
                             setIsVisiblePastRainfall(true);
                         } else if (weatherParam === 'temperature') {
-                            setPastTemperatureData(data["geeURL"]);
+                            setPastTemperatureData(data["tile_url"]);
                             setIsVisiblePastTemperature(true);
                         }
                         break;
                     case 'forecast':
                         if (weatherParam === 'precipitation') {
-                            setForecastRainfallData(data["geeURL"]);
+                            setForecastRainfallData(data["tile_url"]);
                             setIsVisibleForecastRainfall(true);
                         } else if (weatherParam === 'temperature') {
-                            setForecastTemperatureData(data["geeURL"]);
+                            setForecastTemperatureData(data["tile_url"]);
                             setIsVisibleForecastTemperature(true);
                         }
                         break;
@@ -81,19 +89,19 @@ function ShortTermWeatherMap() {
                 switch (weatherType) {
                     case 'past':
                         if (weatherParam === 'precipitation') {
-                            setPastRainfallData(data["geeURL"]);
+                            setPastRainfallData(data["tile_url"]);
                             setIsVisiblePastRainfall(true);
                         } else if (weatherParam === 'temperature') {
-                            setPastTemperatureData(data["geeURL"]);
+                            setPastTemperatureData(data["tile_url"]);
                             setIsVisiblePastTemperature(true);
                         }
                         break;
                     case 'forecast':
                         if (weatherParam === 'precipitation') {
-                            setForecastRainfallData(data["geeURL"]);
+                            setForecastRainfallData(data["tile_url"]);
                             setIsVisibleForecastRainfall(true);
                         } else if (weatherParam === 'temperature') {
-                            setForecastTemperatureData(data["geeURL"]);
+                            setForecastTemperatureData(data["tile_url"]);
                             setIsVisibleForecastTemperature(true);
                         }
                         break;

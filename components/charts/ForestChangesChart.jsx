@@ -21,11 +21,13 @@ import {
     forestChangesDataLoadingAtom,
     updateTriggerAtom,
     maxRetryAttemptsAtom,
-    forestChangesTextAtom
+    forestChangesTextAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 
 const ForestChangesChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [forestChangeChartData, setForestChangesChartData] = useAtom(forestChangesChartAtom);
     const [loading, setLoading] = useAtom(forestChangesDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -53,6 +55,10 @@ const ForestChangesChart = () => {
                         'studyLow': studyLow,
                         'studyHigh': studyHigh
                     };
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
                     const key = JSON.stringify(params);
                     const action = 'get-forestchange-chart';
                     const data = await Fetcher(action, params);

@@ -18,12 +18,14 @@ import {
     sarAlertChartAtom,
     sarAlertChartDataLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
 
 const SARAlertChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [chartData, setChartData] = useAtom(sarAlertChartAtom);
     const [loading, setLoading] = useAtom(sarAlertChartDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -48,6 +50,10 @@ const SARAlertChart = () => {
                         'studyLow': studyLow,
                         'studyHigh': studyHigh
                     };
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
                     const data = await Fetcher(action, params);
                     // console.log(data)
                     setChartData(data);

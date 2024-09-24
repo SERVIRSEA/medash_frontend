@@ -16,14 +16,17 @@ import {
     alertOpenAtom, 
     alertMessageAtom,
     sarfdasAlertVisibilityAtom,
-    combineAlertLegendAtom
+    combineAlertLegendAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
+import { sarfdasService } from "@/services";
 
 function SARFDASMap(){
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [min] = useAtom(minYearSARFDASAlert);
     const [max] = useAtom(maxYearSARFDASAlert);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
@@ -55,6 +58,10 @@ function SARFDASMap(){
             'area_id': area_id,
             'year': year
         };
+        if (geojsonData) {
+            const geojsonString = JSON.stringify(geojsonData);
+            params.geom = geojsonString;
+        }
         const key = JSON.stringify(params);
 
         if (sarfdasMapStore[key]) {
@@ -63,9 +70,10 @@ function SARFDASMap(){
             setIsLoading(false);
         } else {
             try {
-                const data = await Fetcher(action, params);
-                setSARFDASData(data.geeURL);
-                setSARFDASMapStore(prev => ({ ...prev, [key]: data }));
+                const mapData = await sarfdasService.getMap(params);
+                // const data = await Fetcher(action, params);
+                setSARFDASData(mapData.data);
+                setSARFDASMapStore(prev => ({ ...prev, [key]: mapData.data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error; 

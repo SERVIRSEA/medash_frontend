@@ -24,12 +24,15 @@ import {
     textForestReportAtom,
     areaNameAtom,
     forestCoverStudyHighAtom,
-    forestCoverGainLossTextAtom
+    forestCoverGainLossTextAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { forestCoverService } from '@/services';
 
 const ForestNonForestChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [chartData, setChartData] = useAtom(forestNonForestChartDataAtom);
     const [loading, setLoading] = useAtom(forestNonForestChartLoadingAtom);
     const [error, setError] = useState(null);
@@ -56,15 +59,27 @@ const ForestNonForestChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'studyLow': studyLow,
-                        'studyHigh': studyHigh
+                        'start_year': studyLow,
+                        'end_year': studyHigh
                     };
-                    const data = await Fetcher(action, params);
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
+                    // const data = await Fetcher(action, params);
+                    const chartData = await forestCoverService.getChart(params);
                     
-                    const forestData = data;
+                    const forestData = chartData.data;
                     //  generate text reporting
                     const startYear = studyLow.toString();
-                    const endYear = studyHigh.toString();
+                    let endYear = studyHigh.toString();
+
+                    // If endYear is not available in the data, use the last year available
+                    if (!forestData[endYear]) {
+                        // Get the list of years from the data keys and find the latest year
+                        const availableYears = Object.keys(forestData);
+                        endYear = availableYears[availableYears.length - 1]; // Last year in the data
+                    }
                     
                     let previousYearForest = forestData[startYear].forest;
                     let maxLossYear = studyLow, maxGainYear = studyLow;
@@ -73,7 +88,7 @@ const ForestNonForestChart = () => {
                     let totalGain = 0;
                
                     Object.keys(forestData).reduce((acc, year) => {
-                        const currentYearForest = forestData[year].forest;
+                        const currentYearForest = forestData[year].forest_area_ha;
                         const delta = currentYearForest - previousYearForest;
                         if (delta < 0) {
                             totalLoss += Math.abs(delta);
@@ -95,14 +110,14 @@ const ForestNonForestChart = () => {
                     }, { loss: 0, gain: 0 });
 
                     // Calculate the total forest cover loss start year to end year
-                    const forestLoss = forestData[endYear].forest - forestData[startYear].forest;
+                    const forestLoss = forestData[endYear].forest_area_ha - forestData[startYear].forest_area_ha;
                     // Determine the word based on total change
                     const changeType = forestLoss > 0 ? "increase" : "decrease";
                     const LossDirection = forestLoss > 0 ? "gain" : "loss";
                     const LossPercentDirection = forestLoss > 0 ? "gaining" : "reduction";
                     const percentageReduction = (forestLoss / forestData[startYear].forest) * 100;
 
-                    setForestCoverStudyHigh(data[endYear].forest);
+                    setForestCoverStudyHigh(forestData[endYear].forest_area_ha);
           
                     // Check if all 'forest' values are 0
                     const allForestZero = Object.values(forestData).every(entry => entry.forest === 0);
@@ -120,7 +135,7 @@ const ForestNonForestChart = () => {
                     setTextForestReport(paragraph);
                     setForestCoverGainLossText(paragraphForestGainLoss);
 
-                    setChartData(data);
+                    setChartData(forestData);
                     setAttempts(0);
                     setLoading(false);
                     return; // Break out of the loop if successful
@@ -167,8 +182,8 @@ const ForestNonForestChart = () => {
 
     const processedData = Object.entries(chartData).map(([year, data]) => ({
         year,
-        forest: data.forest,
-        nonForest: data.noneForest
+        forest: data.forest_area_ha,
+        nonForest: data.non_forest_area_ha
     }));
 
     const years = processedData.map(item => item.year);

@@ -15,14 +15,17 @@ import {
     updateTriggerAtom,
     alertOpenAtom, 
     alertMessageAtom,
-    rubberVisibilityAtom
+    rubberVisibilityAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
+import { rubberService } from "@/services";
 
 function RubberMap(){
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [min] = useAtom(measureMinYearAtom);
     const [max] = useAtom(measureMaxYearAtom);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
@@ -51,8 +54,13 @@ function RubberMap(){
         const params = {
             'area_type': area_type,
             'area_id': area_id,
-            'year': year
+            'year': year,
+            'lc_type': 'rubber'
         };
+        if (geojsonData) {
+            const geojsonString = JSON.stringify(geojsonData);
+            params.geom = geojsonString;
+        }
         const key = JSON.stringify(params);
 
         if (rubberMapStore[key]) {
@@ -62,9 +70,10 @@ function RubberMap(){
         } else {
             try {
                 setIsLoading(true);
-                const data = await Fetcher(action, params);
-                setRubberData(data);
-                setRubberMapStore(prev => ({ ...prev, [key]: data }));
+                // const data = await Fetcher(action, params);
+                const mapData = await rubberService.getMap(params);
+                setRubberData(mapData.data);
+                setRubberMapStore(prev => ({ ...prev, [key]: mapData.data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error; 

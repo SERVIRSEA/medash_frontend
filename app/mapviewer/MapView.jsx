@@ -32,9 +32,9 @@ export default function MapView() {
         <MapContainer center={[11.862108, 103.288535]} zoom={7} zoomControl={false} className="map-container"> 
             <CustomZoomControl />
             <BasemapLayer />
-            {/* <ProvinceLayer />
+            <ProvinceLayer />
             <DistrictLayer />
-            <ProtectedAreaLayer /> */}
+            <ProtectedAreaLayer />
             <EVILayer />
             <LandCoverLayer />
             <RiceLayer />

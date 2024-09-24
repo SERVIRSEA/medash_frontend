@@ -13,12 +13,14 @@ import {
     seasonalTempVisAtom,
     seasonalTemperatureDataAtom,
     isLoadingAtom,
-    weatherDataStoreAtom
+    weatherDataStoreAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 
 function SeasonalWeatherMap() {
     const [areaType] = useAtom(areaTypeAtom);
     const [areaId] = useAtom(areaIdAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
     const [isVisibleRainfall, setIsVisibleRainfall] = useAtom(seasonalRainfallVisAtom);
     const [isVisibleTemperature, setIsVisibleTemperature] = useAtom(seasonalTempVisAtom);
@@ -37,6 +39,10 @@ function SeasonalWeatherMap() {
                 'weather_param': weatherParam,
                 'weather_type': weatherType,
             };
+            if (geojsonData) {
+                const geojsonString = JSON.stringify(geojsonData);
+                params.geom = geojsonString;
+            }
             const key = JSON.stringify(params);
 
             // Check if data for the given parameters is already available in the data store

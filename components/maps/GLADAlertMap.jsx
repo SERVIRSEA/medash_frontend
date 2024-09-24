@@ -15,14 +15,17 @@ import {
     alertOpenAtom, 
     alertMessageAtom,
     gladAlertVisibilityAtom,
-    gladAlertLegendAtom
+    gladAlertLegendAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
+import { gladService } from "@/services";
 
 const GLADAlertMap = () => {
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [min] = useAtom(minYearGLADAlert);
     const [max] = useAtom(maxYearGLADAlert);
     const years = Array.from({ length: max - min + 1 }, (_, i) => min + i);
@@ -57,6 +60,10 @@ const GLADAlertMap = () => {
             'area_id': area_id,
             'year': year
         };
+        if (geojsonData) {
+            const geojsonString = JSON.stringify(geojsonData);
+            params.geom = geojsonString;
+        }
         const key = JSON.stringify(params);
         
         if (gladAlertMapStore[key]) {
@@ -65,9 +72,10 @@ const GLADAlertMap = () => {
             setIsLoading(false);
         } else {
             try {
-                const data = await Fetcher(action, params);
-                setGLADAlertData(data);
-                setGLADAlertMapStore(prev => ({ ...prev, [key]: data }));
+                const mapData = await gladService.getMap(params);
+                // const data = await Fetcher(action, params);
+                setGLADAlertData(mapData.data);
+                setGLADAlertMapStore(prev => ({ ...prev, [key]: mapData.data }));
             } catch (error) {
                 console.error('Error fetching data:', error);
                 throw error; 

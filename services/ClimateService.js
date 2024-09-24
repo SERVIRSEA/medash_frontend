@@ -1,10 +1,10 @@
 import BaseService from "./BaseService";
 import { API_ENDPOINTS } from "@/config/apiEndpoints";
 
-class FireService extends BaseService {
+class ClimateService extends BaseService {
     constructor() {
-        super(API_ENDPOINTS.FIRE);
+        super(API_ENDPOINTS.CLIMATE);
     }
 }
 
-export default new FireService();
+export default new ClimateService();

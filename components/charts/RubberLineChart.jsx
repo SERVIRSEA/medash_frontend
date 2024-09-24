@@ -20,12 +20,15 @@ import {
     updateTriggerAtom,
     maxRetryAttemptsAtom,
     rubberAreaTextAtom,
-    areaNameAtom
+    areaNameAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { rubberService } from '@/services';
 
 const RubberLineChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [chartData, setChartData] = useAtom(rubberChartAtom);
     const [loading, setLoading] = useAtom(rubberChartDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -50,21 +53,37 @@ const RubberLineChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'studyLow': studyLow,
-                        'studyHigh': studyHigh
+                        'start_year': studyLow,
+                        'end_year': studyHigh,
+                        'lc_type': 'rubber'
                     };
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
                     const key = JSON.stringify(params);
                     
-                    const data = await Fetcher(action, params);
+                    // const data = await Fetcher(action, params);
+                    const chartData = await rubberService.getChart(params, 'LINE');
+
                     let rubberData = {};
                     if (['country', 'province', 'district', 'protected_area'].includes(area_type)) { // 'district', 'protected_area'
-                        const parsedData = JSON.parse(data);
-                        rubberData = parsedData;
-                        setChartData(parsedData);
+                        // const parsedData = JSON.parse(data);
+                        // rubberData = parsedData;
+                        // setChartData(parsedData);
+                        rubberData = chartData.data
                     } else {
-                        rubberData = data;
-                        setChartData(data);
+                        const formatRubberData = (data) => {
+                            return Object.keys(data).reduce((acc, year) => {
+                                acc[year] = data[year].rubber;
+                            return acc;
+                            }, {});
+                        };
+                        
+                        rubberData = formatRubberData(chartData.data);
                     }
+
+                    setChartData(rubberData);
 
                     if (Object.keys(rubberData).length > 0) {
                         const startYear = Object.keys(rubberData)[0]; // Automatically get the first year

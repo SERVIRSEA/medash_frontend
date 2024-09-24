@@ -11,18 +11,22 @@ import {
     areaIdAtom,
     forestGainLossAreaAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    forestChangeGainLossAreaAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import { Fetcher } from '@/fetchers/Fetcher';
 import Typography from '@mui/material/Typography';
 
 const ForestGainLoss = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [refLow] = useAtom(baselineMinYearAtom);
     const [refHigh] = useAtom(baselineMaxYearAtom);
     const [studyLow] = useAtom(measureMinYearAtom);
     const [studyHigh] = useAtom(measureMaxYearAtom);
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [changeData, setChangeData] = useAtom(forestChangeGainLossAreaAtom);
     const [gainLossData, setGainLossData] = useAtom(forestGainLossAreaAtom);
     const [updateTrigger, setUpdateTrigger] = useAtom(updateTriggerAtom);
     const [attempts, setAttempts] = useState(0);
@@ -41,6 +45,10 @@ const ForestGainLoss = () => {
                         'studyLow': studyLow,
                         'studyHigh': studyHigh
                     };
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
                     const data = await Fetcher(action, params);
                     setGainLossData(data);
                     setAttempts(0);
@@ -88,11 +96,17 @@ const ForestGainLoss = () => {
             <Typography variant="body2" sx={{fontSize: '12px'}} pb={2}>
                 Compare the area of forest change between the baseline period ({refLow} - {refHigh}) and the evaluation period ({studyLow} - {studyHigh})
             </Typography>
-            <Typography variant="body2">
+            {/* <Typography variant="body2">
                 Gain compared to the baseline <span style={{color: '#16a34a', fontWeight: 'bold'}}>{Math.round(gainLossData.forestgain).toLocaleString()} Ha</span>
             </Typography>
             <Typography variant="body2">
                 Loss compared to the baseline <span style={{color: '#d69102', fontWeight: 'bold'}}>{Math.round(gainLossData.forestloss).toLocaleString()} Ha</span>
+            </Typography> */}
+            <Typography variant="body2">
+                Gain compared to the baseline <span style={{color: '#16a34a', fontWeight: 'bold'}}>{Math.round(changeData.stats_study_gain - changeData.stats_ref_gain).toLocaleString()} Ha</span>
+            </Typography>
+            <Typography variant="body2">
+                Loss compared to the baseline <span style={{color: '#d69102', fontWeight: 'bold'}}>{Math.round(changeData.stats_study_loss - changeData.stats_ref_loss).toLocaleString()} Ha</span>
             </Typography>
         </>
     )

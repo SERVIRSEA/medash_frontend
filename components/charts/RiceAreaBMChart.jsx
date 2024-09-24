@@ -20,12 +20,15 @@ import {
     riceBMDataAtom,
     riceBMDataLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { riceService } from '@/services';
 
 const RiceAreaBMChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [chartData, setChartData] = useAtom(riceBMDataAtom);
     const [loading, setLoading] = useAtom(riceBMDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -49,15 +52,21 @@ const RiceAreaBMChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'refLow': refLow,
-                        'refHigh': refHigh,
-                        'studyLow': studyLow,
-                        'studyHigh': studyHigh,
-                        'type': 'rice'
+                        'ref_low': refLow,
+                        'ref_high': refHigh,
+                        'study_low': studyLow,
+                        'study_high': studyHigh,
+                        'lc_type': 'rice'
                     };
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
                     const key = JSON.stringify(params);
-                    const data = await Fetcher(action, params);
-                    setChartData(data);
+                    const chartData = await riceService.getChart(params, 'BAR')
+                    // console.log(chartData.data)
+                    // const data = await Fetcher(action, params);
+                    setChartData(chartData.data);
                     setLoading(false);
                     setAttempts(0);
                     return; // Break out of the loop if successful
@@ -107,7 +116,7 @@ const RiceAreaBMChart = () => {
         },
         title: false,
         xAxis: {
-            categories: ['Baseline Area', 'Evaluation Area']
+            categories: ['Baseline Period', 'Evaluation Period']
         },
         yAxis: {
             min: 0,
@@ -131,8 +140,8 @@ const RiceAreaBMChart = () => {
         series: [{
             name: 'Rice Area',
             data: [
-                chartData.baselineArea || 0,
-                chartData.measureArea || 0
+                chartData.baseline_area.rice || 0,
+                chartData.evaluation_area.rice || 0
             ],
             color: "#FFF000"
         }],

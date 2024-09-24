@@ -18,12 +18,15 @@ import {
     forestNonForestChartDataAtom,
     forestNonForestChartLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { forestCoverService } from '@/services';
 
 const ForestCoverChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [chartData, setChartData] = useAtom(forestNonForestChartDataAtom);
     const [loading, setLoading] = useAtom(forestNonForestChartLoadingAtom);
     const [error, setError] = useState(null);
@@ -48,8 +51,13 @@ const ForestCoverChart = () => {
                         'studyLow': studyLow,
                         'studyHigh': studyHigh
                     };
-
-                    const data = await Fetcher(action, params);
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
+                    const chartData = await forestCoverService.getChart(params);
+                    const data = chartData.data;
+                    // const data = await Fetcher(action, params);
                     setChartData(data);
                     setLoading(false);
                     setAttempts(0);

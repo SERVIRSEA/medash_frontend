@@ -17,13 +17,16 @@ import {
     selectedDroughtIndexAtom, 
     selectedDroughtDateAtom, 
     alertOpenAtom, 
-    alertMessageAtom 
+    alertMessageAtom,
+    geojsonDataAtom 
 } from '@/state/atoms';
 import DownloadForm from "../modals/DownloadForm";
+import { climateService } from '@/services';
 
 export default function DroughtMap() {
     const [area_type] = useAtom(areaTypeAtom);
     const [area_id] = useAtom(areaIdAtom);
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [index, setIndex] = useAtom(selectedDroughtIndexAtom); 
     const [isVisible, setIsVisible] = useAtom(droughtVisAtom);
     const [, setIsLoading] = useAtom(isLoadingAtom);
@@ -44,14 +47,22 @@ export default function DroughtMap() {
                 'index': selectedIndex,
                 'date': date,
             };
+
+            if (geojsonData) {
+                const geojsonString = JSON.stringify(geojsonData);
+                params.geom = geojsonString;
+            }
+            
             const key = JSON.stringify(params);
     
             // Check if data for the given parameters is already available in the data store
             if (!dataStore[key]) {
                 // Data not found, fetch it
-                const action = 'get-drought-index-map';
-                const data = await Fetcher(action, params);
-    
+                // const action = 'get-drought-index-map';
+                // const data = await Fetcher(action, params);
+                const mapData = await climateService.getMap(params);
+                const data = mapData.data;
+                
                 // Update the data store
                 setDataStore((prev) => ({ ...prev, [key]: data }));
     

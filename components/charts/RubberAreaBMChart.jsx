@@ -20,12 +20,15 @@ import {
     rubberBMDataAtom,
     rubberBMDataLoadingAtom,
     updateTriggerAtom,
-    maxRetryAttemptsAtom
+    maxRetryAttemptsAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { rubberService } from '@/services';
 
 const RubberAreaBMChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [chartData, setChartData] = useAtom(rubberBMDataAtom);
     const [loading, setLoading] = useAtom(rubberBMDataLoadingAtom);
     const [error, setError] = useState(null);
@@ -49,15 +52,20 @@ const RubberAreaBMChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'refLow': refLow,
-                        'refHigh': refHigh,
-                        'studyLow': studyLow,
-                        'studyHigh': studyHigh,
-                        'type': 'rubber'
+                        'ref_low': refLow,
+                        'ref_high': refHigh,
+                        'study_low': studyLow,
+                        'study_high': studyHigh,
+                        'lc_type': 'rubber'
                     };
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
                     const key = JSON.stringify(params);
-                    const data = await Fetcher(action, params);
-                    setChartData(data);
+                    const chartData = await rubberService.getChart(params, 'BAR')
+                    // const data = await Fetcher(action, params);
+                    setChartData(chartData.data);
                     setLoading(false);
                     setAttempts(0);
                     return; // Break out of the loop if successful
@@ -131,8 +139,8 @@ const RubberAreaBMChart = () => {
         series: [{
             name: 'Rubber Area',
             data: [
-                chartData.baselineArea || 0,
-                chartData.measureArea || 0
+                chartData.baseline_area.rubber || 0,
+                chartData.evaluation_area.rubber || 0
             ],
             color: "#AAFF00"
         }],

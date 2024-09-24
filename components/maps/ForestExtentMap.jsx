@@ -16,7 +16,7 @@ import {
     forestCoverLegendAtom,
     geojsonDataAtom
 } from '@/state/atoms';
-import { getForestCoverMap } from "@/services/forestService";
+import { forestCoverService } from "@/services";
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
 
@@ -64,7 +64,7 @@ function ForestExtentMap(){
             setIsLoading(false);
         } else {
             try {
-                const fetchData = await getForestCoverMap(params);
+                const fetchData = await forestCoverService.getMap(params);
                 const data = fetchData.data;
                 setForestExtentMapStore(prev => ({ ...prev, [key]: data }));
                 setForestExtentData(data);

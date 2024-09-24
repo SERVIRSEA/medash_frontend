@@ -18,7 +18,7 @@ import {
 } from '@/state/atoms';
 import { Fetcher } from "@/fetchers/Fetcher";
 import DownloadForm from "../modals/DownloadForm";
-import { getForestGainMap } from "@/services/forestService";
+import { forestGainService } from "@/services";
 
 function ForestGainMap(){
     const [area_type] = useAtom(areaTypeAtom);
@@ -65,8 +65,8 @@ function ForestGainMap(){
                 setIsLoading(false);
             } else {
                 try {
-                    const fetchData = await getForestGainMap(params);
-                    const data = fetchData.data;
+                    const mapData = await forestGainService.getMap(params);
+                    const data = mapData.data;
                     // const data = await Fetcher(action, params);
                     setForestGainData(data);
                     setForestGainMapStore(prev => ({ ...prev, [key]: data }));

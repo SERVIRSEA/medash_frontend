@@ -1,4 +1,12 @@
 export { default as landcoverService } from './LandCoverService';
 export { default as eviService } from './EviService';
-// export { default as fireService } from './FireService';
-// export { riceService, rubberService } from './CropService';
+export { default as fireService } from './FireService';
+export { default as climateService } from './ClimateService';
+export { riceService, rubberService } from './CropService';
+export { gladService, sarfdasService } from './ForestAlertService';
+export { 
+    forestCoverService, 
+    forestGainService, 
+    forestLossService,
+    forestGainLossService
+} from './ForestService';

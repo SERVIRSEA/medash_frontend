@@ -25,14 +25,17 @@ import {
     forestNetChangeTextAtom,
     forestBaselineLossTextAtom,
     forestStudyLossTextAtom,
-    forestLossPercentTextAtom
+    forestLossPercentTextAtom,
+    geojsonDataAtom
 } from '@/state/atoms';
 
 
 import LoadingCard from '../LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
+import { forestGainLossService } from '@/services';
 
 const ForestChangeGainLossChart = () => {
+    const [geojsonData] = useAtom(geojsonDataAtom);
     const [refLow] = useAtom(baselineMinYearAtom);
     const [refHigh] = useAtom(baselineMaxYearAtom);
     const [studyLow] = useAtom(measureMinYearAtom);
@@ -62,14 +65,20 @@ const ForestChangeGainLossChart = () => {
                     const params = {
                         'area_type': area_type,
                         'area_id': area_id,
-                        'refLow': refLow,
-                        'refHigh': refHigh,
-                        'studyLow': studyLow,
-                        'studyHigh': studyHigh
+                        'ref_low': refLow,
+                        'ref_high': refHigh,
+                        'study_low': studyLow,
+                        'study_high': studyHigh
                     };
+                    if (geojsonData) {
+                        const geojsonString = JSON.stringify(geojsonData);
+                        params.geom = geojsonString;
+                    }
 
-                    const data = await Fetcher(action, params);
-
+                    const chartData = await forestGainLossService.getChart(params);
+                    const data = chartData.data;
+                    // const data = await Fetcher(action, params);
+                    // console.log(data)
                     // set time waiting for forestCoverStudyHigh
                     setTimeout(()=>{
                         const treeCoverArea = forestCoverStudyHigh; // Total tree cover area at the beginning
@@ -160,10 +169,10 @@ const ForestChangeGainLossChart = () => {
     }, [area_type, area_id, refLow, refHigh, studyLow, studyHigh, setChangeData, setLoading, setUpdateTrigger, attempts, updateTrigger, RetryMaxAttempts]);
 
     const data = {
-        statsRefLoss: changeData.statsRefLoss || 0,
-        statsStudyLoss: changeData.statsStudyLoss || 0,
-        statsRefGain: changeData.statsRefGain || 0,
-        statsStudyGain: changeData.statsStudyGain || 0
+        statsRefLoss: changeData.stats_ref_loss || 0,
+        statsStudyLoss: changeData.stats_study_loss || 0,
+        statsRefGain: changeData.stats_ref_gain || 0,
+        statsStudyGain: changeData.stats_study_gain || 0
     };
     
 

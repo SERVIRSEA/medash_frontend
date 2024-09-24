@@ -1,5 +1,5 @@
 Field,Value
-Title,Annual Land Cover of Cambodia
+Title,Land Use and Land Cover of Cambodia
 Abstract,"This landcover map provides detailed information on anual land cover types in Cambodia. It is intended for use in  natural resource management, planning and land use analysis.
 The Cambodia national Land Cover time series (2000 - 2023) was developed through a collaborative effort led by SERVIR SEA using the Regional Land Cover Monitoring System approach (Saah et al. 2020). The maps were developed under the auspices of the REDD+ task team and the FCPF project in Cambodia to support the FREL. For this purpose, RLCMS was customized to meet Cambodia national land cover typologies. An uncertainty assessment was integrated into the assemblage process. These maps were developed using Landsat annual composites and training data collected by MOE."
 Author,Asian Disaster Preparedness Center (ADPC) under SERVIR South East Asia
@@ -35,3 +35,6 @@ Class ID,Class Name & color
 Usage Constraints,"The data is provided 'as is' without warranty of any kind, either expressed or implied. The data originator is not responsible for any damages arising from the use of this data."
 Contact Information,
 Contact Organization, servir-contact@adpc.net
+Citation,"This geospatial data has been provided by SERVIR Southeast Asia.
+SERVIR SEA is a joint initiative of the U.S. Agency for International Development (USAID), the U.S. National Aeronautics and Space Administration (NASA), and the Asian Disaster Preparedness Center (ADPC). The project makes use of publicly available satellite imagery and geospatial technologies to address challenges related to climate resilience,environment, agriculture, water security, air quality, and ecosystems in Cambodia, Indonesia, Lao PDR, Myanmar, Philippines, Thailand, and Vietnam"
+Disclaimer,"The findings, interpretations, and conclusions expressed in this document, data do not necessarily reflect the views of ADPC, USAID or partners, and the US governments, and are based on satellite imagery and artificial intelligence data processed to estimate the best scenario without full validation. While every effort has been made to ensure the accuracy of the information, the data and document remains open for any corrections in facts, figures and visuals. The maps used in this work are for illustrative purposes and does not reflect the official expression Asian Disaster Preparedness Center (ADPC) concerning the legal status of any country or territory or concerning the delimitation of frontiers or boundaries."

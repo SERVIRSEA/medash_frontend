@@ -2,7 +2,7 @@
 
 # data
 # public/*
-
+public/metadata_landcover_v1.csv
 # dependencies
 /node_modules
 /.pnp

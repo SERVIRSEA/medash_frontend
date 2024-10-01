@@ -11,7 +11,8 @@ import { useEffect, useState } from 'react';
 
 export default function Footer() {
     const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-
+    const footerLogoUrl = `${process.env.NEXT_PUBLIC_APP_BASE_URL}/logo-servir-sea-white.png`;
+    
     useEffect(() => {
         const year = new Date().getFullYear();
         setCurrentYear(year);
@@ -23,7 +24,7 @@ export default function Footer() {
                 <Grid container spacing={3} p={4}>
                     <Grid item sm={6} xs={12} style={{ marginTop: '20px', marginBottom: '20px' }}>
                         <Link href="https://servir.adpc.net/" target="_blank" rel="noreferrer">
-                            <Image src='/logo-servir-sea-white.png' width={200} height={30} alt="SERVIR-SEA" />
+                            <Image src={footerLogoUrl} width={200} height={30} alt="SERVIR-SEA" />
                         </Link>
                         <Typography pt={1} variant="body1" style={{ fontWeight: 'bold', color: '#fff' }}>
                             ASIAN DISASTER PREPAREDNESS CENTER (ADPC)

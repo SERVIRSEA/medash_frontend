@@ -294,42 +294,50 @@ export default function ReportTabs() {
     }
 
     return (
-        <Box m={0} p={0} sx={{ overflowY: 'scroll', height: 'calc(100vh - 270px)' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="report tabs" sx={{ width: '100%' }}>
+        // 270px
+        <Box m={0} p={0} sx={{ overflowY: 'scroll', height: 'calc(100vh - 140px)' }}> 
+            <Box m={0} p={0} sx={{ borderBottom: 1, borderColor: 'divider', overflowX: 'auto' }}>
+                <Tabs 
+                    value={value} 
+                    onChange={handleChange} 
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    aria-label="report tabs" 
+                    sx={{  whiteSpace: 'nowrap' }}
+                >
                     <Tab 
                         {...a11yProps(0)} 
-                        sx={{ minWidth: 'auto' }} 
+                        sx={{ minWidth: 'auto', textTransform: 'none' }} 
                         label={
                             <Typography variant="subtitle2" sx={{ fontSize: '12px', margin: 0, paddingRight: '5px', textAlign: 'center', lineHeight: '1.2' }}>
-                                Land cover <br /> and Biophysical health
+                                Landcover <br /> & Biophysical Health
                             </Typography>
                         } 
                     />
                     <Tab 
                         {...a11yProps(1)} 
-                        sx={{ minWidth: 'auto' }} 
+                        sx={{ minWidth: 'auto', textTransform: 'none' }} 
                         label={
                             <Typography variant="subtitle2" sx={{ fontSize: '12px', margin: 0, paddingRight: '5px', textAlign: 'center', lineHeight: '1.2' }}>
-                                Forest monitoring / <br /> forest alerts
+                                Forest Monitoring / <br /> Forest Alerts
                             </Typography>
                         } 
                     />
                     <Tab 
                         {...a11yProps(2)} 
-                        sx={{ minWidth: 'auto' }} 
+                        sx={{ minWidth: 'auto', textTransform: 'none' }} 
                         label={
                             <Typography variant="subtitle2" sx={{ fontSize: '12px', margin: 0, paddingRight: '5px', textAlign: 'center', lineHeight: '1.2' }}>
-                                Crop monitoring
+                                Crop Monitoring
                             </Typography>
                         } 
                     />
                     <Tab 
                         {...a11yProps(3)} 
-                        sx={{ minWidth: 'auto' }} 
+                        sx={{ minWidth: 'auto', textTransform: 'none' }} 
                         label={
                             <Typography variant="subtitle2" sx={{ fontSize: '12px', margin: 0, paddingRight: '5px', textAlign: 'center', lineHeight: '1.2' }}>
-                                Fire hotspot
+                                Fire Hotspot
                             </Typography>
                         } 
                     />

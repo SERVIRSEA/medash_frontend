@@ -9,7 +9,7 @@ import { Tooltip } from '@mui/material';
 import ShortTermWeatherMap from '../maps/ShortTermWeatherMap';
 import SeasonalWeatherMap from '../maps/SeasonalWeatherMap';
 import DroughtMap from '../maps/DroughtMap';
-import DroughtCalender from '../DroughtCalender';
+import DroughtCalender from '../calender/DroughtCalender';
 import LayerNameLegendControl from '../LayerNameLegendControl';
 import LegendToggleIcon from '@mui/icons-material/LegendToggle';
 import DroughtLegend from '../legend/DroughtLegend';

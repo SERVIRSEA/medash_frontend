@@ -22,7 +22,7 @@ import {
     areaNameAtom,
     geojsonDataAtom
 } from '@/state/atoms';
-import LoadingCard from '../LoadingCard';
+import LoadingCard from '../loaders/LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
 import { riceService } from '@/services';
 

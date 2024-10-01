@@ -109,7 +109,7 @@ const SeasonalWeatherLegend = () => {
                 };
 
                 return (
-                    <Box key={index} pt={1} pl={1} pb={1} pr={2}>
+                    <Box key={index}>
                         <Typography variant="body2" fontWeight="bold" sx={{ fontSize: '12px' }} pb={1}>{title}</Typography>
                         <div style={{ ...gradientStyle, height: '20px', width: '100%' }}></div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>

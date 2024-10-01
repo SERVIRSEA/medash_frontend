@@ -8,7 +8,7 @@ const ForestGainLossLegend = () => {
         { color: '#fdb827', text: 'Forest Loss' },
     ];
     return (
-        <Box pt={2} pl={2} pb={4}>
+        <Box>
             <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}}>Forest Gain & Loss Legend</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {Legends.map((legend, index) => (

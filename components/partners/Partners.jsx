@@ -30,6 +30,12 @@ export default function Partners() {
                         </Link>
                     </ListItem>
                     <ListItem sx={{ display: 'flex', justifyContent: 'center', flex: '1 1 auto' }}>
+                        <Link href="https://www.recoftc.org/" target="_blank" rel="noreferrer">
+                            {/* eslint-disable-next-line */}
+                            <img src='logo-recoftc.svg' width={50} height={26} alt="SERVIR-SEA" style={{ maxWidth: '100%', height: 'auto' }} />
+                        </Link>
+                    </ListItem>
+                    <ListItem sx={{ display: 'flex', justifyContent: 'center', flex: '1 1 auto' }}>
                         <Link href="https://sig-gis.com/" target="_blank" rel="noreferrer">
                             {/* eslint-disable-next-line */}
                             <img src="sig.png" alt="SIG" width={200} height={50} style={{ maxWidth: '100%', height: 'auto' }} />

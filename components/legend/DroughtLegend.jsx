@@ -67,7 +67,7 @@ const DroughtLegend = () => {
 
     if (!gradient) {
         return (
-            <Box pt={1} pl={1} pb={2} pr={2}>
+            <Box>
                 <Typography pl={0.7} variant="body2" fontWeight="bold" sx={{ fontSize: '12px' }} pb={0}>{title}</Typography>
                 <Box display="flex" justifyContent="space-between">
                     {palette.map((color, i) => (
@@ -90,7 +90,7 @@ const DroughtLegend = () => {
     };
 
     return (
-        <Box pt={1} pl={1} pb={2} pr={2}>
+        <Box sx={{ minWidth: '200px' }}>
             <Typography pl={0} variant="body2" fontWeight="bold" sx={{ fontSize: '12px' }} pb={0}>{title}</Typography>
             <div style={{ ...gradientStyle, height: '20px', width: '100%' }}></div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>

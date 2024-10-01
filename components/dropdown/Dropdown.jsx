@@ -82,12 +82,12 @@ const Dropdown = () => {
         <Grid container spacing={2} p={2}>
             <Grid item xs={6}>
                 <FormControl fullWidth size='small'>
-                    <InputLabel id="areaTypeLabel">Selected Area Type</InputLabel>
+                    <InputLabel id="areaTypeLabel">Admin</InputLabel>
                     <Select
                         labelId="areaTypeLabel"
                         id='area_type'
                         value={selectedCategory}
-                        label="Selected Area Type"
+                        label="Admin "
                         onChange={handleCategoryChange}
                         displayEmpty
                         MenuProps={{
@@ -97,24 +97,24 @@ const Dropdown = () => {
                                 },
                             },
                         }}
-                        inputProps={{ 'aria-label': 'Selected Area Type' }}
-                        sx={{ fontSize: '12px' }}
+                        inputProps={{ 'aria-label': 'Admin' }}
+                        sx={{ fontSize: '14px' }}
                     >
-                        <MenuItem value="country" sx={{ fontSize: '12px'}}>Country</MenuItem>
-                        <MenuItem value="province" sx={{ fontSize: '12px'}}>Provinces</MenuItem>
-                        <MenuItem value="district" sx={{ fontSize: '12px'}}>Districts</MenuItem>
-                        <MenuItem value="protected_area" sx={{ fontSize: '12px'}}>Protected Area</MenuItem>
+                        <MenuItem value="country" sx={{ fontSize: '14px'}}>Country</MenuItem>
+                        <MenuItem value="province" sx={{ fontSize: '14px'}}>Provinces</MenuItem>
+                        <MenuItem value="district" sx={{ fontSize: '14px'}}>Districts</MenuItem>
+                        <MenuItem value="protected_area" sx={{ fontSize: '14px'}}>Protected Area</MenuItem>
                     </Select>
                 </FormControl>
             </Grid>
             <Grid item xs={6}>
                 <FormControl fullWidth size='small'>
-                    <InputLabel id="areaIdLabel">Selected Area</InputLabel>
+                    <InputLabel id="areaIdLabel">Name</InputLabel>
                     <Select
                         labelId="areaIdLabel"
                         id='area_id'
                         value={selectedItem}
-                        label="Selected Area"
+                        label="Name "
                         onChange={handleItemChange}
                         displayEmpty
                         MenuProps={{
@@ -124,11 +124,11 @@ const Dropdown = () => {
                                 },
                             },
                         }}
-                        inputProps={{ 'aria-label': 'Selected Area Type' }}
-                        sx={{ fontSize: '12px' }}
+                        inputProps={{ 'aria-label': ' Name ' }}
+                        sx={{ fontSize: '14px' }}
                     >
                         {options.map(option => (
-                            <MenuItem key={option.id} value={option.name} sx={{fontSize: '12px'}}>{option.name}</MenuItem>
+                            <MenuItem key={option.id} value={option.name} sx={{fontSize: '14px'}}>{option.name}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>

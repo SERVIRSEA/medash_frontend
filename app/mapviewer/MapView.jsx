@@ -24,14 +24,20 @@ import ForecastTemperatureLayer from '@/components/layers/ForecastTemperatureLay
 import SeasonalRainfallLayer from '@/components/layers/SeasonalRainfallLayer';
 import SeasonalTemperatureLayer from '@/components/layers/SeasonalTemperatureLayer';
 import SARFDASAlertLayer from '@/components/layers/SARFDASAlertLayer';
-import CustomZoomControl from '@/components/CustomZoomControl';
+import CustomZoomControl from '@/components/controls/CustomZoomControl';
 import DrawControl from '@/components/draw/DrawControl';
+import AreaSelector from '@/components/selectors/AreaSelector';
+import MapControls from '@/components/controls/MapControls';
+import LocationLayer from '@/components/layers/LocationLayer';
 
 export default function MapView() {
     return (
         <MapContainer center={[11.862108, 103.288535]} zoom={7} zoomControl={false} className="map-container"> 
+            <AreaSelector />
             <CustomZoomControl />
+            <MapControls />
             <BasemapLayer />
+            <LocationLayer />
             <ProvinceLayer />
             <DistrictLayer />
             <ProtectedAreaLayer />

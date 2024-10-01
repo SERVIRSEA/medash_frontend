@@ -30,7 +30,7 @@ import {
 } from '@/state/atoms';
 
 
-import LoadingCard from '../LoadingCard';
+import LoadingCard from '../loaders/LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
 import { forestGainLossService } from '@/services';
 

@@ -6,7 +6,7 @@ import Dropdown from '../dropdown/Dropdown';
 export default function ReportingPanel(){
     return (
         <>
-            <Dropdown />
+            {/* <Dropdown /> */}
             <ReportTabs />
         </>
     )

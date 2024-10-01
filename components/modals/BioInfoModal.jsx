@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import BiophysicalMonitoringInfoTable from '../tables/BiophysicalMonitoringInfoTable';
-import CustomModal from './CustomModal';
+import CustomModal from '../common/CustomModal';
 
 const BioInfoModal = ({ isOpen, onClose }) => {
     return (

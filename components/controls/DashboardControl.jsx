@@ -8,15 +8,16 @@ import { IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InfoIcon from '@mui/icons-material/Info';
 import { Box, Tooltip } from '@mui/material';
-import BaselineSlider from './sliders/BaselineSlider';
-import MeasureSlider from './sliders/MeasureSlider';
-import LayerSelection from './LayerSelection';
-import UpdateMapButton from './UpdateMap';
+import BaselineSlider from '../sliders/BaselineSlider';
+import MeasureSlider from '../sliders/MeasureSlider';
+import UpdateMapButton from '../buttons/UpdateMap';
 
 import { 
     tempAreaNameAtom,
     guidingModalAtom,
 } from '@/state/atoms';
+
+import CustomAccordion from '../common/CustomAccordion';
 
 export default function DashboardControl() {
     const [selectedArea] = useAtom(tempAreaNameAtom);
@@ -28,7 +29,27 @@ export default function DashboardControl() {
 
     return (
         <div>
-            <Accordion defaultExpanded={false}>
+            <CustomAccordion 
+                title='Dashboard Controls'
+                rotation={0}
+                content={
+                    <>
+                        <Typography sx={{fontSize: "12px" }}>
+                            1. Select a time period for the baseline EVI
+                        </Typography>
+                        <BaselineSlider />
+                        <Typography sx={{fontSize: "12px" }}>
+                            2. Select a time period to evaluate
+                        </Typography>
+                        <MeasureSlider />
+                        <Typography variant="body2" sx={{fontSize: '12px', paddingTop: '10px', paddingBottom: '10px'}}>
+                            Selected Area: {selectedArea}
+                        </Typography>
+                        <UpdateMapButton />
+                    </>
+                }
+            />
+            {/* <Accordion defaultExpanded={false}>
                 <Tooltip title="Click to expand/hide the panel to update map." arrow>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon sx={{ fontSize: '1.25rem' }} />}
@@ -66,17 +87,17 @@ export default function DashboardControl() {
                     <Typography sx={{fontSize: "12px" }}>
                         2. Select a time period to evaluate
                     </Typography>
-                    <MeasureSlider />
-                    <Typography sx={{fontSize: "12px" }}>
+                    <MeasureSlider /> */}
+                    {/* <Typography sx={{fontSize: "12px" }}>
                         3. Choose a polygon selection method
                     </Typography>
-                    <LayerSelection />
-                    <Typography variant="body2" sx={{fontSize: '12px', paddingTop: '10px', paddingBottom: '10px'}}>
+                    <LayerSelection /> */}
+                    {/* <Typography variant="body2" sx={{fontSize: '12px', paddingTop: '10px', paddingBottom: '10px'}}>
                         Selected Area: {selectedArea}
                     </Typography>
                     <UpdateMapButton />
                 </AccordionDetails>
-            </Accordion>
+            </Accordion> */}
         </div>
     );
 }

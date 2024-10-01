@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
-import CustomDatePicker from './CustomDatePicker';
+import CustomDatePicker from '../common/CustomDatePicker';
 import { Fetcher } from '@/fetchers/Fetcher';
-import LoadingCard from './LoadingCard';
+import LoadingCard from '../loaders/LoadingCard';
 import { Box, Typography } from '@mui/material';
 import { selectedDroughtIndexAtom } from '@/state/atoms';
 

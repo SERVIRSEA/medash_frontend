@@ -4,7 +4,7 @@ import ColorLegend from './ColorLegend'
 
 const RubberLegend = () => {
     return (
-        <Box pt={0} pl={2} pb={1}>
+        <Box>
             {/* <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}}>Rubber Map Legend</Typography> */}
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <ColorLegend color={"#AAFF00"} text={"Rubber"} />

@@ -8,7 +8,7 @@ const RiceLegend = () => {
     const [isVisible] = useAtom(rubberLegendAtom);
 
     return (
-        <Box pt={0} pl={2} pb={isVisible ? 0 : 1}>
+        <Box>
             {/* <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}}>Rice Map Legend</Typography> */}
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <ColorLegend color={"#FFFFBE"} text={"Rice"} hasBorder={true} />

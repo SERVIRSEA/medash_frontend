@@ -21,7 +21,7 @@ import {
     maxRetryAttemptsAtom,
     geojsonDataAtom
 } from '@/state/atoms';
-import LoadingCard from '../LoadingCard';
+import LoadingCard from '../loaders/LoadingCard';
 import { Fetcher } from '@/fetchers/Fetcher';
 import { forestCoverService } from '@/services';
 

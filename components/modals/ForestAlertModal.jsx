@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CustomModal from './CustomModal';
+import CustomModal from '../common/CustomModal';
 import ForestAlertInfoTable from '../tables/ForestAlertInfoTable';
 
 const ForestAlertModal = ({ isOpen, onClose }) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CustomModal from './CustomModal';
+import CustomModal from '../common/CustomModal';
 import SeasonalWeastherInfoTable from '../tables/SeasonalWeastherInfoTable';
 
 const SeasonalWeatherModal = ({ isOpen, onClose }) => {

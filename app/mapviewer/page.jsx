@@ -2,17 +2,19 @@
 import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import { Box } from '@mui/material';
-import Navbar from "@/components/Navbar"
-import Header from "@/components/Header"
-import Sidebar from '@/components/Sidebar'
-import DashboardControl from '@/components/DashboardControl';
+import Navbar from "@/components/navbar/Navbar"
+import Header from "@/components/header/Header"
+import Sidebar from '@/components/sidebar/Sidebar'
+import DashboardControl from '@/components/controls/DashboardControl';
 import { isLoadingAtom } from '@/state/atoms';
-import LoadingIcon from '@/components/LoadingIcon';
+import LoadingIcon from '@/components/loaders/LoadingIcon';
 import dynamic from 'next/dynamic';
-import GuidingPanel from '@/components/GuidingPanel';
+import GuidingPanel from '@/components/guide/GuidingPanel';
 import { guidingModalAtom, activeMenuAtom, activeTabAtom } from '@/state/atoms';
-import CustomAlert from '@/components/CustomAlert';
-import MapLegend from '@/components/MapLegend';
+import CustomAlert from '@/components/common/CustomAlert';
+// import MapLegend from '@/components/MapLegend';
+import MapLegend from '@/components/legend/MapLegend';
+import FeedbackButton from '@/components/buttons/FeedbackButton';
 
 const DynamicMapView = dynamic(() => import('./MapView'), {
     loading: () => <LoadingIcon />,
@@ -32,6 +34,7 @@ export default function Mapviewer() {
         <div>
             <Header />
             <Navbar />
+            <FeedbackButton />
             <GuidingPanel isOpen={isGuidingPanelOpen} onClose={handleCloseGuidingPanel} />
             <>
                 <div id="map">
@@ -40,11 +43,12 @@ export default function Mapviewer() {
                 <Sidebar />
                 <Box 
                     sx={{
+                        marginTop: '10px',
                         zIndex: 1, 
                         width: '265px', 
                         // marginLeft: '390px', 
                         marginLeft: `${isCollapse === 'block' ? '440px' : '90px'}`,
-                        display: activeMenu === 5 ? 'none' : 'block'
+                        display: activeMenu === 6 ? 'none' : 'block'
                     }}
                 >
                     <DashboardControl />

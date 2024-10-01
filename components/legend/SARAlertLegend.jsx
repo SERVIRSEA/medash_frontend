@@ -4,7 +4,7 @@ import ColorLegend from './ColorLegend'
 
 const SARAlertLegend = () => {
     return (
-        <Box pt={2} pl={2} pb={4}>
+        <Box>
             <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}}>SAR Alert Legend</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <ColorLegend color={"red"} text={"SAR Alert"} />

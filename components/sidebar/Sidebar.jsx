@@ -5,14 +5,14 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 
-import BiophysicalPanel from './panels/BiophysicalPanel';
-import ForestMonitoringPanel from './panels/ForestMonitoringPanel';
-import CropMonitoringPanel from './panels/CropMonitoringPanel';
-import ForestAlertPanel from './panels/ForestAlertPanel';
-import FireHotspotPanel from './panels/FireHotspotPanel';
-import MapLayersPanel from './panels/MapLayersPanel';
-import ReportingPanel from './panels/ReportingPanel';
-import DroughtMonitoringPanel from './panels/DroughtMonitoringPanel';
+import BiophysicalPanel from '../panels/BiophysicalPanel';
+import ForestMonitoringPanel from '../panels/ForestMonitoringPanel';
+import CropMonitoringPanel from '../panels/CropMonitoringPanel';
+import ForestAlertPanel from '../panels/ForestAlertPanel';
+import FireHotspotPanel from '../panels/FireHotspotPanel';
+import MapLayersPanel from '../panels/MapLayersPanel';
+import ReportingPanel from '../panels/ReportingPanel';
+import DroughtMonitoringPanel from '../panels/DroughtMonitoringPanel';
 import { 
     menuTitleAtom,
     activeTabAtom,
@@ -130,7 +130,8 @@ function Sidebar(){
         background: "#fff",
         color: "#000",
         // width: "350px",
-        width: selectedIndex === 7 ? "700px" : "350px",
+        // "700px"
+        width: selectedIndex === 7 ? "450px" : "350px",
         height: "calc(100% - 15px)",
         position: "fixed",
         marginLeft: "80px",
@@ -179,12 +180,12 @@ function Sidebar(){
             text: 'Drought Monitoring',
             panel: <DroughtMonitoringPanel />,
         },
-        {
-          name: 'Map Layers',
-          icon: '/assets/icons/menu/map-layers-green.png', //BasemapLayerIcon,
-          text: 'Basemap',
-          panel: <MapLayersPanel />,
-        },
+        // {
+        //   name: 'Map Layers',
+        //   icon: '/assets/icons/menu/map-layers-green.png', //BasemapLayerIcon,
+        //   text: 'Basemap',
+        //   panel: <MapLayersPanel />,
+        // },
         {
           name: 'Reporting',
           icon: '/assets/icons/menu/report.png', //ReportIcon,
@@ -216,7 +217,7 @@ function Sidebar(){
         3: { ...allMap, gladMap: true },
         4: { ...allMap, fireMap: true },
         5: { ...allMap, frcstTempMap: true },
-        7: { ...allMap, lcMap: true }
+        6: { ...allMap, lcMap: true }
     };
 
     const baseLegend = {
@@ -233,7 +234,7 @@ function Sidebar(){
         4: { ...baseLegend, fireLegend: true },
         5: { ...baseLegend, shortTermLegend: true },
         // 6: { ...baseLegend },
-        7: { ...baseLegend, lcLegend: true }
+        6: { ...baseLegend, lcLegend: true }
     };
       
     const handleListItemClick = (event, index) => {

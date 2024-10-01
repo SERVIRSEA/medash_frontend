@@ -9,8 +9,8 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import { Typography, Link } from '@mui/material';
-import MobileDrawer from './menu/MobileDrawer';
-import DesktopNav from './menu/DesktopNav';
+import MobileDrawer from '../menu/MobileDrawer';
+import DesktopNav from '../menu/DesktopNav';
 
 const drawerWidth = 240;
 

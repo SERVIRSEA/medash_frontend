@@ -24,7 +24,7 @@ import {
     maxRetryAttemptsAtom,
     geojsonDataAtom
 } from '@/state/atoms';
-import LoadingCard from '../LoadingCard';
+import LoadingCard from '../loaders/LoadingCard';
 
 const EVILineChart = () => {
     const [geojsonData] = useAtom(geojsonDataAtom);

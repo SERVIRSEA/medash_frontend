@@ -13,7 +13,7 @@ const EVILegend = () => {
     };
 
     return (
-        <Box pt={2} pl={2} pb={2} pr={2}>
+        <Box sx={{ minWidth: '200px'}}>
             <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold' }} pb={1}>EVI</Typography>
             <div style={{ ...gradientStyle, height: '20px', width: '100%' }}></div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>

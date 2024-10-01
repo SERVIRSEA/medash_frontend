@@ -4,6 +4,7 @@ export { default as fireService } from './FireService';
 export { default as climateService } from './ClimateService';
 export { riceService, rubberService } from './CropService';
 export { gladService, sarfdasService } from './ForestAlertService';
+export { default as feedbackService } from './FeedbackService'
 export { 
     forestCoverService, 
     forestGainService, 

@@ -1,8 +1,8 @@
 "use client"
 import React, { useState } from "react"
-import Navbar from "@/components/Navbar"
-import Header from "@/components/Header"
-import Footer from "@/components/Footer"
+import Navbar from "@/components/navbar/Navbar"
+import Header from "@/components/header/Header"
+import Footer from "@/components/footer/Footer"
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { Typography, Button } from "@mui/material";
@@ -10,8 +10,9 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import DescriptionIcon from '@mui/icons-material/Description';
 import { useRouter } from "next/navigation";
-import Partners from "@/components/Partners";
-import VideoModal from "@/components/VideoModal";
+import Partners from "@/components/partners/Partners";
+import VideoModal from "@/components/modals/VideoModal";
+import FeedbackButton from "@/components/buttons/FeedbackButton"
 
 export default function Home() {
   const router = useRouter();
@@ -35,6 +36,7 @@ export default function Home() {
       <div>
         <Header />
         <Navbar />
+        <FeedbackButton />
         <Box pl={3} pr={3} pt={8} pb={8}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

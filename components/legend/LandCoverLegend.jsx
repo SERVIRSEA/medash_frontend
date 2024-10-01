@@ -23,7 +23,7 @@ const LandCoverLegend = () => {
     ));
 
     return (
-        <Box pt={2} pl={2} pb={4}>
+        <Box>
             <Typography variant="body2" sx={{ fontSize: '12px', fontWeight: 'bold' }}>Land Cover</Typography>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ flex: 1 }}>

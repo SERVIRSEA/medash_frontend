@@ -24,7 +24,7 @@ import {
     forestChangesTextAtom,
     geojsonDataAtom
 } from '@/state/atoms';
-import LoadingCard from '../LoadingCard';
+import LoadingCard from '../loaders/LoadingCard';
 
 const ForestChangesChart = () => {
     const [geojsonData] = useAtom(geojsonDataAtom);

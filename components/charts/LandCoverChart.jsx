@@ -28,7 +28,7 @@ import {
     activeMenuAtom,
     geojsonDataAtom
 } from '@/state/atoms';
-import LoadingCard from '../LoadingCard';
+import LoadingCard from '../loaders/LoadingCard';
 import { landcoverService } from '@/services';
 
 const LandCoverChart = () => {
@@ -70,7 +70,7 @@ const LandCoverChart = () => {
                     // const data = await Fetcher(action, params);
                     
                     const fetchData = await landcoverService.getChart(params);
-                    console.log(fetchData);
+                    // console.log(fetchData);
                     // const fetchData = await getLandcoverChart(params);
                     
                     const period1Data = filterData(fetchData.data, refLow, refHigh);
@@ -284,7 +284,7 @@ const LandCoverChart = () => {
                 column: {
                     stacking: 'normal',
                     // pointPadding: 10,
-                    pointWidth: menuId === 7 ? 35 : 15,
+                    pointWidth: menuId === 7 ? 25 : 15,
                     borderWidth: 0
                 }
             },

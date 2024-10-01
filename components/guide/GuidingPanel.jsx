@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button, Typography, Grid, Box, Link } from '@mui/material';
-import VideoModal from "@/components/VideoModal";
+import VideoModal from "@/components/modals/VideoModal";
 import CloseIcon from '@mui/icons-material/Close';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 

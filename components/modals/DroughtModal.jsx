@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CustomModal from './CustomModal';
+import CustomModal from '../common/CustomModal';
 import DroughtInfoTable from '../tables/DroughtInfoTable';
 
 const DroughtModal = ({ isOpen, onClose }) => {

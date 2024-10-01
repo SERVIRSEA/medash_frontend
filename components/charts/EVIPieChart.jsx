@@ -26,7 +26,7 @@ import {
     bioTextAtom,
     geojsonDataAtom
 } from '@/state/atoms';
-import LoadingCard from '../LoadingCard';
+import LoadingCard from '../loaders/LoadingCard';
 
 const EVIPieChart = () => {
     const [geojsonData] = useAtom(geojsonDataAtom);

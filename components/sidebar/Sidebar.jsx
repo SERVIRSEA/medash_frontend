@@ -52,6 +52,7 @@ import {
     longTermWeatherLegendAtom,
     droughtLegendAtom
 } from '@/state/atoms';
+import { activeFireMapVisibilityAtom } from '@/state';
 
 function Sidebar(){
     const [sideNav, setActiveSideNav] = useAtom(activeTabAtom);
@@ -91,7 +92,8 @@ function Sidebar(){
     const [, setIsLongTermLegend] = useAtom(longTermWeatherLegendAtom);
     const [, setIsDroughtLegend] = useAtom(droughtLegendAtom);
     const [, setLegendPanel] = useAtom(legendPanelAtom);
-  
+    const [, setActiveFireMapVisibility] = useAtom(activeFireMapVisibilityAtom);
+
     const sidebarStyle = {
         background: "#eff6ff",
         color: "#000",
@@ -206,7 +208,7 @@ function Sidebar(){
     const allMap = {
         eviMap: false, lcMap: false, forestGainMap: false, forestLossMap: false, forestExtentMap: false,
         riceMap: false, rubberMap: false, gladMap: false, sarMap: false, sarfdasMap: false,
-        fireMap: false, pastRainMap: false, frcstRainMap: false, pastTempMap: false,
+        fireMap: false, activeFireMap: false, pastRainMap: false, frcstRainMap: false, pastTempMap: false,
         frcstTempMap: false, sesRainMap: false, sesTempMap: false, droughtMap: false
     };
 
@@ -215,7 +217,7 @@ function Sidebar(){
         1: { ...allMap, forestGainMap: true, forestLossMap: true },
         2: { ...allMap, riceMap: true, rubberMap: true },
         3: { ...allMap, gladMap: true },
-        4: { ...allMap, fireMap: true },
+        4: { ...allMap, fireMap: false, activeFireMap: true },
         5: { ...allMap, frcstTempMap: true },
         6: { ...allMap, lcMap: true }
     };
@@ -263,7 +265,8 @@ function Sidebar(){
         setForecastTempMapVis(mapVisibility.frcstTempMap || false);
         setSeasonalRainfallMapVis(mapVisibility.sesRainMap || false);
         setSeasonalTempMapVis(mapVisibility.sesTempMap || false);
-
+        setActiveFireMapVisibility(mapVisibility.activeFireMap || false);
+        
         const legendVisibility = legendMappings[index] || {};
     
         setIsVisibleEVILegend(legendVisibility.eviLegend || false);

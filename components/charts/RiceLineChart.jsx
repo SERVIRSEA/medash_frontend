@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAtom } from 'jotai';
-import Highcharts from 'highcharts';
+import Highcharts from '@/utils/highcharts-setup'
 import HighchartsReact from 'highcharts-react-official';
-import Exporting from 'highcharts/modules/exporting';
-import ExportData from 'highcharts/modules/export-data';
-
-if (typeof Highcharts === 'object') {
-    Exporting(Highcharts);
-    ExportData(Highcharts);
-}
 import {
     measureMinYearAtom,
     measureMaxYearAtom,
@@ -186,6 +179,11 @@ const RiceLineChart = () => {
         yAxis: {
             title: {
                 text: 'Total Area (in Hectare)'
+            },
+            labels: {
+                formatter: function () {
+                    return (this.value / 1000000) + 'M'; // Convert all labels to millions
+                }
             }
         },
         series: [{

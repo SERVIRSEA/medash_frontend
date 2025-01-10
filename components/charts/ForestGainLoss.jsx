@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useAtom } from 'jotai';
-import Highcharts from 'highcharts';
+import Highcharts from '@/utils/highcharts-setup'
 import HighchartsReact from 'highcharts-react-official';
 import { 
     baselineMinYearAtom,

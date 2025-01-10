@@ -29,6 +29,7 @@ import DrawControl from '@/components/draw/DrawControl';
 import AreaSelector from '@/components/selectors/AreaSelector';
 import MapControls from '@/components/controls/MapControls';
 import LocationLayer from '@/components/layers/LocationLayer';
+import ActiveFireLayer from '@/components/layers/ActiveFireLayer';
 
 export default function MapView() {
     return (
@@ -48,6 +49,7 @@ export default function MapView() {
             <GLADAlertLayer />
             <SARAlertLayer />
             <FireLayer />
+            <ActiveFireLayer />
             <ForestGainLayer />
             <ForestLossLayer />
             <ForestExtentLayer />

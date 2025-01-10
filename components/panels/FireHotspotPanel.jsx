@@ -7,6 +7,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import LayerNameLegendControl from '../LayerNameLegendControl';
 import FireLegend from '../legend/FireLegend';
 import FireInfoModal from '../modals/FireInfoModal';
+import ActiveFiresMap from '../maps/ActiveFiresMap';
 import { 
     measureMinYearAtom,
     measureMaxYearAtom,
@@ -14,6 +15,7 @@ import {
 } from '@/state/atoms';
 import FireMap from '../maps/FireMap';
 import FireHotspotChart from '../charts/FireHotspotChart';
+import ActiveFireLineChart from '../charts/ActiveFireLineChart';
 
 export default function FireHotspotPanel(){
     const [studyLow] = useAtom(measureMinYearAtom);
@@ -54,8 +56,17 @@ export default function FireHotspotPanel(){
                 onClick={handleFireClick}
             />
             {isFireOpen  && ( <FireLegend /> )} */}
+            <ActiveFiresMap />
+            
+            <Typography variant='body2' pt={1} sx={{ fontSize: '12px' }}>
+                Yearly aggregated fire hotspots
+            </Typography>
             <FireMap />
-            <br />
+            
+            <Typography pt={1} variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} pb={1}>
+                NUMBER OF ACTIVE FIRES (Last 7 Days)
+            </Typography>
+            <ActiveFireLineChart />
             <Typography variant="body2" sx={{fontSize: '12px', fontWeight: 'bold'}} pb={1}>
                 NUMBER OF FIRE HOTSPOT
             </Typography>

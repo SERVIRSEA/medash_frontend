@@ -7,3 +7,10 @@ export {
     activeBasemapAtom, 
     basemapPopperAtom 
 } from './basemapAtoms';
+export {
+    activeFireDataAtom,
+    activeFireMapVisibilityAtom,
+    activeFireChartDataAtom,
+    activeFireDataErrorAtom,
+    activeFireChartDataLoadingAtom
+} from './activeFireAtom';

@@ -1,15 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { useAtom } from 'jotai';
-import Highcharts from 'highcharts';
+import Highcharts from '@/utils/highcharts-setup'
 import HighchartsReact from 'highcharts-react-official';
-import Exporting from 'highcharts/modules/exporting';
-import ExportData from 'highcharts/modules/export-data';
 import { eviService } from '@/services';
-if (typeof Highcharts === 'object') {
-    Exporting(Highcharts);
-    ExportData(Highcharts);
-}
-
 import { Fetcher } from '@/fetchers/Fetcher';
 import { 
     baselineMinYearAtom,

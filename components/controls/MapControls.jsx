@@ -4,6 +4,7 @@ import BasemapControl from "./BasemapControl";
 import ShareControl from "./ShareControl"; // Import ShareControl
 import CompareControl from "./CompareControl"; // Import CompareControl
 import LayerControl from "./LayerControl";
+import RefreshMap from "./RefreshMap";
 
 export default function MapControls() {
     const containerStyle = {
@@ -20,6 +21,7 @@ export default function MapControls() {
 
     return (
         <div style={containerStyle} onClick={(e) => e.stopPropagation()}>
+            <RefreshMap />
             <LayerControl />
             <CompareControl /> 
             <ShareControl /> 

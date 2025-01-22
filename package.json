@@ -22,6 +22,7 @@
     "highcharts-react-official": "^3.2.1",
     "jotai": "^2.4.3",
     "jsonp": "^0.2.1",
+    "jspdf": "^2.5.2",
     "leaflet": "^1.9.4",
     "leaflet-draw": "^1.0.4",
     "leaflet-geodesy": "^0.2.1",

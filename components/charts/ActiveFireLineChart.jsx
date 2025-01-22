@@ -20,17 +20,26 @@ const ActiveFireLineChart = () => {
                 setLoading(true);
                 const response = await activeFireService.getActiveFireChartData();
                 const rawData = response.data;
+                
+                // Get the current year
+                const currentYear = new Date().getFullYear();
 
                 // Transform and sort the data
-                const transformedData = Object.keys(rawData)
-                    .flatMap((country) =>
-                        rawData[country]?.[2025]?.map(({ date, count }) => [
-                            new Date(date).getTime(), // Convert date to timestamp
-                            count,
-                        ])
-                    )
-                    .sort((a, b) => a[0] - b[0]); // Sort by date (ascending)
-
+                const transformedData = Object.keys(rawData.countries) // Iterate over country IDs
+                    .flatMap((countryId) => {
+                        const countryData = rawData.countries[countryId]?.data?.[currentYear];
+                        if (!countryData) return []; // Skip if no data for the current year
+                        
+                        // Extract dates and counts
+                        return Object.keys(countryData).flatMap((month) => 
+                            Object.entries(countryData[month]).map(([date, count]) => [
+                                new Date(date).getTime(), // Convert date to timestamp
+                                count,
+                            ])
+                        );
+                    })
+                    .sort((a, b) => a[0] - b[0]);
+                
                 // Store the transformed data in the atom
                 setLineChartData({
                     time_series: transformedData || [],

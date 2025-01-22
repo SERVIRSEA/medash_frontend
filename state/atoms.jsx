@@ -154,7 +154,7 @@ export const sarfdasAlertChartAtom = atom([]);
 export const sarfdasAlertChartDataLoadingAtom = atom(true);
 
 // State for fire map
-export const selectedYearFireAtom = atom(null); 
+export const selectedYearFireAtom = atom(2023); 
 export const fireApiAtom = atom('');
 export const fireVisibilityAtom = atom(false);
 export const fireYearlyMapDataStoreAtom = atom({});

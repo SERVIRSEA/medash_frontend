@@ -25,32 +25,17 @@ const ActiveFiresMap = () => {
                     // Fetch active fire data
                     const response = await activeFireService.getActiveFireData();
                     const data = response.data;
-                    // console.log(response)
-                    // const geojson = {
-                    //     type: "FeatureCollection",
-                    //     features: data.map((fireData) => ({
-                    //         type: "Feature",
-                    //         geometry: {
-                    //             type: "Point",
-                    //             coordinates: [fireData.longitude, fireData.latitude],
-                    //         },
-                    //         properties: {
-                    //             id: fireData.id,
-                    //             acq_datetime: fireData.acq_datetime,
-                    //         },
-                    //     })),
-                    // };
-
+                    
                     // Store the fetched data in the atom
                     setFireData(data);
                 } catch (err) {
-                    setError("Error fetching fire data");
+                    setError("No active fires in last 48 hours");
                 } finally {
                     setLoading(false);
                 }
             };
 
-            fetchFireData();  // Fetch the data if it's not already available
+            fetchFireData(); 
         }
     }, [fireData, setFireData, setLoading, setError]);
 
